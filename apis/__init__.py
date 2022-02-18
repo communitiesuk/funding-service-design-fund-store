@@ -1,6 +1,6 @@
 from flask_restx import Api
 
-from .default_api import api
+from .fund_api import api as fund_api
 
 api = Api(
     title='My Title',
@@ -9,4 +9,4 @@ api = Api(
     # All API metadatas
 )
 
-api.add_namespace(api)
+api.add_namespace(fund_api)
