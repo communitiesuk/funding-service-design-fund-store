@@ -1,6 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 
-api = Namespace('fund store API', description='Operations related to fund infomation')
+api = Namespace('funds', description='Operations related to fund infomation')
 
 eligibility_criteria = api.model('Eligibility', {
     'maximium_project_cost' : fields.Integer(description='The maxmium amount a project can ask for')
@@ -27,3 +27,16 @@ class FundList(Resource):
     def get(self):
         '''List all funds'''
         return FUNDS
+
+@api.route('/<name>')
+@api.param('name', 'The name of the fund')
+@api.response(404, 'Fund not found')
+class Fund(Resource):
+    @api.doc('get_fund')
+    @api.marshal_with(fund_model)
+    def get(self, name):
+        '''Fetch a fund given its name'''
+        for fund in FUNDS:
+            if fund['name'] == name:
+                return fund
+        api.abort(404)

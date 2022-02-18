@@ -3,10 +3,10 @@ from flask_restx import Api
 from .fund_api import api as fund_api
 
 api = Api(
-    title='My Title',
-    version='1.0',
-    description='A description',
+    title='Fund Store API',
+    version='0.1',
+    description='An api for requesting infomation about funds from the fund store',
     # All API metadatas
 )
 
-api.add_namespace(fund_api)
+api.add_namespace(fund_api, path="/funds")
