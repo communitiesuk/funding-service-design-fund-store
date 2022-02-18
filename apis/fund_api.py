@@ -1,4 +1,5 @@
 from flask_restx import Namespace, Resource, fields
+from slugify import slugify
 
 api = Namespace('funds', description='Operations related to fund infomation')
 
@@ -14,22 +15,43 @@ fund_model = api.model('Fund', {
     'opens' : fields.DateTime(required=True, description="The fund opening date")
 })
 
-FUNDS = [
+fund_data = [
     {
         "name" : "Harry's breakfast fund",
         "eligibility_criteria": {"maximium_project_cost" : "10"},
         "deadline" : "2022-12-25",
         "opens" : "2022-11-25",
-        "identifer" : "harrys-breakfast-fund"
     },
         {
         "name" : "Ram's Get Fit Feb fund",
         "eligibility_criteria": {"maximium_project_cost" : "100"},
         "deadline" : "2022-12-31",
         "opens" : "2022-01-01",
-        "identifer" : "rams-get-fit-feb-fund"
     }
 ]
+
+class FundDAO():
+    def __init__(self):
+        self.funds = {}
+
+    def get_all(self):
+        return list(self.funds.values())
+
+    def create(self, data):
+        key = slugify(data["name"])
+        data["identifer"] = key
+        self.funds[key] = data
+
+    def get(self, identifer):
+        if identifer in self.funds.keys():
+            return self.funds[identifer]
+        api.abort(404, f"Fund {identifer} doesn't exist")
+
+FUNDS = FundDAO()
+
+for fund in fund_data:
+
+    FUNDS.create(fund)
 
 @api.route('/')
 class FundList(Resource):
@@ -37,7 +59,7 @@ class FundList(Resource):
     @api.marshal_list_with(fund_model)
     def get(self):
         '''List all funds'''
-        return FUNDS
+        return FUNDS.get_all()
 
 @api.route('/<identifer>')
 @api.param('identifer', 'The id of the fund')
@@ -47,7 +69,4 @@ class Fund(Resource):
     @api.marshal_with(fund_model)
     def get(self, identifer):
         '''Fetch a fund given its name'''
-        for fund in FUNDS:
-            if fund['identifer'] == identifer:
-                return fund
-        api.abort(404)
+        return FUNDS.get(identifer)
