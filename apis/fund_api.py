@@ -8,15 +8,26 @@ eligibility_criteria = api.model('Eligibility', {
 
 fund_model = api.model('Fund', {
     'name': fields.String(required=True, description='The name of the fund'),
-    'eligibility criteria': fields.Nested(eligibility_criteria, desciption="The eligiblity criteria of the fund"),
-    'closing date' : fields.DateTime(required=True, description="The fund closing date")
+    'identifer': fields.String(required=True, description="The unique id for this fund"),
+    'eligibility_criteria': fields.Nested(eligibility_criteria, desciption="The eligiblity criteria of the fund"),
+    'deadline' : fields.DateTime(description="The fund closing date"),
+    'opens' : fields.DateTime(required=True, description="The fund opening date")
 })
 
 FUNDS = [
     {
         "name" : "Harry's breakfast fund",
-        "eligibility criteria": {"maximium_project_cost" : "10"},
-        "closing date" : "2022-12-25" 
+        "eligibility_criteria": {"maximium_project_cost" : "10"},
+        "deadline" : "2022-12-25",
+        "opens" : "2022-11-25",
+        "identifer" : "harrys-breakfast-fund"
+    },
+        {
+        "name" : "Ram's Get Fit Feb fund",
+        "eligibility_criteria": {"maximium_project_cost" : "100"},
+        "deadline" : "2022-12-31",
+        "opens" : "2022-01-01",
+        "identifer" : "rams-get-fit-feb-fund"
     }
 ]
 
@@ -28,15 +39,15 @@ class FundList(Resource):
         '''List all funds'''
         return FUNDS
 
-@api.route('/<name>')
-@api.param('name', 'The name of the fund')
+@api.route('/<identifer>')
+@api.param('identifer', 'The id of the fund')
 @api.response(404, 'Fund not found')
 class Fund(Resource):
     @api.doc('get_fund')
     @api.marshal_with(fund_model)
-    def get(self, name):
+    def get(self, identifer):
         '''Fetch a fund given its name'''
         for fund in FUNDS:
-            if fund['name'] == name:
+            if fund['identifer'] == identifer:
                 return fund
         api.abort(404)
