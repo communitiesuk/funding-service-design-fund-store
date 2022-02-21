@@ -3,7 +3,6 @@ name: Deploy to Gov PaaS
 on:
   workflow_dispatch:
   push:
-    branches:
     paths-ignore:
       - '**/README.md'
 
