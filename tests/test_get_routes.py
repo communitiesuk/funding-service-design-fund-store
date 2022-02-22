@@ -4,16 +4,29 @@ Contains the tests regarding get requests to the Fund Store API
 import json
 
 
-def expected_content_from_get(
-    endpoint: str, expected_content: str, test_client
-):
+def expected_content_from_get(endpoint: str, expected_content, test_client):
+    """Given a endpoint and expected contented we
+    construct a test.
+
+    Args:
+        endpoint (str): The endpoint we wish to
+        make a get request on.
+        expected_content: The content we expect to find
+        test_client (_type_): A flask test client with a get method.
+    """
 
     response = test_client.get(endpoint, follow_redirects=True)
     assert json.loads(response.data) == expected_content
 
 
 def test_funds_endpoint_get(flask_test_client):
-
+    """
+    GIVEN Our Api Fund Store
+    WHEN a /funds/ is requested using GET
+    THEN check that the get response returns the expected data
+    If this test succeedes then our apis is set up and returns
+    a list of funds as expected.
+    """
     expected_content = [
         {
             "name": "Harry's breakfast fund",
@@ -29,7 +42,13 @@ def test_funds_endpoint_get(flask_test_client):
 
 
 def test_specific_fund_endpoint_get(flask_test_client):
-
+    """
+    GIVEN Our Api Fund Store
+    WHEN a /funds/harry-s-breakfast-fund is requested using GET
+    THEN check that the get response returns the expected data
+    If this test succeedes then our apis is set up and returns
+    detailed infomation about a single fund
+    """
     expected_content = {
         "name": "Harry's breakfast fund",
         "fund_identifer": "harry-s-breakfast-fund",
