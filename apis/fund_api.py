@@ -14,8 +14,8 @@ eligibility_criteria = api.model(
     },
 )
 
-fund_model = api.model(
-    "Fund",
+full_fund_model = api.model(
+    "Fund Full Data",
     {
         "name": fields.String(
             required=True, description="The name of the fund"
@@ -30,6 +30,18 @@ fund_model = api.model(
         "deadline": fields.DateTime(description="The fund closing date"),
         "opens": fields.DateTime(
             required=True, description="The fund opening date"
+        ),
+    },
+)
+
+identify_fund_model = api.model(
+    "Fund Summary",
+    {
+        "name": fields.String(
+            required=True, description="The name of the fund"
+        ),
+        "identifer": fields.String(
+            required=True, description="The unique id for this fund"
         ),
     },
 )
@@ -78,7 +90,7 @@ for fund in fund_data:
 @api.route("/")
 class FundList(Resource):
     @api.doc("list_funds")
-    @api.marshal_list_with(fund_model)
+    @api.marshal_list_with(identify_fund_model)
     def get(self):
         """List all funds"""
         return FUNDS.get_all()
@@ -89,7 +101,7 @@ class FundList(Resource):
 @api.response(404, "Fund not found")
 class Fund(Resource):
     @api.doc("get_fund")
-    @api.marshal_with(fund_model)
+    @api.marshal_with(full_fund_model)
     def get(self, identifer):
         """Fetch a fund given its name"""
         return FUNDS.get(identifer)
