@@ -1,6 +1,5 @@
 from flask_restx import fields
 from flask_restx import Namespace
-from flask_restx import Resource
 from slugify import slugify
 
 api = Namespace("funds", description="Operations related to fund infomation")
@@ -46,7 +45,7 @@ identify_fund_model = api.model(
     },
 )
 
-fund_data = [
+FUND_DATA = [
     {
         "name": "Harry's breakfast fund",
         "eligibility_criteria": {"maximium_project_cost": "10"},
@@ -82,26 +81,6 @@ class FundDAO:
 
 FUNDS = FundDAO()
 
-for fund in fund_data:
+for fund in FUND_DATA:
 
     FUNDS.create(fund)
-
-
-@api.route("/")
-class FundList(Resource):
-    @api.doc("list_funds")
-    @api.marshal_list_with(identify_fund_model)
-    def get(self):
-        """List all funds"""
-        return FUNDS.get_all()
-
-
-@api.route("/<identifer>")
-@api.param("identifer", "The id of the fund")
-@api.response(404, "Fund not found")
-class Fund(Resource):
-    @api.doc("get_fund")
-    @api.marshal_with(full_fund_model)
-    def get(self, identifer):
-        """Fetch a fund given its name"""
-        return FUNDS.get(identifer)

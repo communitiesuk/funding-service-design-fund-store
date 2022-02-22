@@ -1,6 +1,5 @@
+from apis.fund_api_routes import api as fund_api
 from flask_restx import Api
-
-from .fund_api import api as fund_api
 
 api = Api(
     title="Fund Store API",
