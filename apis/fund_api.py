@@ -20,7 +20,7 @@ full_fund_model = api.model(
         "name": fields.String(
             required=True, description="The name of the fund"
         ),
-        "identifer": fields.String(
+        "fund_identifer": fields.String(
             required=True, description="The unique id for this fund"
         ),
         "eligibility_criteria": fields.Nested(
@@ -40,7 +40,7 @@ identify_fund_model = api.model(
         "name": fields.String(
             required=True, description="The name of the fund"
         ),
-        "identifer": fields.String(
+        "fund_identifer": fields.String(
             required=True, description="The unique id for this fund"
         ),
     },
@@ -71,7 +71,7 @@ class FundDAO:
 
     def create(self, data):
         key = slugify(data["name"])
-        data["identifer"] = key
+        data["fund_identifer"] = key
         self.funds[key] = data
 
     def get(self, identifer):
