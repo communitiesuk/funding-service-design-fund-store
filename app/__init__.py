@@ -1,3 +1,5 @@
+"""The entry point for app.py to start our app
+"""
 from apis import api
 from flask import Flask
 

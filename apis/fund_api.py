@@ -1,3 +1,6 @@
+"""Contains the set up for our API and a basic DAO
+for prototyping.
+"""
 from flask_restx import fields
 from flask_restx import Namespace
 from slugify import slugify

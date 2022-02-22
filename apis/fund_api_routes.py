@@ -1,3 +1,7 @@
+"""
+Imports the API from fund_app.py and creates the routes
+in it.
+"""
 from apis.fund_api import api
 from apis.fund_api import full_fund_model
 from apis.fund_api import FUNDS
