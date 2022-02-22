@@ -16,6 +16,20 @@ eligibility_criteria = api.model(
     },
 )
 
+round_model = api.model(
+    "Fund Round",
+    {
+        "round_identifer": fields.Integer(
+            required=True,
+            desciption="A unique interger which identifies the round",
+        ),
+        "opens": fields.DateTime(
+            required=True, description="The round opening date"
+        ),
+        "deadline": fields.DateTime(description="The round closing date"),
+    },
+)
+
 full_fund_model = api.model(
     "Fund Full Data",
     {
