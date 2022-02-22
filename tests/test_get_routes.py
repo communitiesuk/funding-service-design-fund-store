@@ -17,11 +17,11 @@ def test_funds_endpoint_get(flask_test_client):
     expected_content = [
         {
             "name": "Harry's breakfast fund",
-            "identifer": "harry-s-breakfast-fund",
+            "fund_identifer": "harry-s-breakfast-fund",
         },
         {
             "name": "Ram's Get Fit Feb fund",
-            "identifer": "ram-s-get-fit-feb-fund",
+            "fund_identifer": "ram-s-get-fit-feb-fund",
         },
     ]
 
@@ -32,7 +32,7 @@ def test_specific_fund_endpoint_get(flask_test_client):
 
     expected_content = {
         "name": "Harry's breakfast fund",
-        "identifer": "harry-s-breakfast-fund",
+        "fund_identifer": "harry-s-breakfast-fund",
         "eligibility_criteria": {"maximium_project_cost": 10},
         "deadline": "2022-12-25T00:00:00",
         "opens": "2022-11-25T00:00:00",
