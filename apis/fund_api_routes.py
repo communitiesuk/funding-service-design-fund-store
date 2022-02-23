@@ -31,8 +31,8 @@ class Fund(Resource):
 
 
 @api.route("/<fund_identifer>/round/<round_number>")
-@api.param("fund_identifer", "The round of the fund")
-@api.param("round_number", "The round of the fund")
+@api.param("fund_identifer", "The fund identifer of the fund")
+@api.param("round_number", "The round identifer of the fund round")
 @api.response(404, "Round not found")
 class Round(Resource):
     @api.doc("get_round")

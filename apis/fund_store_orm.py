@@ -67,6 +67,13 @@ FUND_DATA = [
     },
 ]
 
+for fund in FUND_DATA:
+
+    for round_num in range(len(fund["rounds"])):
+
+        fund["rounds"][round_num]["round_identifer"] = round_num + 1
+
+
 FUNDS = FundDAO()
 
 for fund in FUND_DATA:

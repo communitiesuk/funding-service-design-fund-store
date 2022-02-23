@@ -18,6 +18,10 @@ eligibility_criteria = api.model(
 round_model = api.model(
     "Fund Round",
     {
+        "round_identifer": fields.Integer(
+            required=True,
+            description="An unique integer which identifies the round.",
+        ),
         "opens": fields.DateTime(
             required=True, description="The round opening date"
         ),
