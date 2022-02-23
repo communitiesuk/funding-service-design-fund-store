@@ -36,6 +36,10 @@ def test_funds_endpoint_get(flask_test_client):
             "name": "Ram's Get Fit Feb fund",
             "fund_identifer": "ram-s-get-fit-feb-fund",
         },
+        {
+            "name": "Funding service design",
+            "fund_identifer": "funding-service-design",
+        },
     ]
 
     expected_content_from_get("/funds", expected_content, flask_test_client)
@@ -50,13 +54,40 @@ def test_specific_fund_endpoint_get(flask_test_client):
     detailed infomation about a single fund
     """
     expected_content = {
-        "name": "Harry's breakfast fund",
-        "fund_identifer": "harry-s-breakfast-fund",
-        "eligibility_criteria": {"maximium_project_cost": 10},
-        "deadline": "2022-12-25T00:00:00",
-        "opens": "2022-11-25T00:00:00",
+        "name": "Ram's Get Fit Feb fund",
+        "fund_identifer": "ram-s-get-fit-feb-fund",
+        "eligibility_criteria": {"maximium_project_cost": 100},
+        "rounds": [
+            {
+                "opens": "2022-02-01T00:00:00",
+                "deadline": "2022-07-23T00:00:00",
+            },
+            {
+                "opens": "2022-02-01T00:00:00",
+                "deadline": "2022-07-23T00:00:00",
+            },
+        ],
     }
 
     expected_content_from_get(
-        "/funds/harry-s-breakfast-fund", expected_content, flask_test_client
+        "/funds/ram-s-get-fit-feb-fund", expected_content, flask_test_client
+    )
+
+
+def test_specific_round_endpoint_get(flask_test_client):
+    """
+    GIVEN Our Api Fund Store
+    WHEN /funds/ram-s-get-fit-feb-fund/round/0 is requested using GET
+    THEN check that the get response returns the expected data
+    If this test succeedes then our apis is set up and returns
+    detailed infomation about a single fund
+    """
+    expected_content = {
+        "opens": "2022-02-01T00:00:00",
+        "deadline": "2022-07-23T00:00:00",
+    }
+    expected_content_from_get(
+        "/funds/ram-s-get-fit-feb-fund/round/0",
+        expected_content,
+        flask_test_client,
     )

@@ -26,12 +26,10 @@ FUND_DATA = [
         "eligibility_criteria": {"maximium_project_cost": "10"},
         "rounds": [
             {
-                "fund_name": "Harry's breakfast fund",
                 "opens": "2022-02-01",
                 "deadline": "2022-07-23",
             },
             {
-                "fund_name": "Harry's breakfast fund",
                 "opens": "2022-02-01",
                 "deadline": "2022-07-23",
             },
@@ -42,12 +40,10 @@ FUND_DATA = [
         "eligibility_criteria": {"maximium_project_cost": "100"},
         "rounds": [
             {
-                "fund_name": "Ram's Get Fit Feb fund",
                 "opens": "2022-02-01",
                 "deadline": "2022-07-23",
             },
             {
-                "fund_name": "Ram's Get Fit Feb fund",
                 "opens": "2022-02-01",
                 "deadline": "2022-07-23",
             },
@@ -60,12 +56,10 @@ FUND_DATA = [
         "opens": "2022-01-01",
         "rounds": [
             {
-                "fund_name": "Funding Service Design",
                 "opens": "2022-02-01",
                 "deadline": "2022-07-23",
             },
             {
-                "fund_name": "Funding Service Design",
                 "opens": "2022-02-01",
                 "deadline": "2022-07-23",
             },

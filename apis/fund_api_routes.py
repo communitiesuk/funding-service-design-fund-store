@@ -39,4 +39,4 @@ class Round(Resource):
     @api.marshal_with(round_model)
     def get(self, fund_identifer, round_number):
         """Fetch a fund given its name"""
-        return FUNDS.get(fund_identifer)["rounds"][int(round_number)]
+        return FUNDS.get(fund_identifer)["rounds"][int(round_number) - 1]
