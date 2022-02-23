@@ -75,6 +75,12 @@ FUND_DATA = [
         "deadline": "2022-12-31",
         "opens": "2022-01-01",
     },
+    {
+        "name": "Funding service design",
+        "eligibility_criteria": {"maximium_project_cost": "550"},
+        "deadline": "2022-10-05",
+        "opens": "2022-01-01",
+    },
 ]
 
 
