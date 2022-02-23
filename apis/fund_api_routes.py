@@ -4,8 +4,8 @@ in it.
 """
 from apis.fund_api import api
 from apis.fund_api import full_fund_model
-from apis.fund_api import FUNDS
 from apis.fund_api import identify_fund_model
+from apis.fund_store_orm import FUNDS
 from flask_restx import Resource
 
 

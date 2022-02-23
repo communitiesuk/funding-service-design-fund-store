@@ -3,7 +3,6 @@ for prototyping.
 """
 from flask_restx import fields
 from flask_restx import Namespace
-from slugify import slugify
 
 api = Namespace("funds", description="Operations related to fund infomation")
 
@@ -19,10 +18,6 @@ eligibility_criteria = api.model(
 round_model = api.model(
     "Fund Round",
     {
-        "round_identifer": fields.Integer(
-            required=True,
-            desciption="A unique interger which identifies the round",
-        ),
         "opens": fields.DateTime(
             required=True, description="The round opening date"
         ),
@@ -43,9 +38,13 @@ full_fund_model = api.model(
             eligibility_criteria,
             desciption="The eligiblity criteria of the fund",
         ),
-        "deadline": fields.DateTime(description="The fund closing date"),
-        "opens": fields.DateTime(
-            required=True, description="The fund opening date"
+        "rounds": fields.List(
+            fields.Nested(round_model),
+            required=True,
+            description=(
+                "A list of the funding rounds, along with data regarding their"
+                " opening and closing dates."
+            ),
         ),
     },
 )
@@ -61,49 +60,3 @@ identify_fund_model = api.model(
         ),
     },
 )
-
-FUND_DATA = [
-    {
-        "name": "Harry's breakfast fund",
-        "eligibility_criteria": {"maximium_project_cost": "10"},
-        "deadline": "2022-12-25",
-        "opens": "2022-11-25",
-    },
-    {
-        "name": "Ram's Get Fit Feb fund",
-        "eligibility_criteria": {"maximium_project_cost": "100"},
-        "deadline": "2022-12-31",
-        "opens": "2022-01-01",
-    },
-    {
-        "name": "Funding service design",
-        "eligibility_criteria": {"maximium_project_cost": "550"},
-        "deadline": "2022-10-05",
-        "opens": "2022-01-01",
-    },
-]
-
-
-class FundDAO:
-    def __init__(self):
-        self.funds = {}
-
-    def get_all(self):
-        return list(self.funds.values())
-
-    def create(self, data):
-        key = slugify(data["name"])
-        data["fund_identifer"] = key
-        self.funds[key] = data
-
-    def get(self, identifer):
-        if identifer in self.funds.keys():
-            return self.funds[identifer]
-        api.abort(404, f"Fund {identifer} doesn't exist")
-
-
-FUNDS = FundDAO()
-
-for fund in FUND_DATA:
-
-    FUNDS.create(fund)
