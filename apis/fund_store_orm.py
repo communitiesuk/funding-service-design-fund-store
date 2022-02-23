@@ -1,4 +1,4 @@
-from fund_api import api
+from apis.fund_api import api
 from slugify import slugify
 
 
