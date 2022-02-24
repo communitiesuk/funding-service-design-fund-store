@@ -6,8 +6,12 @@ from apis.fund_api_models import api
 from apis.fund_api_models import full_fund_model
 from apis.fund_api_models import identify_fund_view
 from apis.fund_api_models import round_sub_model
-from apis.fund_store_dummy_data import FUNDS
+from apis.fund_store_dao import FundDAO
+from apis.fund_store_dummy_data import FUND_DATA
 from flask_restx import Resource
+
+FUNDS = FundDAO()
+FUNDS.load_dummy(FUND_DATA)
 
 
 @api.route("/")
