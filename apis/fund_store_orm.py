@@ -11,13 +11,13 @@ class FundDAO:
 
     def create(self, data):
         key = slugify(data["name"])
-        data["fund_identifer"] = key
+        data["fund_identifier"] = key
         self.funds[key] = data
 
-    def get(self, identifer):
-        if identifer in self.funds.keys():
-            return self.funds[identifer]
-        api.abort(404, f"Fund {identifer} doesn't exist")
+    def get(self, identifier):
+        if identifier in self.funds.keys():
+            return self.funds[identifier]
+        api.abort(404, f"Fund {identifier} doesn't exist")
 
 
 FUND_DATA = [
@@ -71,7 +71,7 @@ for fund in FUND_DATA:
 
     for round_num in range(len(fund["rounds"])):
 
-        fund["rounds"][round_num]["round_identifer"] = round_num + 1
+        fund["rounds"][round_num]["round_identifier"] = round_num + 1
 
 
 FUNDS = FundDAO()

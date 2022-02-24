@@ -19,24 +19,24 @@ class FundList(Resource):
         return FUNDS.get_all()
 
 
-@api.route("/<fund_identifer>")
-@api.param("fund_identifer", "The id of the fund")
+@api.route("/<fund_identifier>")
+@api.param("fund_identifier", "The id of the fund")
 @api.response(404, "Fund not found")
 class Fund(Resource):
     @api.doc("get_fund")
     @api.marshal_with(full_fund_model)
-    def get(self, fund_identifer):
+    def get(self, fund_identifier):
         """Fetch a fund given its name"""
-        return FUNDS.get(fund_identifer)
+        return FUNDS.get(fund_identifier)
 
 
-@api.route("/<fund_identifer>/round/<round_number>")
-@api.param("fund_identifer", "The fund identifer of the fund")
-@api.param("round_number", "The round identifer of the fund round")
+@api.route("/<fund_identifier>/round/<round_number>")
+@api.param("fund_identifier", "The fund identifier of the fund")
+@api.param("round_number", "The round identifier of the fund round")
 @api.response(404, "Round not found")
 class Round(Resource):
     @api.doc("get_round")
     @api.marshal_with(round_model)
-    def get(self, fund_identifer, round_number):
+    def get(self, fund_identifier, round_number):
         """Fetch a fund given its name"""
-        return FUNDS.get(fund_identifer)["rounds"][int(round_number) - 1]
+        return FUNDS.get(fund_identifier)["rounds"][int(round_number) - 1]

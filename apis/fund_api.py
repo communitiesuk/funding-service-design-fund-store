@@ -18,7 +18,7 @@ eligibility_criteria = api.model(
 round_model = api.model(
     "Fund Round",
     {
-        "round_identifer": fields.Integer(
+        "round_identifier": fields.Integer(
             required=True,
             description="An unique integer which identifies the round.",
         ),
@@ -35,7 +35,7 @@ full_fund_model = api.model(
         "name": fields.String(
             required=True, description="The name of the fund"
         ),
-        "fund_identifer": fields.String(
+        "fund_identifier": fields.String(
             required=True, description="The unique id for this fund"
         ),
         "eligibility_criteria": fields.Nested(
@@ -59,7 +59,7 @@ identify_fund_model = api.model(
         "name": fields.String(
             required=True, description="The name of the fund"
         ),
-        "fund_identifer": fields.String(
+        "fund_identifier": fields.String(
             required=True, description="The unique id for this fund"
         ),
     },

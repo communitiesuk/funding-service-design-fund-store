@@ -30,15 +30,15 @@ def test_funds_endpoint_get(flask_test_client):
     expected_content = [
         {
             "name": "Harry's breakfast fund",
-            "fund_identifer": "harry-s-breakfast-fund",
+            "fund_identifier": "harry-s-breakfast-fund",
         },
         {
             "name": "Ram's Get Fit Feb fund",
-            "fund_identifer": "ram-s-get-fit-feb-fund",
+            "fund_identifier": "ram-s-get-fit-feb-fund",
         },
         {
             "name": "Funding service design",
-            "fund_identifer": "funding-service-design",
+            "fund_identifier": "funding-service-design",
         },
     ]
 
@@ -55,16 +55,16 @@ def test_specific_fund_endpoint_get(flask_test_client):
     """
     expected_content = {
         "name": "Ram's Get Fit Feb fund",
-        "fund_identifer": "ram-s-get-fit-feb-fund",
+        "fund_identifier": "ram-s-get-fit-feb-fund",
         "eligibility_criteria": {"maximium_project_cost": 100},
         "rounds": [
             {
-                "round_identifer": 1,
+                "round_identifier": 1,
                 "opens": "2022-02-01T00:00:00",
                 "deadline": "2022-07-23T00:00:00",
             },
             {
-                "round_identifer": 2,
+                "round_identifier": 2,
                 "opens": "2022-02-01T00:00:00",
                 "deadline": "2022-07-23T00:00:00",
             },
@@ -85,7 +85,7 @@ def test_specific_round_endpoint_get(flask_test_client):
     detailed infomation about a single fund
     """
     expected_content = {
-        "round_identifer": 1,
+        "round_identifier": 1,
         "opens": "2022-02-01T00:00:00",
         "deadline": "2022-07-23T00:00:00",
     }
