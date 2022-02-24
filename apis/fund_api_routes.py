@@ -2,18 +2,18 @@
 Imports the API from fund_app.py and creates the routes
 in it.
 """
-from apis.fund_api import api
-from apis.fund_api import full_fund_model
-from apis.fund_api import identify_fund_model
-from apis.fund_api import round_model
-from apis.fund_store_orm import FUNDS
+from apis.fund_api_models import api
+from apis.fund_api_models import full_fund_model
+from apis.fund_api_models import identify_fund_view
+from apis.fund_api_models import round_sub_model
+from apis.fund_store_dummy_data import FUNDS
 from flask_restx import Resource
 
 
 @api.route("/")
 class FundList(Resource):
     @api.doc("list_funds")
-    @api.marshal_list_with(identify_fund_model)
+    @api.marshal_list_with(identify_fund_view)
     def get(self):
         """List all funds"""
         return FUNDS.get_all()
@@ -36,7 +36,7 @@ class Fund(Resource):
 @api.response(404, "Round not found")
 class Round(Resource):
     @api.doc("get_round")
-    @api.marshal_with(round_model)
+    @api.marshal_with(round_sub_model)
     def get(self, fund_identifier, round_number):
         """Fetch a fund given its name"""
         return FUNDS.get(fund_identifier)["rounds"][int(round_number) - 1]

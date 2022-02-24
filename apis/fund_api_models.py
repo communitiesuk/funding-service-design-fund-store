@@ -6,7 +6,7 @@ from flask_restx import Namespace
 
 api = Namespace("funds", description="Operations related to fund infomation")
 
-eligibility_criteria = api.model(
+eligibility_criteria_sub_model = api.model(
     "Eligibility",
     {
         "maximium_project_cost": fields.Integer(
@@ -15,7 +15,7 @@ eligibility_criteria = api.model(
     },
 )
 
-round_model = api.model(
+round_sub_model = api.model(
     "Fund Round",
     {
         "round_identifier": fields.Integer(
@@ -39,11 +39,11 @@ full_fund_model = api.model(
             required=True, description="The unique id for this fund"
         ),
         "eligibility_criteria": fields.Nested(
-            eligibility_criteria,
+            eligibility_criteria_sub_model,
             desciption="The eligiblity criteria of the fund",
         ),
         "rounds": fields.List(
-            fields.Nested(round_model),
+            fields.Nested(round_sub_model),
             required=True,
             description=(
                 "A list of the funding rounds, along with data regarding their"
@@ -53,7 +53,7 @@ full_fund_model = api.model(
     },
 )
 
-identify_fund_model = api.model(
+identify_fund_view = api.model(
     "Fund Summary",
     {
         "name": fields.String(
