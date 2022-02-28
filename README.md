@@ -47,7 +47,7 @@ Place brief descriptions of Pipelines here
 
 # Testing
 
-## Unit & Accessibility Testing
+## Unit
 
 To run all tests in a development environment run:
 
