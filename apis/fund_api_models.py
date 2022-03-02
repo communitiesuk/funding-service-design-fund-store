@@ -22,18 +22,10 @@ full_fund_model = api.model(
             required=True, description="The name of the fund"
         ),
         "fund_identifier": fields.String(
-            required=True, description="The unique id for this fund"
+            required=True, description="The unique id for the fund"
         ),
-        "eligibility_criteria": fields.Nested(
-            eligibility_criteria_sub_model,
-            required=True,
-            desciption="The eligiblity criteria of the fund",
-        ),
-        "opens": fields.DateTime(
-            required=True, description="The fund opening date"
-        ),
-        "deadline": fields.DateTime(
-            required=True, description="The fund closing date"
+        "fund_description": fields.String(
+            required=True, description="A description of the fund"
         ),
     },
 )

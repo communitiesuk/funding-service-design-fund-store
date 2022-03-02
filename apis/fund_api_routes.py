@@ -31,15 +31,3 @@ class Fund(Resource):
     def get(self, fund_identifier):
         """Fetch a fund given its name"""
         return FUNDS.get(fund_identifier)
-
-
-# @api.route("/<fund_identifier>/round/<round_number>")
-# @api.param("fund_identifier", "The fund identifier of the fund")
-# @api.param("round_number", "The round identifier of the fund round")
-# @api.response(404, "Round not found")
-# class Round(Resource):
-#     @api.doc("get_round")
-#     @api.marshal_with(round_sub_model)
-#     def get(self, fund_identifier, round_number):
-#         """Fetch a fund given its name"""
-#         return FUNDS.get(fund_identifier)["rounds"][int(round_number) - 1]

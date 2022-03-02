@@ -1,20 +1,21 @@
 FUND_DATA = [
     {
         "name": "Harry's breakfast fund",
-        "eligibility_criteria": {"maximium_project_cost": "10"},
-        "opens": "2022-02-01",
-        "deadline": "2022-07-23",
+        "fund_description": (
+            "A fund designed to supply Harry's endless supply of muesli."
+        ),
     },
     {
         "name": "Ram's Get Fit Feb fund",
-        "eligibility_criteria": {"maximium_project_cost": "100"},
-        "opens": "2022-02-01",
-        "deadline": "2022-07-23",
+        "fund_description": (
+            "A fund designed to supply gym memberships to home workers during"
+            " Feb."
+        ),
     },
     {
         "name": "Funding service design",
-        "eligibility_criteria": {"maximium_project_cost": "550"},
-        "deadline": "2022-10-05",
-        "opens": "2022-01-01",
+        "fund_description": (
+            "A fund designed to test the funding service design dev team."
+        ),
     },
 ]
