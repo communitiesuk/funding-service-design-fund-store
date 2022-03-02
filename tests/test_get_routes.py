@@ -56,9 +56,10 @@ def test_specific_fund_endpoint_get(flask_test_client):
     expected_content = {
         "name": "Ram's Get Fit Feb fund",
         "fund_identifier": "ram-s-get-fit-feb-fund",
-        "eligibility_criteria": {"maximium_project_cost": 100},
-        "opens": "2022-02-01T00:00:00",
-        "deadline": "2022-07-23T00:00:00",
+        "fund_description": (
+            "A fund designed to supply gym memberships to home workers during"
+            " Feb."
+        ),
     }
 
     expected_content_from_get(
