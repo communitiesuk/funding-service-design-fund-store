@@ -13,4 +13,4 @@ api = Api(
 
 api.add_namespace(fund_api, path="/funds")
 
-api.add_namespace(discovery_api, path="/search")
+api.add_namespace(discovery_api, path="/funds/search")

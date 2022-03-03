@@ -11,9 +11,9 @@ from flask_restx import Resource
 
 @api.route("/<words>")
 @api.param("words", "A series of hyphon seperated words.")
-class FundList(Resource):
+class FundSearch(Resource):
     @api.doc("search_funds")
     @api.marshal_list_with(full_search_result)
-    def get(self, words):
+    def post(self, words):
         """List all funds"""
         return search(FUNDS.get_all(), words)
