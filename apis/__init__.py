@@ -1,4 +1,5 @@
-from apis.fund_api_routes import api as fund_api
+from apis.fund_discovery_api.fund_discovery_routes import api as discovery_api
+from apis.fund_store_api.fund_api_routes import api as fund_api
 from flask_restx import Api
 
 api = Api(
@@ -11,3 +12,5 @@ api = Api(
 )
 
 api.add_namespace(fund_api, path="/funds")
+
+api.add_namespace(discovery_api, path="/search")
