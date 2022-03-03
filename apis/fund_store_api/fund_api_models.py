@@ -18,10 +18,10 @@ eligibility_criteria_sub_model = api.model(
 full_fund_model = api.model(
     "Fund Full Data",
     {
-        "name": fields.String(
+        "fund_name": fields.String(
             required=True, description="The name of the fund"
         ),
-        "fund_identifier": fields.String(
+        "fund_id": fields.String(
             required=True, description="The unique id for the fund"
         ),
         "fund_description": fields.String(
@@ -33,7 +33,7 @@ full_fund_model = api.model(
 identify_fund_view = api.model(
     "Fund Summary",
     {
-        "name": fields.String(
+        "fund_name": fields.String(
             required=True, description="The name of the fund"
         ),
         "fund_identifier": fields.String(

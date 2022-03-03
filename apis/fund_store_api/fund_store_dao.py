@@ -12,8 +12,8 @@ class FundDAO:
         return list(self.funds.values())
 
     def create(self, data):
-        key = slugify(data["name"])
-        data["fund_identifier"] = key
+        key = slugify(data["fund_name"])
+        data["fund_id"] = key
         self.funds[key] = data
 
     def load_dummy(self, fund_data):
