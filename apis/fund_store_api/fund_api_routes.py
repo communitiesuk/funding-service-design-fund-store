@@ -4,7 +4,6 @@ in it.
 """
 from apis.fund_store_api.fund_api_models import api
 from apis.fund_store_api.fund_api_models import full_fund_model
-from apis.fund_store_api.fund_api_models import identify_fund_view
 from apis.fund_store_api.fund_store_dummy_data import FUNDS
 from flask_restx import Resource
 
@@ -12,7 +11,7 @@ from flask_restx import Resource
 @api.route("/")
 class FundList(Resource):
     @api.doc("list_funds")
-    @api.marshal_list_with(identify_fund_view)
+    @api.marshal_list_with(full_fund_model)
     def get(self):
         """List all funds"""
         return FUNDS.get_all()

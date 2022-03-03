@@ -29,15 +29,3 @@ full_fund_model = api.model(
         ),
     },
 )
-
-identify_fund_view = api.model(
-    "Fund Summary",
-    {
-        "fund_name": fields.String(
-            required=True, description="The name of the fund"
-        ),
-        "fund_identifier": fields.String(
-            required=True, description="The unique id for this fund"
-        ),
-    },
-)
