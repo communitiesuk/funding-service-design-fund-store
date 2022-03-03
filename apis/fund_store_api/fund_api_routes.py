@@ -2,11 +2,11 @@
 Imports the API from fund_app.py and creates the routes
 in it.
 """
-from apis.fund_api_models import api
-from apis.fund_api_models import full_fund_model
-from apis.fund_api_models import identify_fund_view
-from apis.fund_store_dao import FundDAO
-from apis.fund_store_dummy_data import FUND_DATA
+from apis.fund_store_api.fund_api_models import api
+from apis.fund_store_api.fund_api_models import full_fund_model
+from apis.fund_store_api.fund_api_models import identify_fund_view
+from apis.fund_store_api.fund_store_dao import FundDAO
+from apis.fund_store_api.fund_store_dummy_data import FUND_DATA
 from flask_restx import Resource
 
 FUNDS = FundDAO()
