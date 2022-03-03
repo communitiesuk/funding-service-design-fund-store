@@ -29,16 +29,26 @@ def test_funds_endpoint_get(flask_test_client):
     """
     expected_content = [
         {
-            "name": "Harry's breakfast fund",
-            "fund_identifier": "harry-s-breakfast-fund",
+            "fund_name": "Harry's breakfast fund",
+            "fund_id": "harry-s-breakfast-fund",
+            "fund_description": (
+                "A fund designed to supply Harry's endless supply of muesli."
+            ),
         },
         {
-            "name": "Ram's Get Fit Feb fund",
-            "fund_identifier": "ram-s-get-fit-feb-fund",
+            "fund_name": "Ram's Get Fit Feb fund",
+            "fund_id": "ram-s-get-fit-feb-fund",
+            "fund_description": (
+                "A fund designed to supply gym memberships to home workers"
+                " during Feb."
+            ),
         },
         {
-            "name": "Funding service design",
-            "fund_identifier": "funding-service-design",
+            "fund_name": "Funding service design",
+            "fund_id": "funding-service-design",
+            "fund_description": (
+                "A fund designed to test the funding service design dev team."
+            ),
         },
     ]
 
@@ -54,8 +64,8 @@ def test_specific_fund_endpoint_get(flask_test_client):
     detailed infomation about a single fund
     """
     expected_content = {
-        "name": "Ram's Get Fit Feb fund",
-        "fund_identifier": "ram-s-get-fit-feb-fund",
+        "fund_name": "Ram's Get Fit Feb fund",
+        "fund_id": "ram-s-get-fit-feb-fund",
         "fund_description": (
             "A fund designed to supply gym memberships to home workers during"
             " Feb."
