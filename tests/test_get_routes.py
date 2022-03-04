@@ -4,7 +4,9 @@ Contains the tests regarding get requests to the Fund Store API
 import json
 
 
-def expected_content_from_get(endpoint: str, expected_content, test_client):
+def expected_content_from_get(
+    endpoint: str, expected_content, test_client, method="GET"
+):
     """Given a endpoint and expected contented we
     construct a test.
 
@@ -15,7 +17,10 @@ def expected_content_from_get(endpoint: str, expected_content, test_client):
         test_client (_type_): A flask test client with a get method.
     """
 
-    response = test_client.get(endpoint, follow_redirects=True)
+    if method == "GET":
+        response = test_client.get(endpoint, follow_redirects=True)
+    if method == "POST":
+        response = test_client.post(endpoint, follow_redirects=True)
     assert json.loads(response.data) == expected_content
 
 
@@ -74,4 +79,31 @@ def test_specific_fund_endpoint_get(flask_test_client):
 
     expected_content_from_get(
         "/funds/ram-s-get-fit-feb-fund", expected_content, flask_test_client
+    )
+
+
+def test_search_endpoint_post(flask_test_client):
+    """
+    GIVEN Our Api Fund Store
+    WHEN funds/search/?search_items=ram is requested using POST
+    THEN check that the get response returns the expected data
+    If this test succeedes then our seach api is set up and
+    correctly searches.
+    """
+    expected_content = [
+        {
+            "fund_name": "Ram's Get Fit Feb fund",
+            "fund_id": "ram-s-get-fit-feb-fund",
+            "fund_description": (
+                "A fund designed to supply gym memberships to home workers"
+                " during Feb."
+            ),
+        }
+    ]
+
+    expected_content_from_get(
+        "funds/search/?search_items=ram",
+        expected_content,
+        flask_test_client,
+        method="POST",
     )
