@@ -4,7 +4,7 @@ from flask_restx import Api
 
 api = Api(
     title="Fund Store API",
-    version="0.1",
+    version="0.2",
     description=(
         "An api for requesting infomation about funds from the fund store"
     ),
