@@ -1,7 +1,18 @@
 import warnings
+from typing import List
 
 
-def search(to_search: dict, word_list):
+def search(to_search: dict, word_list: List[str]):
+    """A dummy search function. Very inefficient,
+    testing only please.
+
+    Args:
+        to_search (dict): A dictionary of funds.
+        word_list (List[str]): A list of words to search for.
+
+    Returns:
+        _type_: A list of matching funds.
+    """
     warnings.warn(
         "Search function used in the fund store shouldn't be used in"
         " production",

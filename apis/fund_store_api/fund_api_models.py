@@ -1,5 +1,4 @@
-"""Contains the set up for our API and a basic DAO
-for prototyping.
+"""Contains the models for the fund store API.
 """
 from flask_restx import fields
 from flask_restx import Namespace
