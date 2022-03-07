@@ -1,3 +1,6 @@
+"""A dummy DAO implementation. Acts as a template for our
+future implementation.
+"""
 from apis.fund_store_api.fund_api_models import api
 from slugify import slugify
 

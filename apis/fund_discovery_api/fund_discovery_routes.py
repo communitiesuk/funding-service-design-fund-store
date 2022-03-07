@@ -9,7 +9,18 @@ from flask_restx import reqparse
 from flask_restx import Resource
 
 
-def init_routes(dummy_dao):
+def init_discovery_routes(dao):
+    """This functions allows for an
+    arbituary DAO object to be used
+    in the api. This allows for testing
+    dummy data.
+
+    Args:
+        dummy_dao (_type_): A DAO object.
+
+    Returns:
+        _type_: None, but adds routes to the api.
+    """
     search_parser = reqparse.RequestParser()
     search_parser.add_argument("search_items", action="split")
 
@@ -21,4 +32,4 @@ def init_routes(dummy_dao):
         def post(self):
             """List all funds"""
             args = search_parser.parse_args()
-            return search(dummy_dao.get_all(), args["search_items"])
+            return search(dao.get_all(), args["search_items"])

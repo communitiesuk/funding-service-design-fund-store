@@ -1,3 +1,5 @@
+"""Dummy data to use with testing
+"""
 from apis.fund_store_dao import FundDAO
 
 
