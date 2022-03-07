@@ -1,4 +1,4 @@
-from apis.fund_store_api.fund_store_dao import FundDAO
+from apis.fund_store_dao import FundDAO
 
 
 FUND_DATA = [
@@ -23,5 +23,5 @@ FUND_DATA = [
     },
 ]
 
-FUNDS = FundDAO()
-FUNDS.load_dummy(FUND_DATA)
+FUNDS_DUMMY_DAO = FundDAO()
+FUNDS_DUMMY_DAO.load_dummy(FUND_DATA)
