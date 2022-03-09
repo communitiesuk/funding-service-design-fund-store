@@ -1,8 +1,8 @@
 """
 Imports the API and attaches routes to it.
 """
-from apis.fund_store_api.fund_api_models import api
-from apis.fund_store_api.fund_api_models import full_fund_model
+from apis.fund_store_api.models import api
+from apis.fund_store_api.models import full_fund_model
 from flask_restx import Resource
 
 
