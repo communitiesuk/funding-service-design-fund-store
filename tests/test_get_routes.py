@@ -4,7 +4,7 @@ Contains the tests regarding get requests to the Fund Store API
 import json
 
 
-def expected_content_from_get(
+def expected_content_from_request(
     endpoint: str, expected_content, test_client, method="GET"
 ):
     """Given a endpoint and expected contented we
@@ -57,7 +57,9 @@ def test_funds_endpoint_get(flask_test_client):
         },
     ]
 
-    expected_content_from_get("/funds", expected_content, flask_test_client)
+    expected_content_from_request(
+        "/funds", expected_content, flask_test_client
+    )
 
 
 def test_specific_fund_endpoint_get(flask_test_client):
@@ -77,7 +79,7 @@ def test_specific_fund_endpoint_get(flask_test_client):
         ),
     }
 
-    expected_content_from_get(
+    expected_content_from_request(
         "/funds/ram-s-get-fit-feb-fund", expected_content, flask_test_client
     )
 
@@ -101,7 +103,7 @@ def test_search_endpoint_post(flask_test_client):
         }
     ]
 
-    expected_content_from_get(
+    expected_content_from_request(
         "funds/search/?search_items=ram",
         expected_content,
         flask_test_client,
