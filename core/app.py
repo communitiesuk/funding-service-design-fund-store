@@ -32,5 +32,5 @@ def create_app() -> Flask:
         get_bundled_specs(project_root_path + "/openapi/api.yml"),
         validate_responses=True,
     )
-
+    
     return flask_app
