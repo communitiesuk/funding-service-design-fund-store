@@ -13,9 +13,11 @@ ROUND_DATA = [
         "assessment_criteria_weighting": {
             "strategy": 0.35,
             "deliverability": 0.35,
-            "value_for_money": 0.3
+            "value_for_money": 0.3,
         },
-        "opens": "2022-02-01 00:00:01",
+        "opens": "2025-12-28 00:00:01",
+        "deadline": "2025-12-28 00:00:00",
+        "assessment_deadline": "2026-1-28 00:00:00",
         "application_url": "https://funding-service-design-"
         + "form-runner.london.cloudapps.digital/baseline-"
         + "application-questions",
@@ -28,9 +30,11 @@ ROUND_DATA = [
         "assessment_criteria_weighting": {
             "strategy": 0.25,
             "deliverability": 0.45,
-            "value_for_money": 0.3
+            "value_for_money": 0.3,
         },
-        "opens": "2022-06-01 00:00:01",
+        "opens": "2026-3-28 00:00:01",
+        "deadline": "2026-4-28 00:00:00",
+        "assessment_deadline": "2026-5-28 00:00:00",
         "application_url": "https://funding-service-design-"
         + "form-runner.london.cloudapps.digital/baseline-"
         + "application-questions",
@@ -43,9 +47,11 @@ ROUND_DATA = [
         "assessment_criteria_weighting": {
             "strategy": 0.2,
             "deliverability": 0.6,
-            "value_for_money": 0.2
+            "value_for_money": 0.2,
         },
-        "opens": "2022-09-01 00:00:01",
+        "opens": "2026-6-28 00:00:01",
+        "deadline": "2026-7-28 00:00:00",
+        "assessment_deadline": "2026-8-28 00:00:00",
         "application_url": "https://funding-service-design-"
         + "form-runner.london.cloudapps.digital/funding-application",
     },
@@ -57,13 +63,16 @@ ROUND_DATA = [
         "assessment_criteria_weighting": {
             "strategy": 0.3,
             "deliverability": 0.4,
-            "value_for_money": 0.3
+            "value_for_money": 0.3,
         },
+        "opens": "2026-9-28 00:00:01",
+        "deadline": "2026-10-28 00:00:00",
+        "assessment_deadline": "2026-11-28 00:00:00",
         "application_url": (
             "https://funding-service-design-"
             "form-runner.london.cloudapps.digital/funding-application"
         ),
-    }
+    },
 ]
 
 ROUNDS_DUMMY_DAO = RoundDAO()

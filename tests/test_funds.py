@@ -1,20 +1,22 @@
 """
 A file containing all tests related to the fund endpoint.
 """
-import asserts
 from ast import literal_eval
+
+import asserts
 from flask import Flask
 from flask import request
 from tests.test_data import BREKKY_ROUND
-from tests.test_data import TEST_RESPONSE_FUND_DATA
 from tests.test_data import HARRY_S_BREAKFAST_FUND
 from tests.test_data import ROUNDS_IN_HARRY_S_BREAKFAST_FUND
+from tests.test_data import TEST_RESPONSE_FUND_DATA
+
 
 def test_all_funds_endpoint(client: Flask):
     """
     GIVEN the flask test client running our api
     WHEN we execute a GET request on "/funds"
-    THEN we expect a response length consistent 
+    THEN we expect a response length consistent
     with all inital data (including test data).
     """
     host_url = request.host_url
@@ -22,14 +24,19 @@ def test_all_funds_endpoint(client: Flask):
     api_response = client.get(url)
 
     raw_data = api_response.data
-    number_of_funds_in_store_response = len(literal_eval(raw_data.decode("utf-8")))
+    number_of_funds_in_store_response = len(
+        literal_eval(raw_data.decode("utf-8"))
+    )
     number_of_pre_configured_funds_in_store = 1
-    expected_number_of_funds = len(TEST_RESPONSE_FUND_DATA) + number_of_pre_configured_funds_in_store
+    expected_number_of_funds = (
+        len(TEST_RESPONSE_FUND_DATA) + number_of_pre_configured_funds_in_store
+    )
     asserts.assert_equal(
         number_of_funds_in_store_response,
         expected_number_of_funds,
         msg_fmt="/funds didnt return the expected response, {msg}",
     )
+
 
 def test_all_funds_endpoint_includes_fund_test_data(client: Flask):
     """
@@ -43,7 +50,9 @@ def test_all_funds_endpoint_includes_fund_test_data(client: Flask):
     api_response = client.get(url)
 
     raw_data = api_response.data
-    response_data = literal_eval(raw_data.decode("utf-8"))[-len(TEST_RESPONSE_FUND_DATA):]
+    response_data = literal_eval(raw_data.decode("utf-8"))[
+        -len(TEST_RESPONSE_FUND_DATA) :
+    ]
 
     expected_data = TEST_RESPONSE_FUND_DATA
     asserts.assert_equal(

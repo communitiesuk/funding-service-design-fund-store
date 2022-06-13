@@ -27,10 +27,10 @@ TEST_ROUND_DATA = [
         "assessment_criteria_weighting": {
             "strategy": 0.3,
             "deliverability": 0.4,
-            "value_for_money": 0.3
+            "value_for_money": 0.3,
         },
         "opens": "2099-12-25 00:00:01",
-        "application_deadline": "2099-12-26 00:00:00",
+        "deadline": "2099-12-26 00:00:00",
         "assessment_deadline": "2099-12-27 00:00:00",
         "application_url": (
             "https://funding-service-design-"
@@ -40,15 +40,17 @@ TEST_ROUND_DATA = [
 ]
 
 
-TEST_RESPONSE_FUND_DATA = [{"fund_id": slugify(i["fund_name"]), **i} for i in TEST_FUND_DATA]
+TEST_RESPONSE_FUND_DATA = [
+    {"fund_id": slugify(i["fund_name"]), **i} for i in TEST_FUND_DATA
+]
 
 
 HARRY_S_BREAKFAST_FUND = TEST_RESPONSE_FUND_DATA[0]
 
 
 ROUNDS_IN_HARRY_S_BREAKFAST_FUND = [
-    dict 
-    for dict in TEST_ROUND_DATA 
+    dict
+    for dict in TEST_ROUND_DATA
     if dict["fund_id"] == "harry-s-breakfast-fund"
 ]
 

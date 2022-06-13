@@ -1,13 +1,15 @@
 """
 Contains test configuration.
 """
-import pytest
 import copy
+
+import pytest
 from core.app import create_app
 from core.data_operations import fund_data
 from core.data_operations import round_data
-from tests.test_data import TEST_ROUND_DATA, TEST_FUND_DATA
 from flask import Flask
+from tests.test_data import TEST_FUND_DATA
+from tests.test_data import TEST_ROUND_DATA
 
 
 @pytest.fixture()
