@@ -1,14 +1,15 @@
 """
 A file containing all tests related to the fund endpoint.
 """
-
 import asserts
 from flask import Flask
 from flask import request
-from tests.test_data import BREKKY_ROUND, DEFAULT_RESPONSE_FUND_DATA
+from tests.test_data import BREKKY_ROUND
+from tests.test_data import DEFAULT_RESPONSE_FUND_DATA
 from tests.test_data import HARRY_S_BREAKFAST_FUND
 from tests.test_data import ROUNDS_IN_HARRY_S_BREAKFAST_FUND
 from tests.test_data import TEST_RESPONSE_FUND_DATA
+
 
 def test_all_funds_endpoint(client: Flask, load_test_data):
     """

@@ -17,7 +17,8 @@ def app() -> Flask:
     app = create_app()
     yield app
 
-@pytest.fixture(scope='session')
+
+@pytest.fixture(scope="session")
 def load_test_data():
     fund_data.FUNDS_DUMMY_DAO.load_dummy(copy.deepcopy(TEST_FUND_DATA))
     round_data.ROUNDS_DUMMY_DAO.load_dummy(copy.deepcopy(TEST_ROUND_DATA))
