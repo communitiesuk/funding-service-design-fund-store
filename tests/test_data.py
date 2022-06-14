@@ -1,4 +1,5 @@
 from slugify import slugify
+import sys
 
 
 TEST_FUND_DATA = [
@@ -39,9 +40,16 @@ TEST_ROUND_DATA = [
     }
 ]
 
-
+# When processed by the api, a slugied fund-id is added to the fund dictionary. We simulate this step here
 TEST_RESPONSE_FUND_DATA = [
     {"fund_id": slugify(i["fund_name"]), **i} for i in TEST_FUND_DATA
+]
+
+# setting parent path
+sys.path.append('../core')
+from core.data_operations.fund_data import FUND_DATA as DEFAULT_FUND_DATA
+DEFAULT_RESPONSE_FUND_DATA = [
+    {"fund_id": slugify(i["fund_name"]), **i} for i in DEFAULT_FUND_DATA
 ]
 
 

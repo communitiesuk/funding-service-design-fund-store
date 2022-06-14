@@ -15,7 +15,9 @@ from tests.test_data import TEST_ROUND_DATA
 @pytest.fixture()
 def app() -> Flask:
     app = create_app()
-    # load test data, the test data is copied to prevent test data pollution.
+    yield app
+
+@pytest.fixture(scope='session')
+def load_test_data():
     fund_data.FUNDS_DUMMY_DAO.load_dummy(copy.deepcopy(TEST_FUND_DATA))
     round_data.ROUNDS_DUMMY_DAO.load_dummy(copy.deepcopy(TEST_ROUND_DATA))
-    yield app
