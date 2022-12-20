@@ -17,7 +17,6 @@ jobs:
       run-time: 11s
       run_performance_tests: true
       run_e2e_tests: true
-    if: ${{ github.actor != 'dependabot[bot]' }}
     secrets:
       CF_API: ${{secrets.CF_API}}
       CF_ORG: ${{secrets.CF_ORG}}
