@@ -1,7 +1,6 @@
 from core.rounds import get_round, get_rounds_for_fund
 from fsd_utils.config.commonconfig import CommonConfig
-from datetime import datetime, timedelta
-from core.data_operations.round_data import override_fields_from_env
+from core.data_operations.round_data import override_fields_from_env, get_round_data
 
 class MockRequest_cy:
 
@@ -70,3 +69,17 @@ def test_override_fields(monkeypatch):
     result = override_fields_from_env(round_data, overridable_fields)
     assert "changed" == result["opens"], "opens field not changed"
     assert "original" == result["dont_override"], "other field changed"
+
+
+def test_force_open(monkeypatch):
+    monkeypatch.setattr("core.data_operations.round_data.Config.FORCE_OPEN", "True")
+    result = get_round_data("en")
+    assert "2022-01-01 12:00:00" == result[1]["opens"], "opens field not changed"
+    assert "R2W3" == result[1]["short_name"], "other field changed"
+
+def test_override_fields_with_force_open(monkeypatch):
+    monkeypatch.setenv("force_opens_R2W3", "changed")
+    monkeypatch.setattr("core.data_operations.round_data.Config.FORCE_OPEN", "True")
+    result = get_round_data("en")
+    assert "changed" == result[1]["opens"], "opens field not changed"
+    assert "R2W3" == result[1]["short_name"], "other field changed"
