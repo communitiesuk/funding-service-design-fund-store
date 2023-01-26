@@ -46,6 +46,8 @@ def get_funds(search_items=None):
     :return: Tuple containing the list of (filtered) funds and status code
     :rtype: Tuple
     """
+    language = request.args.get("language")
+    fund_data.FUNDS_DUMMY_DAO.load_dummy(fund_data.get_fund_data(language))
     list_of_funds = fund_data.FUNDS_DUMMY_DAO.get_all()
     if search_items is None:
         if isinstance(list_of_funds, list):
