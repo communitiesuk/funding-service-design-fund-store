@@ -4,7 +4,7 @@
 import os
 
 from config import Config
-from core.dummy_dao import RoundDAO
+from core.fund_round_dao import RoundDAO
 
 shared_cof_r2_data = {
     "fund_id": "47aef2f5-3fcb-4d45-acb5-f0152b5f03c4",
@@ -97,4 +97,4 @@ def get_round_data(language):
     ]
 
 
-ROUNDS_DUMMY_DAO = RoundDAO()
+ROUNDS_DAO = RoundDAO()

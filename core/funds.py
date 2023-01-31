@@ -47,8 +47,8 @@ def get_funds(search_items=None):
     :rtype: Tuple
     """
     language = request.args.get("language")
-    fund_data.FUNDS_DUMMY_DAO.load_dummy(fund_data.get_fund_data(language))
-    list_of_funds = fund_data.FUNDS_DUMMY_DAO.get_all()
+    fund_data.FUNDS_DAO.load_data(fund_data.get_fund_data(language))
+    list_of_funds = fund_data.FUNDS_DAO.get_all()
     if search_items is None:
         if isinstance(list_of_funds, list):
             return list_of_funds, 200
@@ -68,8 +68,8 @@ def get_fund(fund_id: str):
     :rtype: Tuple
     """
     language = request.args.get("language")
-    fund_data.FUNDS_DUMMY_DAO.load_dummy(fund_data.get_fund_data(language))
-    fund_search = fund_data.FUNDS_DUMMY_DAO.get_one(fund_id, language)
+    fund_data.FUNDS_DAO.load_data(fund_data.get_fund_data(language))
+    fund_search = fund_data.FUNDS_DAO.get_one(fund_id, language)
     if isinstance(fund_search, dict):
         return fund_search, 200
     else:
