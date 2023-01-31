@@ -65,7 +65,9 @@ def get_round_data(language):
                 if language == "cy"
                 else "Round 2 Window 2",
                 "short_name": "R2W2",
-                "opens": "2022-10-04 12:00:00",
+                "opens": "2022-10-04 12:00:00"
+                if not Config.FORCE_OPEN
+                else "2022-01-01 12:00:00",
                 "deadline": "2022-12-14 11:59:00"
                 if not Config.FORCE_OPEN
                 else "2024-12-31 11:59:00",
