@@ -60,11 +60,40 @@ Then run gunicorn using the following command:
 
     gunicorn wsgi:app -c run/gunicorn/local.py
 
+### Build with Paketo
+
+[Pack](https://buildpacks.io/docs/tools/pack/cli/pack_build/)
+
+[Paketo buildpacks](https://paketo.io/)
+
+```pack build <name your image> --builder paketobuildpacks/builder:base```
+
+Example:
+
+```
+[~/work/repos/funding-service-design-fund-store] pack build paketo-demofsd-app --builder paketobuildpacks/builder:base
+***
+Successfully built image paketo-demofsd-app
+```
+
+You can then use that image with docker to run a container
+
+```
+docker run -d -p 8080:8080 --env PORT=8080 --env FLASK_ENV=dev paketo-demofsd-app
+```
+
+```
+docker ps -a
+CONTAINER ID   IMAGE                       COMMAND                  CREATED          STATUS                    PORTS                    NAMES
+42633142c619   paketo-demofsd-app          "/cnb/process/web"       8 seconds ago    Up 7 seconds              0.0.0.0:8080->8080/tcp   peaceful_knuth
+```
+
 # Pipelines
 
 Place brief descriptions of Pipelines here
 
-* Deploy to Gov PaaS - This is a simple pipeline to demonstrate capabilities.  Builds, tests and deploys a simple python application to the PaaS for evaluation in Dev and Test Only.
+* Deploy to Gov PaaS - This is a simple pipeline to demonstrate capabilities. Builds, tests and deploys a simple python application to the PaaS for evaluation in Dev and Test Only.
+* Tag to Release - This is a simple pipeline that will create the tag required and push an image, built with Paketo, to the GHCR with that tag
 
 # Testing
 
