@@ -2,6 +2,7 @@ name: tag-to-release
 permissions:
   contents: write
 on:
+  workflow_dispatch:
   pull_request:
     types:
       - closed
