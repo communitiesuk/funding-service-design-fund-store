@@ -3,6 +3,7 @@ permissions:
   contents: write
   packages: write
 on:
+  workflow_dispatch:
   pull_request:
     types:
       - closed
