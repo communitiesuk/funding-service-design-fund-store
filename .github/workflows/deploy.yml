@@ -1,8 +1,5 @@
 name: Deploy fds-fund-store to Gov PaaS
 
-permissions:
-  packages: write
-
 on:
   workflow_dispatch:
   push:
@@ -14,22 +11,24 @@ env:
   DOCKER_IMAGE: funding-service-design-fund-store
 
 jobs:
-  test_and_deploy:
-    uses: communitiesuk/funding-design-service-workflows/.github/workflows/deploy.yml@FS-2406
-    with:
-      app_name: ${{ github.event.repository.name }}
-      api: true
-      run_performance_tests: true
-      run_e2e_tests: true
-    secrets:
-      CF_API: ${{secrets.CF_API}}
-      CF_ORG: ${{secrets.CF_ORG}}
-      CF_SPACE: ${{secrets.CF_SPACE}}
-      CF_USER: ${{secrets.CF_USERNAME}}
-      CF_PASSWORD: ${{secrets.CF_PASSWORD}}
-      E2E_PAT: ${{secrets.E2E_PAT}}
+  # test_and_deploy:
+  #   uses: communitiesuk/funding-design-service-workflows/.github/workflows/deploy.yml@FS-2406
+  #   with:
+  #     app_name: ${{ github.event.repository.name }}
+  #     api: true
+  #     run_performance_tests: true
+  #     run_e2e_tests: true
+  #   secrets:
+  #     CF_API: ${{secrets.CF_API}}
+  #     CF_ORG: ${{secrets.CF_ORG}}
+  #     CF_SPACE: ${{secrets.CF_SPACE}}
+  #     CF_USER: ${{secrets.CF_USERNAME}}
+  #     CF_PASSWORD: ${{secrets.CF_PASSWORD}}
+  #     E2E_PAT: ${{secrets.E2E_PAT}}
   paketo_build:
-    needs: test_and_deploy
+    # needs: test_and_deploy
+    permissions:
+      packages: write
     runs-on: ubuntu-latest
     name: Packaging and building the application
     steps:
@@ -64,3 +63,25 @@ jobs:
 
           docker tag ${{ env.DOCKER_IMAGE }} $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
+  copilot_deploy:
+    needs: paketo_build
+    permissions:
+      id-token: write # This is required for requesting the JWT
+      contents: read  # This is required for actions/checkout
+    runs-on: ubuntu-latest
+    environment: test
+    steps:
+      - name: Git clone the repository
+        uses: actions/checkout@v3
+
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::783050088916:role/AzureAD-UKDDCAWSUsers/aaron.williams@version1.com
+          aws-region: eu-west-2
+      - name: Install AWS Copilot CLI
+        run: |
+          curl -Lo aws-copilot https://github.com/aws/copilot-cli/releases/latest/download/copilot-linux && chmod +x aws-copilot && sudo mv aws-copilot /usr/local/bin/copilot
+      - name: Copilot deploy
+        run: |
+          copilot deploy
