@@ -6,12 +6,10 @@ from fsd_utils.config.commonconfig import CommonConfig
 
 
 class MockRequest_cy:
-
     args = {"language": "cy"}
 
 
 class MockRequest_en:
-
     args = {"language": "en"}
 
 
@@ -29,7 +27,6 @@ def test_get_cof_r2w3(mocker, monkeypatch):
 
 
 def test_get_cof_r2w3_welsh(mocker, monkeypatch):
-
     monkeypatch.setattr(
         "core.rounds.request",
         MockRequest_cy(),
@@ -42,7 +39,6 @@ def test_get_cof_r2w3_welsh(mocker, monkeypatch):
 
 
 def test_get_cof_r2w2(mocker, monkeypatch):
-
     monkeypatch.setattr(
         "core.rounds.request",
         MockRequest_en(),
@@ -53,7 +49,6 @@ def test_get_cof_r2w2(mocker, monkeypatch):
 
 
 def test_get_cof(mocker, monkeypatch):
-
     monkeypatch.setattr(
         "core.rounds.request",
         MockRequest_en(),
