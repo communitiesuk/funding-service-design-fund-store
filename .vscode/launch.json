@@ -22,7 +22,7 @@
             "justMyCode": true
         },
         {
-            "name": "Python: Remote Attach",
+            "name": "Docker-Runner fund-store",
             "type": "python",
             "request": "attach",
             "connect": {
