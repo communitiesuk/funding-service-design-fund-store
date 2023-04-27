@@ -4,12 +4,16 @@
 #
 #    pip-compile requirements.in
 #
+alembic==1.10.4
+    # via flask-migrate
 attrs==21.4.0
     # via jsonschema
 babel==2.10.3
     # via flask-babel
-blinker==1.5
-    # via sentry-sdk
+blinker==1.6.2
+    # via
+    #   flask
+    #   sentry-sdk
 certifi==2022.5.18.1
     # via
     #   requests
@@ -20,7 +24,7 @@ chardet==4.0.0
     # via prance
 charset-normalizer==2.0.12
     # via requests
-click==8.0.2
+click==8.1.3
     # via
     #   clickclick
     #   flask
@@ -32,15 +36,23 @@ connexion==2.13.1
     # via -r requirements.in
 cryptography==37.0.4
     # via pyjwt
-flask==2.1.1
+flask==2.3.1
     # via
     #   -r requirements.in
     #   connexion
     #   flask-babel
+    #   flask-migrate
+    #   flask-sqlalchemy
     #   funding-service-design-utils
     #   sentry-sdk
 flask-babel==2.0.0
     # via funding-service-design-utils
+flask-migrate==4.0.4
+    # via -r requirements.in
+flask-sqlalchemy==3.0.3
+    # via
+    #   -r requirements.in
+    #   flask-migrate
 funding-service-design-utils==1.0.23
     # via -r requirements.in
 gunicorn==20.1.0
@@ -63,15 +75,29 @@ jsonschema==4.5.1
     #   connexion
     #   openapi-schema-validator
     #   openapi-spec-validator
+mako==1.2.4
+    # via alembic
 markupsafe==2.1.1
-    # via jinja2
+    # via
+    #   jinja2
+    #   mako
+    #   werkzeug
+marshmallow==3.19.0
+    # via marshmallow-sqlalchemy
+marshmallow-sqlalchemy==0.29.0
+    # via -r requirements.in
 openapi-schema-validator==0.2.3
     # via openapi-spec-validator
 openapi-spec-validator==0.4.0
     # via -r requirements.in
 packaging==21.3
-    # via connexion
+    # via
+    #   connexion
+    #   marshmallow
+    #   marshmallow-sqlalchemy
 prance==0.21.8.0
+    # via -r requirements.in
+psycopg2-binary==2.9.6
     # via -r requirements.in
 pycparser==2.21
     # via cffi
@@ -117,16 +143,34 @@ semver==2.13.0
 sentry-sdk[flask]==1.9.9
     # via funding-service-design-utils
 six==1.16.0
-    # via prance
+    # via
+    #   prance
+    #   sqlalchemy-json
+sqlalchemy==2.0.11
+    # via
+    #   -r requirements.in
+    #   alembic
+    #   flask-sqlalchemy
+    #   marshmallow-sqlalchemy
+    #   sqlalchemy-json
+    #   sqlalchemy-utils
+sqlalchemy-json==0.5.0
+    # via -r requirements.in
+sqlalchemy-utils==0.41.0
+    # via -r requirements.in
 swagger-ui-bundle==0.0.9
     # via -r requirements.in
 text-unidecode==1.3
     # via python-slugify
+typing-extensions==4.5.0
+    # via
+    #   alembic
+    #   sqlalchemy
 urllib3==1.26.12
     # via
     #   requests
     #   sentry-sdk
-werkzeug==2.1.2
+werkzeug==2.3.0
     # via
     #   connexion
     #   flask
