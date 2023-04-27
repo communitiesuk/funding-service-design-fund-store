@@ -1,6 +1,7 @@
 import connexion
 from db.models import Fund  # noqa
 from db.models import Round  # noqa
+from db.models import Section  # noqa
 from flask import Flask
 from fsd_utils import init_sentry
 from fsd_utils.healthchecks.checkers import FlaskRunningChecker
