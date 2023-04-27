@@ -61,6 +61,14 @@ def seed_db(c, database_host="localhost", db_name="fsd_fund_store_1"):
         f"psql -h {database_host} -d {db_name} -a -f db/cof_sql/sections.sql"
     )
     c.run(
+        f"psql -h {database_host} -d {db_name} -a -f"
+        " db/cof_sql/assessment_fields.sql"
+    )
+    c.run(
+        f"psql -h {database_host} -d {db_name} -a -f"
+        " db/cof_sql/section_fields.sql"
+    )
+    c.run(
         f'psql -h {database_host} -d {db_name} -c "select f.short_name as'
         " Fund, r.short_name as Round from round r join fund f on r.fund_id ="
         ' f.id";'
@@ -70,4 +78,11 @@ def seed_db(c, database_host="localhost", db_name="fsd_fund_store_1"):
         " r.short_name, s.title, s.weighting, s.path from section s join"
         " round r on round_id=r.id join fund f on r.fund_id = f.id order by"
         ' path;"'
+    )
+
+    c.run(
+        f'psql -h {database_host} -d {db_name} -c "select s.title, f.title'
+        " from section s left outer join section_field sf on s.id ="
+        " sf.section_id left outer join assessment_field f on sf.field_id ="
+        ' f.id order by s.path, sf.display_order;"'
     )
