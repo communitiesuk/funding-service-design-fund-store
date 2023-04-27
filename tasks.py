@@ -19,13 +19,15 @@ def recreate_local_db(
         )
     )
     c.run(f"createdb -h {database_host} {db_name}")
+    c.run(
+        f'psql -h {database_host} -d {db_name} -c "create extension if not'
+        ' exists ltree;"'
+    )
     print(stylize(f"{db_name} db created on {database_host}...", ECHO_STYLE))
 
 
 @task
-def init_and_run_flask_migrate(
-    c, database_host="localhost", db_name="fsd_fund_store_1"
-):
+def init_migr(c, database_host="localhost", db_name="fsd_fund_store_1"):
     c.run("rm -rf ./db/migrations/")
     print(stylize("Deleted migrations", ECHO_STYLE))
     c.run("flask db init")
@@ -42,6 +44,10 @@ def init_and_run_flask_migrate(
             ECHO_STYLE,
         )
     )
+
+
+@task
+def seed_db(c, database_host="localhost", db_name="fsd_fund_store_1"):
     c.run("flask db upgrade")
     print(
         stylize(
@@ -52,7 +58,16 @@ def init_and_run_flask_migrate(
     c.run(f"psql -h {database_host} -d {db_name} -a -f db/cof_sql/fund.sql")
     c.run(f"psql -h {database_host} -d {db_name} -a -f db/cof_sql/rounds.sql")
     c.run(
+        f"psql -h {database_host} -d {db_name} -a -f db/cof_sql/sections.sql"
+    )
+    c.run(
         f'psql -h {database_host} -d {db_name} -c "select f.short_name as'
         " Fund, r.short_name as Round from round r join fund f on r.fund_id ="
         ' f.id";'
+    )
+    c.run(
+        f'psql -h {database_host} -d {db_name} -c "select f.short_name,'
+        " r.short_name, s.title, s.weighting, s.path from section s join"
+        " round r on round_id=r.id join fund f on r.fund_id = f.id order by"
+        ' path;"'
     )
