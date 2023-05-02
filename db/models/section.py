@@ -62,3 +62,9 @@ class Section(BaseModel):
         secondary=section_field_table,
         back_populates="sections",
     )
+
+    def __str__(self):
+        return self.title
+
+    def __repr__(self):
+        return self.title
