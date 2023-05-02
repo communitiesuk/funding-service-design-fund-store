@@ -19,21 +19,17 @@ pytest_plugins = ["fsd_test_utils.fixtures.db_fixtures"]
 def seed_fund_data(
     request, app, clear_test_data, enable_preserve_test_data, _db
 ):
-    with open("db/cof_sql/fund.sql") as file:
-        query = text(file.read())
-        _db.engine.execute(query)
-    with open("db/cof_sql/rounds.sql") as file:
-        query = text(file.read())
-        _db.engine.execute(query)
-    with open("db/cof_sql/sections_sqla.sql") as file:
-        query = text(file.read())
-        _db.engine.execute(query)
-    with open("db/cof_sql/assessment_fields.sql") as file:
-        query = text(file.read())
-        _db.engine.execute(query)
-    with open("db/cof_sql/section_fields.sql") as file:
-        query = text(file.read())
-        _db.engine.execute(query)
+    with _db.engine.begin() as conn:
+        with open("db/cof_sql/fund.sql") as file:
+            conn.execute(text(file.read()))
+        with open("db/cof_sql/rounds.sql") as file:
+            conn.execute(text(file.read()))
+        with open("db/cof_sql/sections_sqla.sql") as file:
+            conn.execute(text(file.read()))
+        with open("db/cof_sql/assessment_fields.sql") as file:
+            conn.execute(text(file.read()))
+        with open("db/cof_sql/section_fields.sql") as file:
+            conn.execute(text(file.read()))
 
 
 @pytest.fixture(scope="session")
