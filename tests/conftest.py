@@ -8,6 +8,7 @@ from app import create_app
 from core.data_operations import fund_data
 from core.data_operations import round_data
 from flask import Flask
+from sqlalchemy import text
 from tests.test_data import TEST_FUND_DATA
 from tests.test_data import TEST_ROUND_DATA
 
@@ -18,7 +19,21 @@ pytest_plugins = ["fsd_test_utils.fixtures.db_fixtures"]
 def seed_fund_data(
     request, app, clear_test_data, enable_preserve_test_data, _db
 ):
-    pass
+    with open("db/cof_sql/fund.sql") as file:
+        query = text(file.read())
+        _db.engine.execute(query)
+    with open("db/cof_sql/rounds.sql") as file:
+        query = text(file.read())
+        _db.engine.execute(query)
+    with open("db/cof_sql/sections_sqla.sql") as file:
+        query = text(file.read())
+        _db.engine.execute(query)
+    with open("db/cof_sql/assessment_fields.sql") as file:
+        query = text(file.read())
+        _db.engine.execute(query)
+    with open("db/cof_sql/section_fields.sql") as file:
+        query = text(file.read())
+        _db.engine.execute(query)
 
 
 @pytest.fixture(scope="session")

@@ -19,6 +19,7 @@ class Round(BaseModel):
         primary_key=True,
         nullable=False,
     )
+    # fund_id: Mapped[UUID] = mapped_column(ForeignKey("fund.id"))
     fund_id = Column(
         "fund_id",
         UUID(as_uuid=True),

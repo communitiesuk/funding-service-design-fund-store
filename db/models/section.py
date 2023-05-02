@@ -58,7 +58,7 @@ class Section(BaseModel):
     )
     path = Column(LtreeType, nullable=False)
     fields = relationship(
-        "AssesmentField",
+        "AssessmentField",
         secondary=section_field_table,
         back_populates="sections",
     )
