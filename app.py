@@ -1,4 +1,5 @@
 import connexion
+import psycopg2
 from db.models import Fund  # noqa
 from db.models import Round  # noqa
 from db.models import Section  # noqa
@@ -8,6 +9,7 @@ from fsd_utils.healthchecks.checkers import FlaskRunningChecker
 from fsd_utils.healthchecks.healthcheck import Healthcheck
 from fsd_utils.logging import logging
 from openapi.utils import get_bundled_specs
+from sqlalchemy_utils import Ltree
 
 
 def create_app() -> Flask:
@@ -33,6 +35,10 @@ def create_app() -> Flask:
     # Bind Flask-Migrate db utilities to Flask app
     migrate.init_app(
         flask_app, db, directory="db/migrations", render_as_batch=True
+    )
+    # Enable mapping of ltree datatype for sections
+    psycopg2.extensions.register_adapter(
+        Ltree, lambda ltree: psycopg2.extensions.QuotedString(str(ltree))
     )
 
     # Initialise logging

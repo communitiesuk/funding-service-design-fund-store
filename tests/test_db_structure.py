@@ -2,6 +2,8 @@ from db.queries import get_fund_by_id
 from db.queries import get_fund_by_short_name
 from db.queries import get_round_by_id
 from db.queries import get_round_by_short_name
+from db.queries import get_sections_for_round
+from db.queries import sections_filter
 from fsd_utils.config.commonconfig import CommonConfig
 
 
@@ -34,3 +36,14 @@ def test_get_round_by_short_name(seed_fund_data):
     assert r.title == "Round 2 Window 2"
     assert r.short_name == "R2W2"
     assert str(r.id) == CommonConfig.COF_ROUND_2_ID
+
+
+def test_get_sections_for_round(seed_fund_data):
+    sections = get_sections_for_round(CommonConfig.COF_ROUND_2_ID)
+    for section in sections:
+        print(section.title)
+
+
+def test_stuff(seed_fund_data):
+    sections = sections_filter(CommonConfig.COF_ROUND_2_ID)
+    print(sections)
