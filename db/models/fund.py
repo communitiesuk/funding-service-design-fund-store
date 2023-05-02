@@ -1,9 +1,13 @@
 import uuid
+from typing import List
 
 from db import db
+from db.models.round import Round
 from flask_sqlalchemy import DefaultMeta
 from sqlalchemy import Column
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import relationship
 
 
 BaseModel: DefaultMeta = db.Model
@@ -23,3 +27,4 @@ class Fund(BaseModel):
     description = Column(
         "description", db.String(), nullable=False, unique=False
     )
+    rounds: Mapped[List["Round"]] = relationship("Round")

@@ -58,4 +58,5 @@ BEGIN
     VALUES(r2w2id, 'Activities', null, '0.2.10.10.10.20');
     INSERT INTO section(round_id, title, weighting, path)
     VALUES(r2w2id, 'Partnerships', null, '0.2.10.10.10.30');
+
 END $$
