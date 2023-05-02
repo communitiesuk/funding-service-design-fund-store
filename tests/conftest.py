@@ -11,8 +11,17 @@ from flask import Flask
 from tests.test_data import TEST_FUND_DATA
 from tests.test_data import TEST_ROUND_DATA
 
+pytest_plugins = ["fsd_test_utils.fixtures.db_fixtures"]
 
-@pytest.fixture()
+
+@pytest.fixture(scope="function")
+def seed_fund_data(
+    request, app, clear_test_data, enable_preserve_test_data, _db
+):
+    pass
+
+
+@pytest.fixture(scope="session")
 def app() -> Flask:
     app = create_app()
     yield app

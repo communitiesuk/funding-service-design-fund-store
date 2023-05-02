@@ -6,7 +6,7 @@ funding-service-design-utils>=1.0.23,<1.1.0
 #-----------------------------------
 #   Flask Version
 #-----------------------------------
-flask>=2.2.3
+flask==2.2.4
 flask-json
 #-----------------------------------
 #   Connexion APIs
@@ -18,12 +18,12 @@ prance
 #-----------------------------------
 #   Database
 #-----------------------------------
-SQLAlchemy
+SQLAlchemy[mypy]==1.4.44
 Flask-SQLAlchemy>=3.0.3
 Flask-Migrate
 sqlalchemy-utils
 sqlalchemy_json
-psycopg2-binary==2.9.6
+psycopg2-binary
 marshmallow-sqlalchemy
 
 pytest-mock
