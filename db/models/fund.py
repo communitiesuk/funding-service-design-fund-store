@@ -3,7 +3,7 @@ from typing import List
 
 from db import db
 from db.models.round import Round
-from flask_sqlalchemy import DefaultMeta
+from flask_sqlalchemy.model import DefaultMeta
 from sqlalchemy import Column
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped
