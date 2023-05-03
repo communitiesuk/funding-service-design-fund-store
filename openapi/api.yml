@@ -151,6 +151,29 @@ paths:
           description: "If the round exists then the sections are returned."
         404:
           description: "If an invalid fund/round ID is supplied"
+  /db/funds/{fund_id}/rounds/{round_id}/sections/assessment:
+    get:
+      tags:
+        - DB_Sections
+      summary: Returns the assessment sections for the given round
+      description: Given a fund ID and a round ID we return the display sections for assessment
+      operationId: api.routes.get_sections_for_round_assessment
+      parameters:
+        - $ref: "components.yml#/components/parameters/fund_id"
+        - name: round_id
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: language
+          in: query
+          schema:
+            type: string
+      responses:
+        200:
+          description: "If the round exists then the sections are returned."
+        404:
+          description: "If an invalid fund/round ID is supplied"
 
   /funds:
     get:

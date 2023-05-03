@@ -77,3 +77,20 @@ def test_get_app_sections_for_round(flask_test_client, seed_fund_data):
     assert response.status_code == 200
     result = response.json
     assert result[0]["title"] == "About your organisation"
+
+
+def test_get_assess_sections_for_round(flask_test_client, seed_fund_data):
+    response = flask_test_client.get(
+        f"/db/funds/{CommonConfig.COF_FUND_ID}/rounds/"
+        f"{CommonConfig.COF_ROUND_2_ID}/sections/assessment"
+    )
+    assert response.status_code == 200
+    result = response.json
+    assert result[0]["title"] == "Unscored"
+    assert result[1]["title"] == "Scored"
+
+    assert len(result[0]["children"][0]["children"][0]["fields"]) == 2
+    assert (
+        len(result[1]["children"][0]["children"][1]["children"][0]["fields"])
+        == 1
+    )

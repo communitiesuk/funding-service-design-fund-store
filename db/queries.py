@@ -137,15 +137,28 @@ def get_application_sections_for_round(
         return application_sections
 
 
-def get_assessment_sections_for_round(round_id) -> List[Section]:
-    assessment = db.session.scalars(
+def get_assessment_sections_for_round(
+    fund_id, round_id, as_json: bool = False
+) -> List[Section]:
+    assessment_level = db.session.scalar(
         select(Section)
         .filter(Section.round_id == round_id)
         .filter(Section.title == "Assessment")
-    ).one()
-    query = f"{assessment.path}.*{'{1}'}"
+        .join(Round)
+        .filter(Round.fund_id == fund_id)
+    )
+    if not assessment_level:
+        return None
+
+    query = f"{assessment_level.path}.*{'{1}'}"
     lquery = expression.cast(query, LQUERY)
+
     assessment_sections = db.session.scalars(
         select(Section).filter(Section.path.lquery(lquery))
     ).all()
-    return assessment_sections
+
+    if as_json:
+        serialiser = SectionSchema(many=True)
+        return serialiser.dump(assessment_sections)
+    else:
+        return assessment_sections
