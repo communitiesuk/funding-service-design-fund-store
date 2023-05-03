@@ -6,6 +6,28 @@ info:
   version: "0.1.0"
 
 paths:
+  /db/funds:
+    get:
+      tags:
+        - DB_Funds
+      summary: Returns list of all funds
+      description: Returns list of all funds
+      operationId: api.routes.get_funds
+      responses:
+        200:
+          description: "List all funds."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref : 'components.yml#/components/schemas/Fund'
+        404:
+          description: "No funds exist"
+          content:
+              texts/plain:
+                schema:
+                  $ref: 'components.yml#/components/schemas/Error'
   /db/funds/{fund_id}:
     get:
       operationId: api.routes.get_fund
@@ -30,7 +52,7 @@ paths:
               schema:
                 $ref: 'components.yml#/components/schemas/Fund'
         404:
-          description: "Fund page not found for given fund id."
+          description: "Fund not found"
           content:
               texts/plain:
                 schema:

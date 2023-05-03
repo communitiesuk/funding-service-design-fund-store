@@ -1,7 +1,20 @@
+from db.queries import get_all_funds
 from db.queries import get_fund_by_id
 from db.queries import get_fund_by_short_name
 from distutils.util import strtobool
+from flask import abort
 from flask import request
+
+
+def get_funds():
+    # language = request.args.get("language")
+
+    funds = get_all_funds(True)
+
+    if funds:
+        return funds
+
+    abort(404)
 
 
 def get_fund(fund_id):
@@ -17,4 +30,4 @@ def get_fund(fund_id):
     if fund:
         return fund
 
-    return 404
+    abort(404)

@@ -11,6 +11,15 @@ from sqlalchemy.sql import expression
 from sqlalchemy_utils.types.ltree import LQUERY
 
 
+def get_all_funds(as_json: bool = False) -> List[Fund]:
+    funds = db.session.scalars(select(Fund)).all()
+    if as_json:
+        serialiser = FundSchema()
+        return serialiser.dump(funds, many=True)
+    else:
+        return funds
+
+
 def get_fund_by_id(fund_id: str, as_json: bool = False) -> Fund:
     fund = db.session.scalars(select(Fund).filter(Fund.id == fund_id)).one()
     if as_json:
@@ -23,11 +32,11 @@ def get_fund_by_id(fund_id: str, as_json: bool = False) -> Fund:
 def get_fund_by_short_name(
     fund_short_name: str, as_json: bool = False
 ) -> Fund:
-    fund = db.session.scalars(
+    fund = db.session.scalar(
         select(Fund).filter(
             func.lower(Fund.short_name) == func.lower(fund_short_name)
         )
-    ).one()
+    )
     if as_json:
         serialiser = FundSchema()
         return serialiser.dump(fund)
