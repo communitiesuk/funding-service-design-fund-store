@@ -6,6 +6,7 @@ from db.models.round import Round
 from db.models.section import Section
 from db.schemas.fund import FundSchema
 from db.schemas.round import RoundSchema
+from db.schemas.section import SectionSchema
 from sqlalchemy import func
 from sqlalchemy import select
 from sqlalchemy.sql import expression
@@ -110,18 +111,30 @@ def get_sections_for_round(round_id) -> List[Section]:
     ).all()
 
 
-def get_application_sections_for_round(round_id) -> List[Section]:
-    application = db.session.scalars(
+def get_application_sections_for_round(
+    fund_id, round_id, as_json: bool = False
+) -> List[Section]:
+    application_level = db.session.scalar(
         select(Section)
         .filter(Section.round_id == round_id)
         .filter(Section.title == "Application")
-    ).one()
-    query = f"{application.path}.*{'{1}'}"
+        .join(Round)
+        .filter(Round.fund_id == fund_id)
+    )
+    if not application_level:
+        return None
+
+    query = f"{application_level.path}.*{'{1}'}"
     lquery = expression.cast(query, LQUERY)
     application_sections = db.session.scalars(
         select(Section).filter(Section.path.lquery(lquery))
     ).all()
-    return application_sections
+
+    if as_json:
+        serialiser = SectionSchema(many=True)
+        return serialiser.dump(application_sections)
+    else:
+        return application_sections
 
 
 def get_assessment_sections_for_round(round_id) -> List[Section]:

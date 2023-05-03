@@ -128,6 +128,29 @@ paths:
             application/json:
               schema:
                 $ref: "components.yml#/components/schemas/Error"
+  /db/funds/{fund_id}/rounds/{round_id}/sections/application:
+    get:
+      tags:
+        - DB_Sections
+      summary: Returns the application sections for the given round
+      description: Given a fund ID and a round ID we return the display sections for Application
+      operationId: api.routes.get_sections_for_round_application
+      parameters:
+        - $ref: "components.yml#/components/parameters/fund_id"
+        - name: round_id
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: language
+          in: query
+          schema:
+            type: string
+      responses:
+        200:
+          description: "If the round exists then the sections are returned."
+        404:
+          description: "If an invalid fund/round ID is supplied"
 
   /funds:
     get:

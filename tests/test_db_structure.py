@@ -77,7 +77,7 @@ def test_get_round_by_short_name(
 
 def test_get_application_sections(seed_fund_data):
     sections: List[Section] = get_application_sections_for_round(
-        CommonConfig.COF_ROUND_2_ID
+        CommonConfig.COF_FUND_ID, CommonConfig.COF_ROUND_2_ID
     )
     assert len(sections) == 2
     assert sections[0].title == "About your organisation"
