@@ -58,6 +58,77 @@ paths:
                 schema:
                   $ref: 'components.yml#/components/schemas/Error'
 
+  /db/funds/{fund_id}/rounds/{round_id}:
+    get:
+      tags:
+        - DB_Rounds
+      summary: Returns the data on a specified round for a specific fund.
+      description: Given a fund ID and a round ID we return the relavant round data.
+      operationId: api.routes.get_round
+      parameters:
+        - $ref: "components.yml#/components/parameters/fund_id"
+        - name: round_id
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: language
+          in: query
+          schema:
+            type: string
+        - name: use_short_name
+          in: query
+          schema:
+            type: boolean
+          required: false
+      responses:
+        200:
+          description: "If the round exists then the data is returned."
+          # content:
+          #   application/json:
+              # schema:
+              #   $ref: 'components.yml#/components/schemas/Round'
+        404:
+          description: "Round not found from given fund id and round id."
+          content:
+              application/json:
+                schema:
+                  $ref: 'components.yml#/components/schemas/Error'
+
+  /db/funds/{fund_id}/rounds:
+    get:
+      tags:
+        - DB_Rounds
+      summary: Given a fund ID we return all rounds for that fund.
+      description: Given a fund ID we return all rounds for that fund.
+      operationId: api.routes.get_rounds_for_fund
+      parameters:
+        - in: path
+          name: fund_id
+          schema:
+            type: string
+          required: true
+        - name: use_short_name
+          in: query
+          schema:
+            type: boolean
+          required: false
+      responses:
+        200:
+          description: A list of rounds matching the given fund ID.
+          # content:
+          #   application/json:
+          #     schema:
+          #       type: array
+                # items:
+                #   $ref : 'components.yml#/components/schemas/Round'
+        404:
+          description: "Rounds page not found for given fund id."
+          content:
+            application/json:
+              schema:
+                $ref: "components.yml#/components/schemas/Error"
+
   /funds:
     get:
       tags:
