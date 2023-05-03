@@ -19,7 +19,7 @@ def test_get_fund_by_id(seed_fund_data):
 
 
 def test_get_fund_by_short_name(seed_fund_data):
-    f = get_fund_by_short_name("COF")
+    f = get_fund_by_short_name("cof")
     assert f.name == "Community Ownership Fund"
     assert f.short_name == "COF"
 
