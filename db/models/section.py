@@ -1,12 +1,10 @@
 from db import db
-from db import metadata
 from flask_sqlalchemy.model import DefaultMeta
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import func
 from sqlalchemy import Index
 from sqlalchemy import Integer
-from sqlalchemy import Table
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import foreign
 from sqlalchemy.orm import relationship
@@ -17,13 +15,23 @@ from sqlalchemy_utils import LtreeType
 BaseModel: DefaultMeta = db.Model
 
 
-section_field_table = Table(
-    "section_field",
-    metadata,
-    Column("section_id", ForeignKey("section.id"), primary_key=True),
-    Column("field_id", ForeignKey("assessment_field.id"), primary_key=True),
-    Column("display_order", Integer, nullable=False, unique=False),
-)
+# section_field_table = Table(
+#     "section_field",
+#     metadata,
+#     Column("section_id", ForeignKey("section.id"), primary_key=True),
+#     Column("field_id", ForeignKey("assessment_field.id"), primary_key=True),
+#     Column("display_order", Integer, nullable=False, unique=False),
+# )
+
+
+class SectionField(BaseModel):
+    __tablename__ = "section_field"
+    section_id = Column(ForeignKey("section.id"), primary_key=True)
+    field_id = Column(ForeignKey("assessment_field.id"), primary_key=True)
+    display_order = Column(
+        "display_order", Integer, nullable=False, unique=False
+    )
+    field = relationship("AssessmentField")
 
 
 class AssessmentField(BaseModel):
@@ -38,9 +46,9 @@ class AssessmentField(BaseModel):
         "display_type", db.String(), nullable=False, unique=False
     )
     title = Column("title", db.String(), nullable=False, unique=False)
-    sections = relationship(
-        "Section", secondary=section_field_table, back_populates="fields"
-    )
+    # sections = relationship(
+    #     "Section", secondary=section_field_table, back_populates="fields"
+    # )
 
 
 class Section(BaseModel):
@@ -65,15 +73,19 @@ class Section(BaseModel):
         Index("ix_sections_path", path, postgresql_using="gist"),
     )
     fields = relationship(
-        "AssessmentField",
-        secondary=section_field_table,
-        back_populates="sections",
+        "SectionField", order_by=SectionField.display_order, viewonly=True
     )
+    # fields = relationship(
+    #     "AssessmentField",
+    #     secondary=section_field_table,
+    #     back_populates="sections",
+    # )
     parent = relationship(
         "Section",
         primaryjoin=remote(path) == foreign(func.subpath(path, 0, -1)),
         backref="children",
         viewonly=True,
+        order_by="Section.path",
     )
 
     def __str__(self):

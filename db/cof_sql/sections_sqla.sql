@@ -51,11 +51,11 @@
 
 
     INSERT INTO section(round_id, title, weighting, path)
-    VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'General information', null, '0.2.10.10.10.10');
+    VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'General information', null, '0.2.10.10.10');
     INSERT INTO section(round_id, title, weighting, path)
-    VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'Activities', null, '0.2.10.10.10.20');
+    VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'Activities', null, '0.2.10.10.20');
     INSERT INTO section(round_id, title, weighting, path)
-    VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'Partnerships', null, '0.2.10.10.10.30');
+    VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'Partnerships', null, '0.2.10.10.30');
 
 
 

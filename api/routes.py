@@ -1,5 +1,6 @@
 from db.queries import get_all_funds
 from db.queries import get_application_sections_for_round
+from db.queries import get_assessment_sections_for_round
 from db.queries import get_fund_by_id
 from db.queries import get_fund_by_short_name
 from db.queries import get_round_by_id
@@ -68,4 +69,9 @@ def get_rounds_for_fund(fund_id):
 
 def get_sections_for_round_application(fund_id, round_id):
     sections = get_application_sections_for_round(fund_id, round_id, True)
+    return sections if sections else abort(404)
+
+
+def get_sections_for_round_assessment(fund_id, round_id):
+    sections = get_assessment_sections_for_round(fund_id, round_id, True)
     return sections if sections else abort(404)
