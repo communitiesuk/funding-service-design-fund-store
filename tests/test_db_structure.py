@@ -2,6 +2,7 @@ from typing import List
 
 import pytest
 from db.models.section import Section
+from db.queries import get_all_funds
 from db.queries import get_application_sections_for_round
 from db.queries import get_assessment_sections_for_round
 from db.queries import get_fund_by_id
@@ -67,6 +68,15 @@ def test_get_assessment_sections(seed_fund_data):
     assert len(sections[0].children) == 2
     assert sections[1].title == "Scored"
     assert len(sections[1].children) == 0
+
+
+def test_get_all_funds(seed_fund_data):
+    result = get_all_funds(True)
+    assert len(result) == 1
+    assert result[0]["name"] == "Community Ownership Fund"
+    result = get_all_funds(False)
+    assert len(result) == 1
+    assert result[0].name == "Community Ownership Fund"
 
 
 @pytest.mark.skip(reason="tdd")
