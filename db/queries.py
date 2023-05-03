@@ -5,6 +5,8 @@ from db.models.fund import Fund
 from db.models.round import Round
 from db.models.section import Section
 from sqlalchemy import select
+from sqlalchemy.sql import expression
+from sqlalchemy_utils.types.ltree import LQUERY
 
 
 def get_fund_by_id(fund_id: str) -> Fund:
@@ -35,13 +37,29 @@ def get_sections_for_round(round_id) -> List[Section]:
     ).all()
 
 
-def sections_filter(round_id) -> List[Section]:
-    app = db.session.scalars(
+def get_application_sections_for_round(round_id) -> List[Section]:
+    application = db.session.scalars(
         select(Section)
         .filter(Section.round_id == round_id)
         .filter(Section.title == "Application")
     ).one()
+    query = f"{application.path}.*{'{1}'}"
+    lquery = expression.cast(query, LQUERY)
     application_sections = db.session.scalars(
-        select(Section).filter(Section.path.descendant_of(app))
+        select(Section).filter(Section.path.lquery(lquery))
     ).all()
     return application_sections
+
+
+def get_assessment_sections_for_round(round_id) -> List[Section]:
+    assessment = db.session.scalars(
+        select(Section)
+        .filter(Section.round_id == round_id)
+        .filter(Section.title == "Assessment")
+    ).one()
+    query = f"{assessment.path}.*{'{1}'}"
+    lquery = expression.cast(query, LQUERY)
+    assessment_sections = db.session.scalars(
+        select(Section).filter(Section.path.lquery(lquery))
+    ).all()
+    return assessment_sections
