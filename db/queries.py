@@ -5,6 +5,7 @@ from db.models.fund import Fund
 from db.models.round import Round
 from db.models.section import Section
 from db.schemas.fund import FundSchema
+from db.schemas.round import RoundSchema
 from sqlalchemy import func
 from sqlalchemy import select
 from sqlalchemy.sql import expression
@@ -44,14 +45,61 @@ def get_fund_by_short_name(
         return fund
 
 
-def get_round_by_id(round_id: str) -> Round:
-    return db.session.scalars(select(Round).filter(Round.id == round_id)).one()
-
-
-def get_round_by_short_name(round_short_name: str) -> Round:
-    return db.session.scalars(
-        select(Round).filter(Round.short_name == round_short_name)
+def get_round_by_id(
+    fund_id: str, round_id: str, as_json: bool = False
+) -> Round:
+    round = db.session.scalars(
+        select(Round)
+        .filter(Round.id == round_id)
+        .filter(Round.fund_id == fund_id)
     ).one()
+    if as_json:
+        serialiser = RoundSchema()
+        return serialiser.dump(round)
+    else:
+        return round
+
+
+def get_rounds_for_fund_by_id(
+    fund_id: str, as_json: bool = False
+) -> List[Round]:
+    rounds = db.session.scalars(
+        select(Round).filter(Round.fund_id == fund_id)
+    ).all()
+    if as_json:
+        serialiser = RoundSchema()
+        return serialiser.dump(rounds, many=True)
+    else:
+        return rounds
+
+
+def get_round_by_short_name(
+    fund_short_name: str, round_short_name: str, as_json: bool = False
+) -> Round:
+    round = db.session.scalar(
+        select(Round)
+        .filter(func.lower(Round.short_name) == func.lower(round_short_name))
+        .join(Fund)
+        .filter(func.lower(Fund.short_name) == func.lower(fund_short_name))
+    )
+    if as_json:
+        serialiser = RoundSchema()
+        return serialiser.dump(round)
+    else:
+        return round
+
+
+def get_rounds_for_fund_by_short_name(fund_short_name, as_json: bool = False):
+    rounds = db.session.scalars(
+        select(Round)
+        .join(Fund)
+        .filter(func.lower(Fund.short_name) == func.lower(fund_short_name))
+    ).all()
+    if as_json:
+        serialiser = RoundSchema()
+        return serialiser.dump(rounds, many=True)
+    else:
+        return rounds
 
 
 def get_sections_for_round(round_id) -> List[Section]:
