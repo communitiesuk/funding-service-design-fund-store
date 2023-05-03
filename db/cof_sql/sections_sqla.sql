@@ -56,3 +56,22 @@
     VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'Activities', null, '0.2.10.10.10.20');
     INSERT INTO section(round_id, title, weighting, path)
     VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'Partnerships', null, '0.2.10.10.10.30');
+
+
+
+    INSERT INTO section(round_id, title, weighting, path)
+    VALUES('5cf439bf-ef6f-431e-92c5-a1d90a4dd32f', 'Top', null, '25');
+
+    INSERT INTO section(round_id, title, weighting, path)
+    VALUES('5cf439bf-ef6f-431e-92c5-a1d90a4dd32f', 'Application', null, '25.1');
+    INSERT INTO section(round_id, title, weighting, path)
+    VALUES('5cf439bf-ef6f-431e-92c5-a1d90a4dd32f', 'Assessment', null, '25.2');
+    INSERT INTO section(round_id, title, weighting, path)
+    VALUES('5cf439bf-ef6f-431e-92c5-a1d90a4dd32f', 'Unscored', null, '25.2.10');
+    INSERT INTO section(round_id, title, weighting, path)
+    VALUES('5cf439bf-ef6f-431e-92c5-a1d90a4dd32f', 'Scored', null, '25.2.20');
+
+    INSERT INTO section(round_id, title, weighting, path)
+    VALUES('5cf439bf-ef6f-431e-92c5-a1d90a4dd32f', 'Organisation information', null, '25.2.10.10');
+    INSERT INTO section(round_id, title, weighting, path)
+    VALUES('5cf439bf-ef6f-431e-92c5-a1d90a4dd32f', 'Applicant information', null, '25.2.10.20');

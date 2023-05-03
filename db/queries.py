@@ -4,19 +4,32 @@ from db import db
 from db.models.fund import Fund
 from db.models.round import Round
 from db.models.section import Section
+from db.schemas.fund import FundSchema
 from sqlalchemy import select
 from sqlalchemy.sql import expression
 from sqlalchemy_utils.types.ltree import LQUERY
 
 
-def get_fund_by_id(fund_id: str) -> Fund:
-    return db.session.scalars(select(Fund).filter(Fund.id == fund_id)).one()
+def get_fund_by_id(fund_id: str, as_json: bool = False) -> Fund:
+    fund = db.session.scalars(select(Fund).filter(Fund.id == fund_id)).one()
+    if as_json:
+        serialiser = FundSchema()
+        return serialiser.dump(fund)
+    else:
+        return fund
 
 
-def get_fund_by_short_name(fund_short_name: str) -> Fund:
-    return db.session.scalars(
+def get_fund_by_short_name(
+    fund_short_name: str, as_json: bool = False
+) -> Fund:
+    fund = db.session.scalars(
         select(Fund).filter(Fund.short_name == fund_short_name)
     ).one()
+    if as_json:
+        serialiser = FundSchema()
+        return serialiser.dump(fund)
+    else:
+        return fund
 
 
 def get_round_by_id(round_id: str) -> Round:

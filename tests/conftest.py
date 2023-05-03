@@ -38,6 +38,14 @@ def app() -> Flask:
     yield app
 
 
+@pytest.fixture(scope="function")
+def flask_test_client():
+
+    with create_app().app_context() as app_context:
+        with app_context.app.test_client() as test_client:
+            yield test_client
+
+
 @pytest.fixture(scope="session")
 def load_test_data():
     fund_data.FUNDS_DAO.load_data(copy.deepcopy(TEST_FUND_DATA))
