@@ -6,6 +6,36 @@ info:
   version: "0.1.0"
 
 paths:
+  /db/funds/{fund_id}:
+    get:
+      operationId: api.routes.get_fund
+      tags:
+        - DB_Funds
+      parameters:
+        - $ref: "components.yml#/components/parameters/fund_id"
+        - name: language
+          in: query
+          schema:
+            type: string
+        - name: use_short_name
+          in: query
+          schema:
+            type: boolean
+          required: false
+      responses:
+        200:
+          description: "If the fund exists then the data is returned."
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yml#/components/schemas/Fund'
+        404:
+          description: "Fund page not found for given fund id."
+          content:
+              texts/plain:
+                schema:
+                  $ref: 'components.yml#/components/schemas/Error'
+
   /funds:
     get:
       tags:

@@ -59,6 +59,15 @@ def test_get_assessment_sections(seed_fund_data):
     assert sections[1].title == "Scored"
     assert len(sections[1].children) == 1
 
+    sections: List[Section] = get_assessment_sections_for_round(
+        CommonConfig.COF_ROUND_2_W3_ID
+    )
+    assert len(sections) == 2
+    assert sections[0].title == "Unscored"
+    assert len(sections[0].children) == 2
+    assert sections[1].title == "Scored"
+    assert len(sections[1].children) == 0
+
 
 @pytest.mark.skip(reason="tdd")
 def test_get_sections_for_round(seed_fund_data):
