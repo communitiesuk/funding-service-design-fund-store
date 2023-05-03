@@ -3,10 +3,14 @@ from db import metadata
 from flask_sqlalchemy.model import DefaultMeta
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
+from sqlalchemy import func
+from sqlalchemy import Index
 from sqlalchemy import Integer
 from sqlalchemy import Table
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import foreign
 from sqlalchemy.orm import relationship
+from sqlalchemy.orm import remote
 from sqlalchemy_utils import LtreeType
 
 
@@ -57,14 +61,23 @@ class Section(BaseModel):
         nullable=True,
     )
     path = Column(LtreeType, nullable=False)
+    __table_args__ = (
+        Index("ix_sections_path", path, postgresql_using="gist"),
+    )
     fields = relationship(
         "AssessmentField",
         secondary=section_field_table,
         back_populates="sections",
+    )
+    parent = relationship(
+        "Section",
+        primaryjoin=remote(path) == foreign(func.subpath(path, 0, -1)),
+        backref="children",
+        viewonly=True,
     )
 
     def __str__(self):
         return self.title
 
     def __repr__(self):
-        return self.title
+        return "Section({})".format(self.title)

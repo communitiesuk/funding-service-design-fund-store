@@ -1,15 +1,15 @@
+from typing import List
+
+import pytest
+from db.models.section import Section
+from db.queries import get_application_sections_for_round
+from db.queries import get_assessment_sections_for_round
 from db.queries import get_fund_by_id
 from db.queries import get_fund_by_short_name
 from db.queries import get_round_by_id
 from db.queries import get_round_by_short_name
 from db.queries import get_sections_for_round
-from db.queries import sections_filter
 from fsd_utils.config.commonconfig import CommonConfig
-
-
-# @pytest.mark.preserve_test_data(True)
-def test_db_created(seed_fund_data):
-    pass
 
 
 def test_get_fund_by_id(seed_fund_data):
@@ -38,12 +38,30 @@ def test_get_round_by_short_name(seed_fund_data):
     assert str(r.id) == CommonConfig.COF_ROUND_2_ID
 
 
+def test_get_application_sections(seed_fund_data):
+    sections: List[Section] = get_application_sections_for_round(
+        CommonConfig.COF_ROUND_2_ID
+    )
+    assert len(sections) == 2
+    assert sections[0].title == "About your organisation"
+    assert len(sections[0].children) == 2
+    assert sections[1].title == "Strategic case"
+    assert len(sections[1].children) == 2
+
+
+def test_get_assessment_sections(seed_fund_data):
+    sections: List[Section] = get_assessment_sections_for_round(
+        CommonConfig.COF_ROUND_2_ID
+    )
+    assert len(sections) == 2
+    assert sections[0].title == "Unscored"
+    assert len(sections[0].children) == 5
+    assert sections[1].title == "Scored"
+    assert len(sections[1].children) == 1
+
+
+@pytest.mark.skip(reason="tdd")
 def test_get_sections_for_round(seed_fund_data):
     sections = get_sections_for_round(CommonConfig.COF_ROUND_2_ID)
     for section in sections:
         print(section.title)
-
-
-def test_stuff(seed_fund_data):
-    sections = sections_filter(CommonConfig.COF_ROUND_2_ID)
-    print(sections)
