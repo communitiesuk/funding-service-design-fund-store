@@ -106,6 +106,37 @@ def test_get_assessment_sections(seed_fund_data):
     assert len(sections[1].children) == 0
 
 
+def print_section(section, indent):
+    indent += "  "
+    print(f"{indent}{section.title}")
+    for f in section.fields:
+        print(f"{indent}  Q: {f.field.title}")
+    for s in section.children:
+        print_section(s, indent)
+
+
+def test_print_assessment_sections(seed_fund_data):
+
+    sections: List[Section] = get_assessment_sections_for_round(
+        CommonConfig.COF_FUND_ID, CommonConfig.COF_ROUND_2_ID
+    )
+    for section in sections:
+        print_section(section, "")
+
+    print("done")
+
+
+def test_print_application_sections(seed_fund_data):
+
+    sections: List[Section] = get_application_sections_for_round(
+        CommonConfig.COF_FUND_ID, CommonConfig.COF_ROUND_2_ID
+    )
+    for section in sections:
+        print_section(section, "")
+
+    print("done")
+
+
 def test_get_all_funds(seed_fund_data):
     result = get_all_funds(True)
     assert len(result) == 1
