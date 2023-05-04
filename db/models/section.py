@@ -7,10 +7,10 @@ from sqlalchemy import Index
 from sqlalchemy import Integer
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import foreign
+from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import remote
 from sqlalchemy_utils import LtreeType
-
 
 BaseModel: DefaultMeta = db.Model
 
@@ -59,6 +59,14 @@ class Section(BaseModel):
         nullable=False,
     )
     title = Column("title", db.String(), nullable=False, unique=False)
+    title_content_id = mapped_column(Integer, nullable=True)
+    # title_translations = relationship("Translation", primaryjoin=
+    # "Section.title_content_id == Translation.content_id", viewonly=True)
+    # title_translations = relationship("Translation",
+    # primaryjoin="and_(foreign(
+    # Section.title_content_id) == Translation.content_id,
+    # Translation.language.like('%'))",
+    # viewonly=True)
     round_id = Column(
         UUID(as_uuid=True),
         ForeignKey("round.id"),
