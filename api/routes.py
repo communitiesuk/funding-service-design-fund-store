@@ -10,7 +10,7 @@ from db.queries import get_rounds_for_fund_by_short_name
 from distutils.util import strtobool
 from flask import abort
 from flask import request
-from fsd_utils.locale_selector import get_lang
+from fsd_utils.locale_selector.get_lang import get_lang
 
 
 def get_funds():
