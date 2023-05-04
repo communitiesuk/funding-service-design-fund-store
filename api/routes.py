@@ -10,6 +10,7 @@ from db.queries import get_rounds_for_fund_by_short_name
 from distutils.util import strtobool
 from flask import abort
 from flask import request
+from fsd_utils.locale_selector import get_lang
 
 
 def get_funds():
@@ -73,5 +74,7 @@ def get_sections_for_round_application(fund_id, round_id):
 
 
 def get_sections_for_round_assessment(fund_id, round_id):
-    sections = get_assessment_sections_for_round(fund_id, round_id, True)
+    sections = get_assessment_sections_for_round(
+        fund_id, round_id, get_lang(), True
+    )
     return sections if sections else abort(404)

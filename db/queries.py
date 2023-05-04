@@ -138,7 +138,7 @@ def get_application_sections_for_round(
 
 
 def get_assessment_sections_for_round(
-    fund_id, round_id, as_json: bool = False
+    fund_id, round_id, language, as_json: bool = False
 ) -> List[Section]:
     assessment_level = db.session.scalar(
         select(Section)
@@ -152,9 +152,24 @@ def get_assessment_sections_for_round(
 
     query = f"{assessment_level.path}.*{'{1}'}"
     lquery = expression.cast(query, LQUERY)
-
+    # select(Section).join(Translation, onclause=(Section.title_content_id ==
+    #  Translation.content_id) and (Translation.language == 'en'),
+    #  isouter=True)
+    # .filter(Section.id == 12)
     assessment_sections = db.session.scalars(
-        select(Section).filter(Section.path.lquery(lquery))
+        select(Section)
+        # .join
+        # (
+        #     Translation,
+        #     onclause=and_((Translation.language == language),
+        # (Section.title_content_id == Translation.content_id)),
+        #     isouter=True
+        # )
+        # select (Section).filter(Section.path.lquery(lquery))
+        # select(Section).join(Translation, onclause=f"section.title_content_id
+        #  = translation.content_id and translation.language='{language}'",
+        # isouter=True).filter(Section.path.lquery(lquery))
+        .filter(Section.path.lquery(lquery))
     ).all()
 
     if as_json:

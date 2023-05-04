@@ -30,6 +30,8 @@ def seed_fund_data(
             conn.execute(text(file.read()))
         with open("db/cof_sql/section_fields.sql") as file:
             conn.execute(text(file.read()))
+        with open("db/cof_sql/translations.sql") as file:
+            conn.execute(text(file.read()))
 
 
 @pytest.fixture(scope="session")

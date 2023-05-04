@@ -4,15 +4,15 @@ BEGIN
     INSERT INTO section(round_id, title, weighting, path)
     VALUES(r2w2id, 'Top', null, '0');
 
-    INSERT INTO section(round_id, title, weighting, path)
-    VALUES(r2w2id, 'Application', null, '0.1');
-    INSERT INTO section(round_id, title, weighting, path)
-    VALUES(r2w2id, 'Assessment', null, '0.2');
+    INSERT INTO section(round_id, title, weighting, path, title_content_id)
+    VALUES(r2w2id, 'Application', null, '0.1', 1);
+    INSERT INTO section(round_id, title, weighting, path, title_content_id)
+    VALUES(r2w2id, 'Assessment', null, '0.2', 2);
 
-    INSERT INTO section(round_id, title, weighting, path)
-    VALUES(r2w2id, 'About your organisation', null, '0.1.10');
-    INSERT INTO section(round_id, title, weighting, path)
-    VALUES(r2w2id, 'Organisation information', null, '0.1.10.10');
+    INSERT INTO section(round_id, title, weighting, path, title_content_id)
+    VALUES(r2w2id, 'About your organisation', null, '0.1.10', 4);
+    INSERT INTO section(round_id, title, weighting, path, title_content_id)
+    VALUES(r2w2id, 'Organisation information', null, '0.1.10.10', 3);
     INSERT INTO section(round_id, title, weighting, path)
     VALUES(r2w2id, 'Applicant information', null, '0.1.10.20');
     INSERT INTO section(round_id, title, weighting, path)
@@ -28,8 +28,8 @@ BEGIN
     INSERT INTO section(round_id, title, weighting, path)
     VALUES(r2w2id, 'Scored', null, '0.2.20');
 
-    INSERT INTO section(round_id, title, weighting, path)
-    VALUES(r2w2id, 'Organisation information', null, '0.2.10.10');
+    INSERT INTO section(round_id, title, weighting, path, title_content_id)
+    VALUES(r2w2id, 'Organisation information', null, '0.2.10.10', 3);
     INSERT INTO section(round_id, title, weighting, path)
     VALUES(r2w2id, 'Applicant information', null, '0.2.10.20');
     INSERT INTO section(round_id, title, weighting, path)

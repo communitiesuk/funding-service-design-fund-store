@@ -2,15 +2,15 @@
     INSERT INTO section(round_id, title, weighting, path)
     VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'Top', null, '0');
 
-    INSERT INTO section(round_id, title, weighting, path)
-    VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'Application', null, '0.1');
-    INSERT INTO section(round_id, title, weighting, path)
-    VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'Assessment', null, '0.2');
+    INSERT INTO section(round_id, title, weighting, path, title_content_id)
+    VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'Application', null, '0.1', 1);
+    INSERT INTO section(round_id, title, weighting, path, title_content_id)
+    VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'Assessment', null, '0.2', 2);
 
-    INSERT INTO section(round_id, title, weighting, path)
-    VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'About your organisation', null, '0.1.10');
-    INSERT INTO section(round_id, title, weighting, path)
-    VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'Organisation information', null, '0.1.10.10');
+    INSERT INTO section(round_id, title, weighting, path, title_content_id)
+    VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'About your organisation', null, '0.1.10', 4);
+    INSERT INTO section(round_id, title, weighting, path, title_content_id)
+    VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'Organisation information', null, '0.1.10.10', 3);
     INSERT INTO section(round_id, title, weighting, path)
     VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'Applicant information', null, '0.1.10.20');
     INSERT INTO section(round_id, title, weighting, path)
@@ -26,8 +26,8 @@
     INSERT INTO section(round_id, title, weighting, path)
     VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'Scored', null, '0.2.20');
 
-    INSERT INTO section(round_id, title, weighting, path)
-    VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'Organisation information', null, '0.2.10.10');
+    INSERT INTO section(round_id, title, weighting, path, title_content_id)
+    VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'Organisation information', null, '0.2.10.10', 3);
     INSERT INTO section(round_id, title, weighting, path)
     VALUES('c603d114-5364-4474-a0c4-c41cbf4d3bbd', 'Applicant information', null, '0.2.10.20');
     INSERT INTO section(round_id, title, weighting, path)

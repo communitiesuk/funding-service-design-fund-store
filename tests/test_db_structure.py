@@ -88,7 +88,7 @@ def test_get_application_sections(seed_fund_data):
 
 def test_get_assessment_sections(seed_fund_data):
     sections: List[Section] = get_assessment_sections_for_round(
-        CommonConfig.COF_FUND_ID, CommonConfig.COF_ROUND_2_ID
+        CommonConfig.COF_FUND_ID, CommonConfig.COF_ROUND_2_ID, "en"
     )
     assert len(sections) == 2
     assert sections[0].title == "Unscored"
@@ -97,7 +97,7 @@ def test_get_assessment_sections(seed_fund_data):
     assert len(sections[1].children) == 1
 
     sections: List[Section] = get_assessment_sections_for_round(
-        CommonConfig.COF_FUND_ID, CommonConfig.COF_ROUND_2_W3_ID
+        CommonConfig.COF_FUND_ID, CommonConfig.COF_ROUND_2_W3_ID, "en"
     )
     assert len(sections) == 2
     assert sections[0].title == "Unscored"
