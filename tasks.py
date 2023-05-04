@@ -69,6 +69,10 @@ def seed_db(c, database_host="localhost", db_name="fsd_fund_store_1"):
         " db/cof_sql/section_fields.sql"
     )
     c.run(
+        f"psql -h {database_host} -d {db_name} -a -f"
+        " db/cof_sql/translations.sql"
+    )
+    c.run(
         f'psql -h {database_host} -d {db_name} -c "select f.short_name as'
         " Fund, r.short_name as Round from round r join fund f on r.fund_id ="
         ' f.id";'
@@ -86,3 +90,46 @@ def seed_db(c, database_host="localhost", db_name="fsd_fund_store_1"):
         " sf.section_id left outer join assessment_field f on sf.field_id ="
         ' f.id order by s.path, sf.display_order;"'
     )
+
+
+def print_section(section, indent):
+    indent += "  "
+    print(f"{indent}{section.title}")
+    for f in section.fields:
+        print(f"{indent}  Q: {f.field.title}")
+    for s in section.children:
+        print_section(s, indent)
+
+
+@task
+def print_application_sections(c):
+    from fsd_utils.config.commonconfig import CommonConfig
+    from app import create_app
+    from db.queries import get_application_sections_for_round
+
+    target_round = CommonConfig.COF_ROUND_2_ID
+    target_fund = CommonConfig.COF_FUND_ID
+
+    app = create_app()
+    with app.app_context():
+        sections = get_application_sections_for_round(
+            target_fund, target_round
+        )
+        for section in sections:
+            print_section(section, "")
+
+
+@task
+def print_assessment_sections(c):
+    from fsd_utils.config.commonconfig import CommonConfig
+    from app import create_app
+    from db.queries import get_assessment_sections_for_round
+
+    target_round = CommonConfig.COF_ROUND_2_ID
+    target_fund = CommonConfig.COF_FUND_ID
+
+    app = create_app()
+    with app.app_context():
+        sections = get_assessment_sections_for_round(target_fund, target_round)
+        for section in sections:
+            print_section(section, "")
