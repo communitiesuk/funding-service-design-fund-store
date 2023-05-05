@@ -34,6 +34,16 @@ def seed_fund_data(
             conn.execute(text(file.read()))
 
 
+@pytest.fixture(scope="function")
+def seed_only_fund_and_round_data(
+    request, app, clear_test_data, enable_preserve_test_data, _db
+):
+    with _db.engine.begin() as conn:
+        with open("db/cof_sql/fund.sql") as file:
+            conn.execute(text(file.read()))
+        with open("db/cof_sql/rounds.sql") as file:
+            conn.execute(text(file.read()))
+
 @pytest.fixture(scope="session")
 def app() -> Flask:
     app = create_app()

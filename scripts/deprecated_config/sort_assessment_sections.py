@@ -1,4 +1,4 @@
-from assessment_section_config import scored_sections, unscored_sections
+from scripts.deprecated_config.assessment_section_config import scored_sections, unscored_sections
 
 
 def map_fields(fields, all_fields):
@@ -23,7 +23,7 @@ def map_fields(fields, all_fields):
                 )
         else:
             ordered_fields.append({
-                "form_json_id,": field["field_id"],
+                "form_json_id": field["field_id"],
                 "display_order": 10*(index+1)
             })
             all_fields.append(
@@ -101,4 +101,3 @@ def return_numerically_sorted_section_for_assessment(scored_sections, unscored_s
 
 
 sorted_sections_and_field_ids = return_numerically_sorted_section_for_assessment(scored_sections, unscored_sections)
-print(sorted_sections_and_field_ids)
