@@ -68,9 +68,12 @@ def seed_db(c, database_host="localhost", db_name="fsd_fund_store_1"):
         f"psql -h {database_host} -d {db_name} -a -f"
         " db/cof_sql/section_fields.sql"
     )
+    # c.run(
+    #     f"psql -h {database_host} -d {db_name} -a -f"
+    #     " db/cof_sql/translations.sql"
+    # )
     c.run(
-        f"psql -h {database_host} -d {db_name} -a -f"
-        " db/cof_sql/translations.sql"
+        f"psql -h {database_host} -d {db_name} -a -f db/cof_sql/form_name.sql"
     )
     c.run(
         f'psql -h {database_host} -d {db_name} -c "select f.short_name as'
