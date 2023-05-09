@@ -2,11 +2,13 @@
 Contains test configuration.
 """
 import copy
+from uuid import uuid4
 
 import pytest
 from app import create_app
 from core.data_operations import fund_data
 from core.data_operations import round_data
+from db.queries import insert_fund_data
 from flask import Flask
 from sqlalchemy import text
 from tests.test_data import TEST_FUND_DATA
@@ -43,6 +45,57 @@ def seed_only_fund_and_round_data(
             conn.execute(text(file.read()))
         with open("db/cof_sql/rounds.sql") as file:
             conn.execute(text(file.read()))
+
+
+@pytest.fixture(scope="function")
+def seed_dynamic_data(
+    request, app, clear_test_data, enable_preserve_test_data, _db
+):
+    marker = request.node.get_closest_marker("seed_config")
+    if marker is None:
+        seed_config = {
+            "funds": [
+                {
+                    "rounds": [
+                        {
+                            "is_open": True,
+                            "is_past_deadline": False,
+                            "is_not_yet_open": False,
+                        },
+                        {
+                            "is_open": False,
+                            "is_past_deadline": True,
+                            "is_not_yet_open": False,
+                        },
+                        {
+                            "is_open": False,
+                            "is_past_deadline": False,
+                            "is_not_yet_open": True,
+                        },
+                    ]
+                }
+            ]
+        }
+    else:
+        seed_config = marker.args[0]
+    inserted_data = {"funds": []}
+    for fund in seed_config["funds"]:
+        fund_id = str(uuid4())
+        short_suffix = fund_id[0:4]
+        fund_config = {
+            "id": fund_id,
+            "name": f"Unit Test Fund {short_suffix}",
+            "title": f"Unit test fund title {short_suffix}",
+            "short_name": short_suffix,
+            "description": "testing description",
+        }
+        insert_fund_data(fund_config)
+        inserted_data["funds"].append(
+            {"rounds": [], "id": fund_id, "short_name": short_suffix}
+        )
+
+    yield inserted_data
+
 
 @pytest.fixture(scope="session")
 def app() -> Flask:
