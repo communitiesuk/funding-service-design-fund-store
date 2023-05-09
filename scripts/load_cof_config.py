@@ -47,6 +47,22 @@ with app.app_context():
         "support_times":'9am to 5pm',
         "support_days":'Monday to Friday',
         "instructions":'You must have received an invitation to apply. If we did not invite you, first <a href="https://www.gov.uk/government/publications/community-ownership-fund-prospectus"> express your interest in the fund</a>.'
+    },{
+        "id":'5cf439bf-ef6f-431e-92c5-a1d90a4dd32f',
+        "title":'Round 2 Window 3',
+        "short_name":'R2W3',
+        "opens":'2022-10-04 12:00:00',
+        "deadline":'2023-12-14 11:59:00',
+        "fund_id":'47aef2f5-3fcb-4d45-acb5-f0152b5f03c4',
+        "assessment_deadline":'2024-03-30 12:00:00',
+        "prospectus":'https://www.gov.uk/government/publications/community-ownership-fund-prospectus',
+        "privacy_notice":'https://www.gov.uk/government/publications/community-ownership-fund-privacy-notice/community-ownership-fund-privacy-notice',
+        "contact_email":'COF@levellingup.gov.uk',
+        "contact_phone": None,
+        "contact_textphone": None,
+        "support_times":'9am to 5pm',
+        "support_days":'Monday to Friday',
+        "instructions":'You must have received an invitation to apply. If we did not invite you, first <a href="https://www.gov.uk/government/publications/community-ownership-fund-prospectus"> express your interest in the fund</a>.'
     }]
 
     inserted_fund = insert_fund_data(fund_config)
@@ -61,8 +77,10 @@ with app.app_context():
         {'section_name': 'Application', 'tree_path': application_tree_base_path, 'weighting': None},
         {'section_name': 'Assessment', 'tree_path': assessment_tree_base_path, 'weighting': None}
     ]
+    print("Inserting sections for COFR2W2")
     insert_application_sections(CommonConfig.COF_ROUND_2_ID, tree_base_sections)
-
+    print("Inserting sections for COFR2W3")
+    insert_application_sections(CommonConfig.COF_ROUND_2_W3_ID, tree_base_sections)
     # -- load fields belonging to round --
     # inserted_field_ids = upsert_fields(assessment_config["all_fields"])
 
