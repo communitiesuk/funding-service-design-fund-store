@@ -96,6 +96,8 @@ class Section(BaseModel):
         order_by="Section.path",
     )
 
+    form_name = relationship("FormName")
+
     def __str__(self):
         return self.title
 

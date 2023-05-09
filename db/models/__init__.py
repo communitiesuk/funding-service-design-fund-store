@@ -1,3 +1,4 @@
+from .form_name import FormName  # noqa
 from .fund import Fund  # noqa
 from .round import Round  # noqa
 from .section import AssessmentField  # noqa
@@ -13,6 +14,6 @@ __all__ = [
     "Fund",
     "Section",
     "AssessmentField",
-    # "section_field_table",
     "SectionField",
+    "FormName",
 ]

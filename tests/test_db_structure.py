@@ -97,6 +97,10 @@ def test_get_application_sections(seed_fund_data):
     assert len(sections) == 2
     assert sections[0].title == "About your organisation"
     assert len(sections[0].children) == 2
+    assert (
+        sections[0].children[0].form_name[0].form_name
+        == "organisation-information"
+    )
     assert sections[1].title == "Strategic case"
     assert len(sections[1].children) == 2
 
