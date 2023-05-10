@@ -15,13 +15,6 @@ shared_cof_r2_data = {
         "email_address": "COF@levellingup.gov.uk",
         "text_phone": "",
     },
-    "support_availability": {
-        "time": "9am to 5pm",
-        "days": "Monday to Friday",
-        "closed": (
-            "Easter Sunday, Christmas Day, Boxing Day and New Year’s Day"
-        ),
-    },
     "assessment_criteria_weighting": [
         {
             "id": "e2fd30d2-9207-421c-b8b3-c961bcee138b",
@@ -85,6 +78,12 @@ def get_round_data(language):
                     " <a href='https://www.gov.uk/government/publications/community-ownership-fund-prospectus'>"  # noqa
                     " express your interest in the fund</a>."  # noqa
                 ),
+                "support_availability": {
+                    "time": "9yb i 5yp" if language == "cy" else "9am to 5pm",
+                    "days": "Dydd Llun i ddydd Gwener"
+                    if language == "cy"
+                    else "Monday to Friday",
+                },
                 **shared_cof_r2_data,
             },
             overridable_fields,
@@ -102,7 +101,7 @@ def get_round_data(language):
                 "deadline": "2023-04-14 11:59:00"
                 if not Config.FORCE_OPEN
                 else "2024-12-31 11:59:00",
-                "assessment_deadline": "2023-05-05 12:00:00",
+                "assessment_deadline": "2023-05-17 12:00:00",
                 "instructions": (
                     "Mae'n rhaid i chi fod wedi derbyn gwahoddiad i ymgeisio."
                     " Os na wnaethom eich gwahodd,  <a href="
@@ -116,6 +115,12 @@ def get_round_data(language):
                     " <a href='https://www.gov.uk/government/publications/community-ownership-fund-prospectus'>"  # noqa
                     " express your interest in the fund</a>."  # noqa
                 ),
+                "support_availability": {
+                    "time": "9yb i 5yp" if language == "cy" else "9am to 5pm",
+                    "days": "Dydd Llun i ddydd Gwener"
+                    if language == "cy"
+                    else "Monday to Friday",
+                },
                 **shared_cof_r2_data,
             },
             overridable_fields,
