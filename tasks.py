@@ -106,12 +106,12 @@ def print_section(section, indent):
 
 @task
 def print_application_sections(c):
-    from fsd_utils.config.commonconfig import CommonConfig
+    from fsd_test_utils.test_config.useful_config import UsefulConfig
     from app import create_app
     from db.queries import get_application_sections_for_round
 
-    target_round = CommonConfig.COF_ROUND_2_ID
-    target_fund = CommonConfig.COF_FUND_ID
+    target_round = UsefulConfig.COF_ROUND_2_ID
+    target_fund = UsefulConfig.COF_FUND_ID
 
     app = create_app()
     with app.app_context():
@@ -124,12 +124,12 @@ def print_application_sections(c):
 
 @task
 def print_assessment_sections(c):
-    from fsd_utils.config.commonconfig import CommonConfig
+    from fsd_test_utils.test_config.useful_config import UsefulConfig
     from app import create_app
     from db.queries import get_assessment_sections_for_round
 
-    target_round = CommonConfig.COF_ROUND_2_ID
-    target_fund = CommonConfig.COF_FUND_ID
+    target_round = UsefulConfig.COF_ROUND_2_ID
+    target_fund = UsefulConfig.COF_FUND_ID
 
     app = create_app()
     with app.app_context():

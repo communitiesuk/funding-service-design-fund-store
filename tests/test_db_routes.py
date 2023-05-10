@@ -1,4 +1,4 @@
-from fsd_utils.config.commonconfig import CommonConfig
+from fsd_test_utils.test_config.useful_config import UsefulConfig
 
 
 def test_get_fund_by_short_name(flask_test_client, seed_fund_data):
@@ -12,7 +12,7 @@ def test_get_fund_by_short_name(flask_test_client, seed_fund_data):
 
 
 def test_get_fund_by_id(flask_test_client, seed_fund_data):
-    response = flask_test_client.get(f"/db/funds/{CommonConfig.COF_FUND_ID}")
+    response = flask_test_client.get(f"/db/funds/{UsefulConfig.COF_FUND_ID}")
     assert response.status_code == 200
     result = response.json
     assert result["name"] == "Community Ownership Fund"
@@ -29,8 +29,8 @@ def test_get_round_by_short_name(flask_test_client, seed_fund_data):
 
 def test_get_round_by_id(flask_test_client, seed_fund_data):
     response = flask_test_client.get(
-        f"/db/funds/{CommonConfig.COF_FUND_ID}/"
-        f"rounds/{CommonConfig.COF_ROUND_2_ID}"
+        f"/db/funds/{UsefulConfig.COF_FUND_ID}/"
+        f"rounds/{UsefulConfig.COF_ROUND_2_ID}"
     )
     assert response.status_code == 200
     result = response.json
@@ -49,7 +49,7 @@ def test_get_rounds_for_fund_by_short_name(flask_test_client, seed_fund_data):
 
 def test_get_rounds_for_fund_by_id(flask_test_client, seed_fund_data):
     response = flask_test_client.get(
-        f"/db/funds/{CommonConfig.COF_FUND_ID}/rounds"
+        f"/db/funds/{UsefulConfig.COF_FUND_ID}/rounds"
     )
     assert response.status_code == 200
     result = response.json
@@ -71,8 +71,8 @@ def test_get_all_funds_no_data(flask_test_client):
 
 def test_get_app_sections_for_round(flask_test_client, seed_fund_data):
     response = flask_test_client.get(
-        f"/db/funds/{CommonConfig.COF_FUND_ID}/rounds/"
-        f"{CommonConfig.COF_ROUND_2_ID}/sections/application"
+        f"/db/funds/{UsefulConfig.COF_FUND_ID}/rounds/"
+        f"{UsefulConfig.COF_ROUND_2_ID}/sections/application"
     )
     assert response.status_code == 200
     result = response.json
@@ -81,8 +81,8 @@ def test_get_app_sections_for_round(flask_test_client, seed_fund_data):
 
 def test_get_assess_sections_for_round(flask_test_client, seed_fund_data):
     response = flask_test_client.get(
-        f"/db/funds/{CommonConfig.COF_FUND_ID}/rounds/"
-        f"{CommonConfig.COF_ROUND_2_ID}/sections/assessment"
+        f"/db/funds/{UsefulConfig.COF_FUND_ID}/rounds/"
+        f"{UsefulConfig.COF_ROUND_2_ID}/sections/assessment"
     )
     assert response.status_code == 200
     result = response.json
