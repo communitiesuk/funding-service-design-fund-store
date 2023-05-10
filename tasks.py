@@ -7,9 +7,7 @@ ECHO_STYLE = fg("light_gray") + attr("bold")
 
 
 @task
-def recreate_local_db(
-    c, database_host="localhost", db_name="fsd_fund_store_1"
-):
+def recreate_local_db(c, database_host="localhost", db_name="fsd_fund_store_1"):
     """Create a clean database for testing"""
     c.run(f"dropdb -h {database_host} --if-exists {db_name} --force")
     print(
@@ -57,24 +55,16 @@ def seed_db(c, database_host="localhost", db_name="fsd_fund_store_1"):
     )
     c.run(f"psql -h {database_host} -d {db_name} -a -f db/cof_sql/fund.sql")
     c.run(f"psql -h {database_host} -d {db_name} -a -f db/cof_sql/rounds.sql")
+    c.run(f"psql -h {database_host} -d {db_name} -a -f db/cof_sql/sections.sql")
     c.run(
-        f"psql -h {database_host} -d {db_name} -a -f db/cof_sql/sections.sql"
+        f"psql -h {database_host} -d {db_name} -a -f db/cof_sql/assessment_fields.sql"
     )
-    c.run(
-        f"psql -h {database_host} -d {db_name} -a -f"
-        " db/cof_sql/assessment_fields.sql"
-    )
-    c.run(
-        f"psql -h {database_host} -d {db_name} -a -f"
-        " db/cof_sql/section_fields.sql"
-    )
+    c.run(f"psql -h {database_host} -d {db_name} -a -f db/cof_sql/section_fields.sql")
     # c.run(
     #     f"psql -h {database_host} -d {db_name} -a -f"
     #     " db/cof_sql/translations.sql"
     # )
-    c.run(
-        f"psql -h {database_host} -d {db_name} -a -f db/cof_sql/form_name.sql"
-    )
+    c.run(f"psql -h {database_host} -d {db_name} -a -f db/cof_sql/form_name.sql")
     c.run(
         f'psql -h {database_host} -d {db_name} -c "select f.short_name as'
         " Fund, r.short_name as Round from round r join fund f on r.fund_id ="
@@ -115,9 +105,7 @@ def print_application_sections(c):
 
     app = create_app()
     with app.app_context():
-        sections = get_application_sections_for_round(
-            target_fund, target_round
-        )
+        sections = get_application_sections_for_round(target_fund, target_round)
         for section in sections:
             print_section(section, "")
 

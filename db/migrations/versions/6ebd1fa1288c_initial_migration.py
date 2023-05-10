@@ -69,9 +69,7 @@ def upgrade():
         sa.Column("title_content_id", sa.Integer(), nullable=True),
         sa.Column("round_id", sa.UUID(), nullable=False),
         sa.Column("weighting", sa.Integer(), nullable=True),
-        sa.Column(
-            "path", sqlalchemy_utils.types.ltree.LtreeType(), nullable=False
-        ),
+        sa.Column("path", sqlalchemy_utils.types.ltree.LtreeType(), nullable=False),
         sa.ForeignKeyConstraint(
             ["round_id"], ["round.id"], name=op.f("fk_section_round_id_round")
         ),

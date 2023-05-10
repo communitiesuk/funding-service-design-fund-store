@@ -97,10 +97,7 @@ def test_get_application_sections(seed_fund_data):
     assert len(sections) == 2
     assert sections[0].title == "About your organisation"
     assert len(sections[0].children) == 2
-    assert (
-        sections[0].children[0].form_name[0].form_name
-        == "organisation-information"
-    )
+    assert sections[0].children[0].form_name[0].form_name == "organisation-information"
     assert sections[1].title == "Strategic case"
     assert len(sections[1].children) == 2
 
@@ -142,11 +139,9 @@ def test_get_sections_for_round(seed_fund_data):
 
 
 def test_load_application_sections(seed_only_fund_and_round_data):
-    sorted_application_sections = (
-        return_numerically_sorted_section_for_application(
-            UsefulConfig.COF_R2_ORDERED_FORMS_CONFIG
-        )["sorted_sections"]
-    )
+    sorted_application_sections = return_numerically_sorted_section_for_application(
+        UsefulConfig.COF_R2_ORDERED_FORMS_CONFIG
+    )["sorted_sections"]
     result = insert_application_sections(
         UsefulConfig.COF_ROUND_2_ID, sorted_application_sections
     )
@@ -160,9 +155,7 @@ def test_load_assessment_sections(seed_only_fund_and_round_data):
     )
 
     inserted_field_ids = upsert_fields(assessment_config["all_fields"])
-    result = insert_assessment_sections(
-        UsefulConfig.COF_ROUND_2_ID, assessment_config
-    )
+    result = insert_assessment_sections(UsefulConfig.COF_ROUND_2_ID, assessment_config)
 
     assert len(inserted_field_ids) == 124
     assert len(result["inserted_sections"]) == 53

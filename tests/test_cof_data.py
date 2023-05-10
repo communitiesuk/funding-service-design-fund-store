@@ -20,9 +20,7 @@ def test_get_cof_r2w3(mocker, monkeypatch):
         "core.rounds.request",
         MockRequest_en(),
     )
-    result = get_round(
-        UsefulConfig.COF_FUND_ID, UsefulConfig.COF_ROUND_2_W3_ID
-    )
+    result = get_round(UsefulConfig.COF_FUND_ID, UsefulConfig.COF_ROUND_2_W3_ID)
 
     assert "Round 2 Window 3" == result[0]["title"]
     assert "Monday to Friday" == result[0]["support_availability"]["days"]
@@ -34,9 +32,7 @@ def test_get_cof_r2w3_welsh(mocker, monkeypatch):
         "core.rounds.request",
         MockRequest_cy(),
     )
-    result = get_round(
-        UsefulConfig.COF_FUND_ID, UsefulConfig.COF_ROUND_2_W3_ID
-    )
+    result = get_round(UsefulConfig.COF_FUND_ID, UsefulConfig.COF_ROUND_2_W3_ID)
     assert "Cylch 2 Cyfnod Cynnig 3" == result[0]["title"]
     assert "Dydd Llun i ddydd Gwener" == result[0]["support_availability"]["days"]
 

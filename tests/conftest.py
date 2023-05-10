@@ -18,9 +18,7 @@ pytest_plugins = ["fsd_test_utils.fixtures.db_fixtures"]
 
 
 @pytest.fixture(scope="function")
-def seed_fund_data(
-    request, app, clear_test_data, enable_preserve_test_data, _db
-):
+def seed_fund_data(request, app, clear_test_data, enable_preserve_test_data, _db):
     with _db.engine.begin() as conn:
         with open("db/cof_sql/fund.sql") as file:
             conn.execute(text(file.read()))
@@ -50,9 +48,7 @@ def seed_only_fund_and_round_data(
 
 
 @pytest.fixture(scope="function")
-def seed_dynamic_data(
-    request, app, clear_test_data, enable_preserve_test_data, _db
-):
+def seed_dynamic_data(request, app, clear_test_data, enable_preserve_test_data, _db):
     marker = request.node.get_closest_marker("seed_config")
     if marker is None:
         seed_config = {

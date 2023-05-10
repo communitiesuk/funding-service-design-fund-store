@@ -18,6 +18,5 @@ class UnitTestConfig(Config):
     # Database
     SQLALCHEMY_DATABASE_URI = environ.get(
         "DATABASE_URL",
-        "postgresql://postgres:postgres@127.0.0.1:5432/"
-        "fsd_fund_store_unit_test",
+        "postgresql://postgres:postgres@127.0.0.1:5432/fsd_fund_store_unit_test",
     )

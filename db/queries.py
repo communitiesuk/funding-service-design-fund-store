@@ -38,13 +38,9 @@ def get_fund_by_id(fund_id: str, as_json: bool = False) -> Fund:
         return fund
 
 
-def get_fund_by_short_name(
-    fund_short_name: str, as_json: bool = False
-) -> Fund:
+def get_fund_by_short_name(fund_short_name: str, as_json: bool = False) -> Fund:
     fund = db.session.scalar(
-        select(Fund).filter(
-            func.lower(Fund.short_name) == func.lower(fund_short_name)
-        )
+        select(Fund).filter(func.lower(Fund.short_name) == func.lower(fund_short_name))
     )
     if as_json:
         serialiser = FundSchema()
@@ -53,13 +49,9 @@ def get_fund_by_short_name(
         return fund
 
 
-def get_round_by_id(
-    fund_id: str, round_id: str, as_json: bool = False
-) -> Round:
+def get_round_by_id(fund_id: str, round_id: str, as_json: bool = False) -> Round:
     round = db.session.scalars(
-        select(Round)
-        .filter(Round.id == round_id)
-        .filter(Round.fund_id == fund_id)
+        select(Round).filter(Round.id == round_id).filter(Round.fund_id == fund_id)
     ).one()
     if as_json:
         serialiser = RoundSchema()
@@ -68,12 +60,8 @@ def get_round_by_id(
         return round
 
 
-def get_rounds_for_fund_by_id(
-    fund_id: str, as_json: bool = False
-) -> List[Round]:
-    rounds = db.session.scalars(
-        select(Round).filter(Round.fund_id == fund_id)
-    ).all()
+def get_rounds_for_fund_by_id(fund_id: str, as_json: bool = False) -> List[Round]:
+    rounds = db.session.scalars(select(Round).filter(Round.fund_id == fund_id)).all()
     if as_json:
         serialiser = RoundSchema()
         return serialiser.dump(rounds, many=True)
@@ -112,9 +100,7 @@ def get_rounds_for_fund_by_short_name(fund_short_name, as_json: bool = False):
 
 def get_sections_for_round(round_id) -> List[Section]:
     return db.session.scalars(
-        select(Section)
-        .filter(Section.round_id == round_id)
-        .order_by(Section.path)
+        select(Section).filter(Section.round_id == round_id).order_by(Section.path)
     ).all()
 
 

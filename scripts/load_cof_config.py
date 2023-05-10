@@ -43,11 +43,9 @@ def create_sections(path_prefix, round_id, forms_config):
     # -- load application sections --
     if forms_config:
         # -- convert old config into new config (stage not necessary for new rounds) --
-        sorted_application_sections = (
-            return_numerically_sorted_section_for_application(
-                forms_config, tree_base_sections[0]["tree_path"]
-            )["sorted_sections"]
-        )
+        sorted_application_sections = return_numerically_sorted_section_for_application(
+            forms_config, tree_base_sections[0]["tree_path"]
+        )["sorted_sections"]
         insert_application_sections(round_id, sorted_application_sections)
     # assessment_result = insert_assessment_sections(cof_form_config.COF_ROUND_2_ID, assessment_config)
 
@@ -85,8 +83,8 @@ with app.app_context():
             "support_times": "9am to 5pm",
             "support_days": "Monday to Friday",
             "instructions": (
-                "You must have received an invitation to apply. If we did not"
-                " invite you, first <a"
+                "You must have received an invitation to apply. If we did not invite"
+                " you, first <a"
                 ' href="https://www.gov.uk/government/publications/community-ownership-fund-prospectus">'
                 " express your interest in the fund</a>."
             ),
@@ -107,8 +105,8 @@ with app.app_context():
             "support_times": "9am to 5pm",
             "support_days": "Monday to Friday",
             "instructions": (
-                "You must have received an invitation to apply. If we did not"
-                " invite you, first <a"
+                "You must have received an invitation to apply. If we did not invite"
+                " you, first <a"
                 ' href="https://www.gov.uk/government/publications/community-ownership-fund-prospectus">'
                 " express your interest in the fund</a>."
             ),

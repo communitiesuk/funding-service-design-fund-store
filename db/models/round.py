@@ -31,27 +31,13 @@ class Round(BaseModel):
     opens = Column("opens", DateTime())
     deadline = Column("deadline", DateTime())
     assessment_deadline = Column("assessment_deadline", DateTime())
-    prospectus = Column(
-        "prospectus", db.String(), nullable=False, unique=False
-    )
-    privacy_notice = Column(
-        "privacy_notice", db.String(), nullable=False, unique=False
-    )
-    contact_email = Column(
-        "contact_email", db.String(), nullable=True, unique=False
-    )
-    contact_phone = Column(
-        "contact_phone", db.String(), nullable=True, unique=False
-    )
+    prospectus = Column("prospectus", db.String(), nullable=False, unique=False)
+    privacy_notice = Column("privacy_notice", db.String(), nullable=False, unique=False)
+    contact_email = Column("contact_email", db.String(), nullable=True, unique=False)
+    contact_phone = Column("contact_phone", db.String(), nullable=True, unique=False)
     contact_textphone = Column(
         "contact_textphone", db.String(), nullable=True, unique=False
     )
-    support_times = Column(
-        "support_times", db.String(), nullable=False, unique=False
-    )
-    support_days = Column(
-        "support_days", db.String(), nullable=False, unique=False
-    )
-    instructions = Column(
-        "instructions", db.String(), nullable=False, unique=False
-    )
+    support_times = Column("support_times", db.String(), nullable=False, unique=False)
+    support_days = Column("support_days", db.String(), nullable=False, unique=False)
+    instructions = Column("instructions", db.String(), nullable=False, unique=False)

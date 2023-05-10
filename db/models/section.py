@@ -28,9 +28,7 @@ class SectionField(BaseModel):
     __tablename__ = "section_field"
     section_id = Column(ForeignKey("section.id"), primary_key=True)
     field_id = Column(ForeignKey("assessment_field.id"), primary_key=True)
-    display_order = Column(
-        "display_order", Integer, nullable=False, unique=False
-    )
+    display_order = Column("display_order", Integer, nullable=False, unique=False)
     field = relationship("AssessmentField")
 
 
@@ -42,9 +40,7 @@ class AssessmentField(BaseModel):
         nullable=False,
         unique=False,
     )
-    display_type = Column(
-        "display_type", db.String(), nullable=False, unique=False
-    )
+    display_type = Column("display_type", db.String(), nullable=False, unique=False)
     title = Column("title", db.String(), nullable=False, unique=False)
     # sections = relationship(
     #     "Section", secondary=section_field_table, back_populates="fields"
@@ -77,9 +73,7 @@ class Section(BaseModel):
         nullable=True,
     )
     path = Column(LtreeType, nullable=False)
-    __table_args__ = (
-        Index("ix_sections_path", path, postgresql_using="gist"),
-    )
+    __table_args__ = (Index("ix_sections_path", path, postgresql_using="gist"),)
     fields = relationship(
         "SectionField", order_by=SectionField.display_order, viewonly=True
     )

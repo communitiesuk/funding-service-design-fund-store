@@ -14,12 +14,9 @@ def alpha_numeric_sort_section(index, section_config, tree_base_path):
         current_form_section_tree_level = index + 1
         an_sorted_sections.append(
             {
-                "section_name": str(form_section["en"])
-                .replace("-", " ")
-                .title(),
+                "section_name": str(form_section["en"]).replace("-", " ").title(),
                 "tree_path": str(
-                    f"{top_section_tree_level}"
-                    f".{current_form_section_tree_level}"
+                    f"{top_section_tree_level}.{current_form_section_tree_level}"
                 ),
                 "form_name": form_section["en"],
             }
@@ -30,9 +27,7 @@ def alpha_numeric_sort_section(index, section_config, tree_base_path):
 def sort_sections_from_config(sections_config, tree_base_path):
     all_an_sorted_sections = []
     for index, sc in enumerate(sections_config):
-        all_an_sorted_sections += alpha_numeric_sort_section(
-            index, sc, tree_base_path
-        )
+        all_an_sorted_sections += alpha_numeric_sort_section(index, sc, tree_base_path)
     return all_an_sorted_sections
 
 

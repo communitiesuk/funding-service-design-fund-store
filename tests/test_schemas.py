@@ -12,17 +12,13 @@ top = Section(
             id=1,
             title="Middle",
             path="0.1",
-            children=[
-                Section(id=2, title="Bottom", path="0.1.1", children=[])
-            ],
+            children=[Section(id=2, title="Bottom", path="0.1.1", children=[])],
         ),
         Section(
             id=3,
             title="Middle2",
             path="0.2",
-            children=[
-                Section(id=4, title="Bottom2", path="0.2.1", children=[])
-            ],
+            children=[Section(id=4, title="Bottom2", path="0.2.1", children=[])],
         ),
     ],
 )

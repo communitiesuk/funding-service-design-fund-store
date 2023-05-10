@@ -24,7 +24,5 @@ class Fund(BaseModel):
     name = Column("name", db.String(), nullable=False, unique=False)
     title = Column("title", db.String(), nullable=False, unique=False)
     short_name = Column("short_name", db.String(), nullable=False, unique=True)
-    description = Column(
-        "description", db.String(), nullable=False, unique=False
-    )
+    description = Column("description", db.String(), nullable=False, unique=False)
     rounds: Mapped[List["Round"]] = relationship("Round")

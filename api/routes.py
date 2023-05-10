@@ -74,7 +74,5 @@ def get_sections_for_round_application(fund_id, round_id):
 
 
 def get_sections_for_round_assessment(fund_id, round_id):
-    sections = get_assessment_sections_for_round(
-        fund_id, round_id, get_lang(), True
-    )
+    sections = get_assessment_sections_for_round(fund_id, round_id, get_lang(), True)
     return sections if sections else abort(404)

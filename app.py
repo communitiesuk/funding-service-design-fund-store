@@ -34,9 +34,7 @@ def create_app() -> Flask:
     # Bind SQLAlchemy ORM to Flask app
     db.init_app(flask_app)
     # Bind Flask-Migrate db utilities to Flask app
-    migrate.init_app(
-        flask_app, db, directory="db/migrations", render_as_batch=True
-    )
+    migrate.init_app(flask_app, db, directory="db/migrations", render_as_batch=True)
     # Enable mapping of ltree datatype for sections
     psycopg2.extensions.register_adapter(
         Ltree, lambda ltree: psycopg2.extensions.QuotedString(str(ltree))
