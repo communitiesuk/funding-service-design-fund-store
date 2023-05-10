@@ -3,13 +3,13 @@ openapi: "3.0.0"
 info:
   title: Funding Service Design - Fund store.
   description: Fund store API for DLUHC Funding Service Design
-  version: "0.1.0"
+  version: "0.2.0"
 
 paths:
   /funds:
     get:
       tags:
-        - DB_Funds
+        - Funds
       summary: Returns list of all funds
       description: Returns list of all funds
       operationId: api.routes.get_funds
@@ -32,7 +32,7 @@ paths:
     get:
       operationId: api.routes.get_fund
       tags:
-        - DB_Funds
+        - Funds
       parameters:
         - $ref: "components.yml#/components/parameters/fund_id"
         - name: language
@@ -61,7 +61,7 @@ paths:
   /funds/{fund_id}/rounds/{round_id}:
     get:
       tags:
-        - DB_Rounds
+        - Rounds
       summary: Returns the data on a specified round for a specific fund.
       description: Given a fund ID and a round ID we return the relavant round data.
       operationId: api.routes.get_round
@@ -97,7 +97,7 @@ paths:
   /funds/{fund_id}/rounds:
     get:
       tags:
-        - DB_Rounds
+        - Rounds
       summary: Given a fund ID we return all rounds for that fund.
       description: Given a fund ID we return all rounds for that fund.
       operationId: api.routes.get_rounds_for_fund
@@ -130,7 +130,7 @@ paths:
   /funds/{fund_id}/rounds/{round_id}/sections/application:
     get:
       tags:
-        - DB_Sections
+        - Sections
       summary: Returns the application sections for the given round
       description: Given a fund ID and a round ID we return the display sections for Application
       operationId: api.routes.get_sections_for_round_application
@@ -153,7 +153,7 @@ paths:
   /funds/{fund_id}/rounds/{round_id}/sections/assessment:
     get:
       tags:
-        - DB_Sections
+        - Sections
       summary: Returns the assessment sections for the given round
       description: Given a fund ID and a round ID we return the display sections for assessment
       operationId: api.routes.get_sections_for_round_assessment
