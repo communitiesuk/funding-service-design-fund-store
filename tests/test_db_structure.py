@@ -15,7 +15,7 @@ from db.queries import get_sections_for_round
 from db.queries import insert_application_sections
 from db.queries import insert_assessment_sections
 from db.queries import upsert_fields
-from fsd_utils.config.commonconfig import CommonConfig
+from fsd_test_utils.test_config.useful_config import UsefulConfig
 from scripts.deprecated_config.assessment_section_config import scored_sections
 from scripts.deprecated_config.assessment_section_config import (
     unscored_sections,
@@ -43,18 +43,18 @@ def test_get_fund_by_short_name(seed_dynamic_data):
 
 
 def test_get_round_by_id(seed_fund_data):
-    r = get_round_by_id(CommonConfig.COF_FUND_ID, CommonConfig.COF_ROUND_2_ID)
+    r = get_round_by_id(UsefulConfig.COF_FUND_ID, UsefulConfig.COF_ROUND_2_ID)
     assert r.title == "Round 2 Window 2"
     assert r.short_name == "R2W2"
-    assert str(r.id) == CommonConfig.COF_ROUND_2_ID
+    assert str(r.id) == UsefulConfig.COF_ROUND_2_ID
 
 
 def test_get_rounds_for_fund_by_id(seed_fund_data):
-    r = get_rounds_for_fund_by_id(CommonConfig.COF_FUND_ID)
+    r = get_rounds_for_fund_by_id(UsefulConfig.COF_FUND_ID)
     assert len(r) == 2
     assert r[0].title == "Round 2 Window 2"
     assert r[0].short_name == "R2W2"
-    assert str(r[0].id) == CommonConfig.COF_ROUND_2_ID
+    assert str(r[0].id) == UsefulConfig.COF_ROUND_2_ID
 
 
 def test_get_rounds_for_fund_by_short_name(seed_fund_data):
@@ -62,7 +62,7 @@ def test_get_rounds_for_fund_by_short_name(seed_fund_data):
     assert len(r) == 2
     assert r[0].title == "Round 2 Window 2"
     assert r[0].short_name == "R2W2"
-    assert str(r[0].id) == CommonConfig.COF_ROUND_2_ID
+    assert str(r[0].id) == UsefulConfig.COF_ROUND_2_ID
 
 
 @pytest.mark.parametrize(
@@ -92,7 +92,7 @@ def test_get_round_by_short_name(
 
 def test_get_application_sections(seed_fund_data):
     sections: List[Section] = get_application_sections_for_round(
-        CommonConfig.COF_FUND_ID, CommonConfig.COF_ROUND_2_ID
+        UsefulConfig.COF_FUND_ID, UsefulConfig.COF_ROUND_2_ID
     )
     assert len(sections) == 2
     assert sections[0].title == "About your organisation"
@@ -107,7 +107,7 @@ def test_get_application_sections(seed_fund_data):
 
 def test_get_assessment_sections(seed_fund_data):
     sections: List[Section] = get_assessment_sections_for_round(
-        CommonConfig.COF_FUND_ID, CommonConfig.COF_ROUND_2_ID, "en"
+        UsefulConfig.COF_FUND_ID, UsefulConfig.COF_ROUND_2_ID, "en"
     )
     assert len(sections) == 2
     assert sections[0].title == "Unscored"
@@ -116,7 +116,7 @@ def test_get_assessment_sections(seed_fund_data):
     assert len(sections[1].children) == 1
 
     sections: List[Section] = get_assessment_sections_for_round(
-        CommonConfig.COF_FUND_ID, CommonConfig.COF_ROUND_2_W3_ID, "en"
+        UsefulConfig.COF_FUND_ID, UsefulConfig.COF_ROUND_2_W3_ID, "en"
     )
     assert len(sections) == 2
     assert sections[0].title == "Unscored"
@@ -136,7 +136,7 @@ def test_get_all_funds(seed_fund_data):
 
 @pytest.mark.skip(reason="tdd")
 def test_get_sections_for_round(seed_fund_data):
-    sections = get_sections_for_round(CommonConfig.COF_ROUND_2_ID)
+    sections = get_sections_for_round(UsefulConfig.COF_ROUND_2_ID)
     for section in sections:
         print(section.title)
 
@@ -144,11 +144,11 @@ def test_get_sections_for_round(seed_fund_data):
 def test_load_application_sections(seed_only_fund_and_round_data):
     sorted_application_sections = (
         return_numerically_sorted_section_for_application(
-            CommonConfig.COF_R2_ORDERED_FORMS_CONFIG
+            UsefulConfig.COF_R2_ORDERED_FORMS_CONFIG
         )["sorted_sections"]
     )
     result = insert_application_sections(
-        CommonConfig.COF_ROUND_2_ID, sorted_application_sections
+        UsefulConfig.COF_ROUND_2_ID, sorted_application_sections
     )
     assert len(result) == 28
 
@@ -161,7 +161,7 @@ def test_load_assessment_sections(seed_only_fund_and_round_data):
 
     inserted_field_ids = upsert_fields(assessment_config["all_fields"])
     result = insert_assessment_sections(
-        CommonConfig.COF_ROUND_2_ID, assessment_config
+        UsefulConfig.COF_ROUND_2_ID, assessment_config
     )
 
     assert len(inserted_field_ids) == 124

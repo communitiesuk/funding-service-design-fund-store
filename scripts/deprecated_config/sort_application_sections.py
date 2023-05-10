@@ -1,8 +1,3 @@
-from fsd_utils import CommonConfig  # noqa: E402
-
-application_display_config = CommonConfig.COF_R2_ORDERED_FORMS_CONFIG
-
-
 def alpha_numeric_sort_section(index, section_config, tree_base_path):
     an_sorted_sections = []
     top_section_tree_level = f"{tree_base_path}.{index+1}"

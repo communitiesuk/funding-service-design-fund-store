@@ -7,7 +7,7 @@ from db.queries import insert_assessment_sections
 from db.queries import insert_fund_data
 from db.queries import insert_round_data
 from db.queries import upsert_fields
-from fsd_utils import CommonConfig  # noqa: E402
+from scripts.deprecated_config import cof_form_config
 from scripts.deprecated_config.assessment_section_config import scored_sections
 from scripts.deprecated_config.assessment_section_config import (
     unscored_sections,
@@ -49,7 +49,7 @@ def create_sections(path_prefix, round_id, forms_config):
             )["sorted_sections"]
         )
         insert_application_sections(round_id, sorted_application_sections)
-    # assessment_result = insert_assessment_sections(CommonConfig.COF_ROUND_2_ID, assessment_config)
+    # assessment_result = insert_assessment_sections(cof_form_config.COF_ROUND_2_ID, assessment_config)
 
 
 with app.app_context():
@@ -125,13 +125,13 @@ with app.app_context():
     # Do we want to reuse the application sections config?
 
     # Separate config for r2w2 and r2w3
-    # create_sections("1", CommonConfig.COF_ROUND_2_ID, CommonConfig.COF_R2_ORDERED_FORMS_CONFIG, True)
-    # create_sections("2", CommonConfig.COF_ROUND_2_W3_ID, CommonConfig.COF_R2_ORDERED_FORMS_CONFIG, True)
+    # create_sections("1", cof_form_config.COF_ROUND_2_ID, cof_form_config.COF_R2_ORDERED_FORMS_CONFIG, True)
+    # create_sections("2", cof_form_config.COF_ROUND_2_W3_ID, cof_form_config.COF_R2_ORDERED_FORMS_CONFIG, True)
 
     # reuse config between r2w2 and r2w3
     create_sections(
         "1",
-        CommonConfig.COF_ROUND_2_ID,
-        CommonConfig.COF_R2_ORDERED_FORMS_CONFIG,
+        cof_form_config.COF_ROUND_2_ID,
+        cof_form_config.COF_R2_ORDERED_FORMS_CONFIG,
     )
-    create_sections("1", CommonConfig.COF_ROUND_2_W3_ID, None)
+    create_sections("1", cof_form_config.COF_ROUND_2_W3_ID, None)
