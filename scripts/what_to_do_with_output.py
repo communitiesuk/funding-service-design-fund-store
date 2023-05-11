@@ -141,7 +141,7 @@ all_fields_SAMPLE = [
 # for section in all_an_sorted_sections_unscored:
 #     INSERT INTO SECTIONS_TABLE(path_value, section_name, weighting, assessmentORapplication)
 #       values (etc);
-# If this is the lowest level section it will have a "fields" key. 
+# If this is the lowest level section it will have a "fields" key.
 #   if "fields" in section:
 #       for field in fields:
 #           INSERT INTO SECTIONS_FIELDS(field_id, section_id, display_order)
@@ -153,14 +153,14 @@ all_fields_SAMPLE = [
 # There are some instances of duplicate field_ids in the assessment mapping (a single field_id to many assessment field mapping objects),
 # suspected because we need to break an application field into multiple assessment elements.
 
-# We should aim to have a 1-1 mapping of fields from application to assessment 
-# We could handle this locally in the assessment frontend for that type and presentation_type, 
+# We should aim to have a 1-1 mapping of fields from application to assessment
+# We could handle this locally in the assessment frontend for that type and presentation_type,
 # rather than complicate our data model. This may only be true for "add-another" fields (need further investigation).
-# This needs further discussion and as it stands, in some cases we store many fields_ids in our mapping 
+# This needs further discussion and as it stands, in some cases we store many fields_ids in our mapping
 # for one application component
 # Changes to remove this behavior on add-another fields to be implemented as part of fs-2500
 
-# the same is found in reverse (many field_ids to one assessment field mapping object), 
+# the same is found in reverse (many field_ids to one assessment field mapping object),
 # many field ids map (are grouped) to one assessment componenet as a list of field_ids
 # suspected because we need to consume multiple fields into one assessment field view.
 # At the moment this is handled by giving these grouped ids the same display_order (i.e: all 10)
