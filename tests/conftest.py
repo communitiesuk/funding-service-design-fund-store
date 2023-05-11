@@ -1,18 +1,18 @@
 """
 Contains test configuration.
 """
-import copy
+from datetime import datetime
 from uuid import uuid4
 
 import pytest
 from app import create_app
-from core.data_operations import fund_data
-from core.data_operations import round_data
+from db.models.fund import Fund
+from db.models.round import Round
+from db.models.section import Section
 from db.queries import insert_fund_data
+from db.queries import insert_round_data
 from flask import Flask
 from sqlalchemy import text
-from tests.test_data import TEST_FUND_DATA
-from tests.test_data import TEST_ROUND_DATA
 
 pytest_plugins = ["fsd_test_utils.fixtures.db_fixtures"]
 
@@ -47,30 +47,30 @@ def seed_only_fund_and_round_data(
             conn.execute(text(file.read()))
 
 
-@pytest.fixture(scope="function")
-def seed_dynamic_data(request, app, clear_test_data, enable_preserve_test_data, _db):
+@pytest.fixture(scope="session")
+def seed_dynamic_data(request, app, clear_test_data, _db):
     marker = request.node.get_closest_marker("seed_config")
+    fund_count = 0
+    round_count = 0
     if marker is None:
+        fund_id = str(uuid4())
         seed_config = {
             "funds": [
                 {
+                    "id": fund_id,
+                    "short_name": "FUND",
                     "rounds": [
                         {
-                            "is_open": True,
-                            "is_past_deadline": False,
-                            "is_not_yet_open": False,
+                            "id": str(uuid4()),
+                            # "fund_id": fund_id,
+                            # "short_name": "RND1"
                         },
                         {
-                            "is_open": False,
-                            "is_past_deadline": True,
-                            "is_not_yet_open": False,
+                            "id": str(uuid4()),
+                            # "fund_id": fund_id,
+                            # "short_name": "RND2"
                         },
-                        {
-                            "is_open": False,
-                            "is_past_deadline": False,
-                            "is_not_yet_open": True,
-                        },
-                    ]
+                    ],
                 }
             ]
         }
@@ -78,18 +78,43 @@ def seed_dynamic_data(request, app, clear_test_data, enable_preserve_test_data, 
         seed_config = marker.args[0]
     inserted_data = {"funds": []}
     for fund in seed_config["funds"]:
-        fund_id = str(uuid4())
-        short_suffix = fund_id[0:4]
+        fund_count += 1
+        # fund_id = str(uuid4())
+        # short_suffix = fund_id[0:4]
         fund_config = {
-            "id": fund_id,
-            "name": f"Unit Test Fund {short_suffix}",
-            "title": f"Unit test fund title {short_suffix}",
-            "short_name": short_suffix,
+            "id": fund["id"],
+            "name": f"Unit Test Fund {fund_count}",  # fund['short_name']}",
+            "title": f"Unit test fund title {fund_count}",  # {fund['short_name']}",
+            "short_name": f"FND{fund_count}",  # fund["short_name"],
             "description": "testing description",
         }
         insert_fund_data(fund_config)
+        rounds = []
+        for round in fund["rounds"]:
+            round_count += 1
+            # round_id = str(uuid4())
+            # round_short_suffix = round_id[0:4]
+            round_config = {
+                "id": round["id"],
+                "title": f"Unit Test Round {round_count}",  # {round['short_name']}",
+                "short_name": f"RND{round_count}",  # round["short_name"],
+                "opens": "2023-01-01 12:00:00",
+                "deadline": "2023-12-31 12:00:00",
+                "fund_id": fund["id"],
+                "assessment_deadline": "2024-02-28 12:00:00",
+                "prospectus": "http://google.com",
+                "privacy_notice": "http://google.com",
+                "contact_email": "contact@example.com",
+                "contact_phone": "01234567890",
+                "contact_textphone": "1234",
+                "support_times": "8am - 12:30pm",
+                "support_days": "Monday and Tuesday",
+                "instructions": "Instructions to fill out the form",
+            }
+            rounds.append(round_config)
+        insert_round_data(rounds)
         inserted_data["funds"].append(
-            {"rounds": [], "id": fund_id, "short_name": short_suffix}
+            {"rounds": rounds, "id": fund_id, "short_name": fund["short_name"]}
         )
 
     yield inserted_data
@@ -109,7 +134,66 @@ def flask_test_client():
             yield test_client
 
 
-@pytest.fixture(scope="session")
-def load_test_data():
-    fund_data.FUNDS_DAO.load_data(copy.deepcopy(TEST_FUND_DATA))
-    round_data.ROUNDS_DAO.load_data(copy.deepcopy(TEST_ROUND_DATA))
+@pytest.fixture(scope="function")
+def mock_get_fund_round(mocker):
+    mock_fund: Fund = Fund(
+        id=uuid4(),
+        short_name="FND1",
+        name="Fund Name 1",
+        title="Fund 1",
+        description="description text",
+    )
+    round_config = {
+        "id": uuid4(),
+        "assessment_deadline": datetime.now(),
+        "deadline": datetime.now(),
+        "fund_id": "",
+        "opens": datetime.now(),
+        "prospectus": "",
+        "privacy_notice": "",
+        "instructions": "",
+        "contact_email": "",
+        "contact_phone": "",
+        "contact_textphone": "",
+        "support_days": "",
+        "support_times": "",
+    }
+    mock_round: Round = Round(title="Round 1", short_name="RND1", **round_config)
+    mocker.patch("api.routes.get_all_funds", return_value=[mock_fund])
+    mocker.patch("api.routes.get_fund_by_id", return_value=mock_fund)
+    mocker.patch("api.routes.get_fund_by_short_name", return_value=mock_fund)
+    mocker.patch("api.routes.get_round_by_id", return_value=mock_round)
+    mocker.patch("api.routes.get_round_by_short_name", return_value=mock_round)
+    mocker.patch("api.routes.get_rounds_for_fund_by_id", return_value=[mock_round])
+    mocker.patch(
+        "api.routes.get_rounds_for_fund_by_short_name", return_value=[mock_round]
+    )
+
+
+@pytest.fixture(scope="function")
+def mock_get_sections(mocker):
+    mock_sections = Section(
+        id=0,
+        title="Top",
+        path="0",
+        children=[
+            Section(
+                id=1,
+                title="Middle",
+                path="0.1",
+                children=[Section(id=2, title="Bottom", path="0.1.1", children=[])],
+            ),
+            Section(
+                id=3,
+                title="Middle2",
+                path="0.2",
+                children=[Section(id=4, title="Bottom2", path="0.2.1", children=[])],
+            ),
+        ],
+    )
+    mocker.patch(
+        "api.routes.get_application_sections_for_round", return_value=[mock_sections]
+    )
+    mocker.patch(
+        "api.routes.get_assessment_sections_for_round", return_value=[mock_sections]
+    )

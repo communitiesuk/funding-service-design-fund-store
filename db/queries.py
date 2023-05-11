@@ -7,9 +7,6 @@ from db.models.round import Round
 from db.models.section import AssessmentField
 from db.models.section import Section
 from db.models.section import SectionField
-from db.schemas.fund import FundSchema
-from db.schemas.round import RoundSchema
-from db.schemas.section import SectionSchema
 from sqlalchemy import bindparam
 from sqlalchemy import func
 from sqlalchemy import insert
@@ -20,57 +17,47 @@ from sqlalchemy_utils import Ltree
 from sqlalchemy_utils.types.ltree import LQUERY
 
 
-def get_all_funds(as_json: bool = False) -> List[Fund]:
+def get_all_funds() -> List[Fund]:
     funds = db.session.scalars(select(Fund)).all()
-    if as_json:
-        serialiser = FundSchema()
-        return serialiser.dump(funds, many=True)
-    else:
-        return funds
+    return funds
 
 
-def get_fund_by_id(fund_id: str, as_json: bool = False) -> Fund:
+def get_fund_by_id(
+    fund_id: str,
+) -> Fund:
     fund = db.session.scalars(select(Fund).filter(Fund.id == fund_id)).one()
-    if as_json:
-        serialiser = FundSchema()
-        return serialiser.dump(fund)
-    else:
-        return fund
+    return fund
 
 
-def get_fund_by_short_name(fund_short_name: str, as_json: bool = False) -> Fund:
+def get_fund_by_short_name(
+    fund_short_name: str,
+) -> Fund:
     fund = db.session.scalar(
         select(Fund).filter(func.lower(Fund.short_name) == func.lower(fund_short_name))
     )
-    if as_json:
-        serialiser = FundSchema()
-        return serialiser.dump(fund)
-    else:
-        return fund
+    return fund
 
 
-def get_round_by_id(fund_id: str, round_id: str, as_json: bool = False) -> Round:
+def get_round_by_id(
+    fund_id: str,
+    round_id: str,
+) -> Round:
     round = db.session.scalars(
         select(Round).filter(Round.id == round_id).filter(Round.fund_id == fund_id)
     ).one()
-    if as_json:
-        serialiser = RoundSchema()
-        return serialiser.dump(round)
-    else:
-        return round
+    return round
 
 
-def get_rounds_for_fund_by_id(fund_id: str, as_json: bool = False) -> List[Round]:
+def get_rounds_for_fund_by_id(
+    fund_id: str,
+) -> List[Round]:
     rounds = db.session.scalars(select(Round).filter(Round.fund_id == fund_id)).all()
-    if as_json:
-        serialiser = RoundSchema()
-        return serialiser.dump(rounds, many=True)
-    else:
-        return rounds
+    return rounds
 
 
 def get_round_by_short_name(
-    fund_short_name: str, round_short_name: str, as_json: bool = False
+    fund_short_name: str,
+    round_short_name: str,
 ) -> Round:
     round = db.session.scalar(
         select(Round)
@@ -78,24 +65,18 @@ def get_round_by_short_name(
         .join(Fund)
         .filter(func.lower(Fund.short_name) == func.lower(fund_short_name))
     )
-    if as_json:
-        serialiser = RoundSchema()
-        return serialiser.dump(round)
-    else:
-        return round
+    return round
 
 
-def get_rounds_for_fund_by_short_name(fund_short_name, as_json: bool = False):
+def get_rounds_for_fund_by_short_name(
+    fund_short_name,
+):
     rounds = db.session.scalars(
         select(Round)
         .join(Fund)
         .filter(func.lower(Fund.short_name) == func.lower(fund_short_name))
     ).all()
-    if as_json:
-        serialiser = RoundSchema()
-        return serialiser.dump(rounds, many=True)
-    else:
-        return rounds
+    return rounds
 
 
 def get_sections_for_round(round_id) -> List[Section]:
@@ -105,7 +86,8 @@ def get_sections_for_round(round_id) -> List[Section]:
 
 
 def get_application_sections_for_round(
-    fund_id, round_id, as_json: bool = False
+    fund_id,
+    round_id,
 ) -> List[Section]:
     application_level = db.session.scalar(
         select(Section)
@@ -123,15 +105,13 @@ def get_application_sections_for_round(
         select(Section).filter(Section.path.lquery(lquery))
     ).all()
 
-    if as_json:
-        serialiser = SectionSchema(many=True)
-        return serialiser.dump(application_sections)
-    else:
-        return application_sections
+    return application_sections
 
 
 def get_assessment_sections_for_round(
-    fund_id, round_id, language, as_json: bool = False
+    fund_id,
+    round_id,
+    language,
 ) -> List[Section]:
     assessment_level = db.session.scalar(
         select(Section)
@@ -165,11 +145,7 @@ def get_assessment_sections_for_round(
         .filter(Section.path.lquery(lquery))
     ).all()
 
-    if as_json:
-        serialiser = SectionSchema(many=True)
-        return serialiser.dump(assessment_sections)
-    else:
-        return assessment_sections
+    return assessment_sections
 
 
 def upsert_fields(fields: list):

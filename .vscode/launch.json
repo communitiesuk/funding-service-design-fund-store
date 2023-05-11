@@ -41,7 +41,7 @@
             "name": "Debug Unit Test",
             "type": "python",
             "purpose": ["debug-test"],
-            "justMyCode": true,
+            "justMyCode": false,
         }
     ]
 }
