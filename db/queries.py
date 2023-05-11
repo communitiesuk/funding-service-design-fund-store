@@ -178,6 +178,12 @@ def upsert_fields(fields: list):
     return inserted_field_ids
 
 
+def insert_sections(sections):
+    for section in sections:
+        db.session.add(section)
+    db.session.commit()
+
+
 def insert_fund_data(fund_config):
     stmt = (
         insert(Fund).values(

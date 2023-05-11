@@ -11,8 +11,10 @@ from db.models.round import Round
 from db.models.section import Section
 from db.queries import insert_fund_data
 from db.queries import insert_round_data
+from db.queries import insert_sections
 from flask import Flask
 from sqlalchemy import text
+from sqlalchemy_utils import Ltree
 
 pytest_plugins = ["fsd_test_utils.fixtures.db_fixtures"]
 
@@ -54,6 +56,7 @@ def seed_dynamic_data(request, app, clear_test_data, _db):
     round_count = 0
     if marker is None:
         fund_id = str(uuid4())
+        round_id_1 = str(uuid4())
         seed_config = {
             "funds": [
                 {
@@ -61,12 +64,61 @@ def seed_dynamic_data(request, app, clear_test_data, _db):
                     "short_name": "FUND",
                     "rounds": [
                         {
-                            "id": str(uuid4()),
-                            # "fund_id": fund_id,
-                            # "short_name": "RND1"
+                            "id": round_id_1,
+                            "sections": [
+                                Section(
+                                    id=0,
+                                    round_id=round_id_1,
+                                    title="Application",
+                                    path=Ltree("0.1"),
+                                ),
+                                Section(
+                                    id=1,
+                                    round_id=round_id_1,
+                                    title="Middle1",
+                                    path=Ltree("0.1.1"),
+                                ),
+                                Section(
+                                    id=2,
+                                    round_id=round_id_1,
+                                    title="Bottom1",
+                                    path=Ltree("0.1.1.1"),
+                                ),
+                                Section(
+                                    id=3,
+                                    round_id=round_id_1,
+                                    title="Middle2",
+                                    path=Ltree("0.1.2"),
+                                ),
+                                Section(
+                                    id=4,
+                                    round_id=round_id_1,
+                                    title="Bottom2",
+                                    path=Ltree("0.1.2.1"),
+                                ),
+                                Section(
+                                    id=5,
+                                    round_id=round_id_1,
+                                    title="Assessment",
+                                    path=Ltree("0.2"),
+                                ),
+                                Section(
+                                    id=6,
+                                    round_id=round_id_1,
+                                    title="assess section 1",
+                                    path=Ltree("0.2.1"),
+                                ),
+                                Section(
+                                    id=7,
+                                    round_id=round_id_1,
+                                    title="assess section 1 a",
+                                    path=Ltree("0.2.1.1"),
+                                ),
+                            ],
                         },
                         {
                             "id": str(uuid4()),
+                            "sections": []
                             # "fund_id": fund_id,
                             # "short_name": "RND2"
                         },
@@ -112,10 +164,15 @@ def seed_dynamic_data(request, app, clear_test_data, _db):
                 "instructions": "Instructions to fill out the form",
             }
             rounds.append(round_config)
+
         insert_round_data(rounds)
         inserted_data["funds"].append(
             {"rounds": rounds, "id": fund_id, "short_name": fund["short_name"]}
         )
+
+        for fund in seed_config["funds"]:
+            for round in fund["rounds"]:
+                insert_sections(round["sections"])
 
     yield inserted_data
 
