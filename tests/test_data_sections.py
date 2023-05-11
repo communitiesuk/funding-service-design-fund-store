@@ -46,12 +46,12 @@ def test_get_assessment_sections(seed_dynamic_data):
     assert len(sections[0].children[0].children) == 0
 
 
-def test_load_application_sections(seed_only_fund_and_round_data):
+def test_load_application_sections(seed_dynamic_data):
     sorted_application_sections = return_numerically_sorted_section_for_application(
         COF_R2_ORDERED_FORMS_CONFIG, "0.1"
     )["sorted_sections"]
     result = insert_application_sections(
-        UsefulConfig.COF_ROUND_2_ID, sorted_application_sections
+        seed_dynamic_data["funds"][0]["rounds"][0]["id"], sorted_application_sections
     )
     assert len(result) == 28
 
