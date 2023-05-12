@@ -1,4 +1,4 @@
-an_sorted_application_sections_SAMPLE = [
+sorted_application_r3w1_sections = [
     {"section_name": "1. About your organisation", "tree_path": "1"},
     {
         "section_name": "1.1 Organisation Information",
