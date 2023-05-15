@@ -8,15 +8,15 @@ from db.queries import insert_application_sections
 from db.queries import insert_assessment_sections
 from db.queries import upsert_fields
 from fsd_test_utils.test_config.useful_config import UsefulConfig
-from scripts.deprecated_config.assessment_section_config import scored_sections
-from scripts.deprecated_config.assessment_section_config import (
+from scripts.deprecated_fund_config.assessment_section_config import scored_sections
+from scripts.deprecated_fund_config.assessment_section_config import (
     unscored_sections,
 )
-from scripts.deprecated_config.cof_form_config import COF_R2_ORDERED_FORMS_CONFIG
-from scripts.deprecated_config.sort_application_sections import (
+from scripts.deprecated_fund_config.cof_form_config import COF_R2_ORDERED_FORMS_CONFIG
+from scripts.deprecated_fund_config.sort_application_sections import (
     return_numerically_sorted_section_for_application,
 )
-from scripts.deprecated_config.sort_assessment_sections import (
+from scripts.deprecated_fund_config.sort_assessment_sections import (
     return_numerically_sorted_section_for_assessment,
 )
 
