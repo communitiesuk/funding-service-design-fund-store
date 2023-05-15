@@ -20,7 +20,7 @@ tree_base_sections = [
 
 sorted_application_r3w1_sections = [
     {
-        "section_name": "1. About your organisation",
+        "section_name": "About your organisation",
         "tree_path": f"{tree_base_sections[0]['tree_path']}.1",
     },
     {
@@ -34,7 +34,7 @@ sorted_application_r3w1_sections = [
         "tree_path": f"{tree_base_sections[0]['tree_path']}.1.2",
     },
     {
-        "section_name": "2. About your project",
+        "section_name": "About your project",
         "tree_path": f"{tree_base_sections[0]['tree_path']}.2",
     },
     {
@@ -48,7 +48,7 @@ sorted_application_r3w1_sections = [
         "tree_path": f"{tree_base_sections[0]['tree_path']}.2.2",
     },
     {
-        "section_name": "3. Strategic case",
+        "section_name": "Strategic case",
         "tree_path": f"{tree_base_sections[0]['tree_path']}.3",
     },
     {
@@ -77,7 +77,7 @@ sorted_application_r3w1_sections = [
         "tree_path": f"{tree_base_sections[0]['tree_path']}.3.5",
     },
     {
-        "section_name": "4. Management case",
+        "section_name": "Management case",
         "tree_path": f"{tree_base_sections[0]['tree_path']}.4",
     },
     {
@@ -121,7 +121,7 @@ sorted_application_r3w1_sections = [
         "tree_path": f"{tree_base_sections[0]['tree_path']}.4.8",
     },
     {
-        "section_name": "5. Subsidy control and state aid",
+        "section_name": "Subsidy control and state aid",
         "tree_path": f"{tree_base_sections[0]['tree_path']}.5",
     },
     {
@@ -130,7 +130,7 @@ sorted_application_r3w1_sections = [
         "tree_path": f"{tree_base_sections[0]['tree_path']}.5.1",
     },
     {
-        "section_name": "6. Check declarations",
+        "section_name": "Check declarations",
         "tree_path": f"{tree_base_sections[0]['tree_path']}.6",
     },
     {
