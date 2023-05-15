@@ -165,7 +165,10 @@ round_config = [
         "deadline": "2023-12-14 11:59:00",
         "assessment_deadline": "2024-03-30 12:00:00",
         "prospectus": "https://www.gov.uk/government/publications/community-ownership-fund-prospectus",
-        "privacy_notice": "https://www.gov.uk/government/publications/community-ownership-fund-privacy-notice/community-ownership-fund-privacy-notice",
+        "privacy_notice": (
+            "https://www.gov.uk/government/publications/community-ownership-fund-"
+            "privacy-notice/community-ownership-fund-privacy-notice"
+        ),
         "contact_email": "COF@levellingup.gov.uk",
         "contact_phone": None,
         "contact_textphone": None,
@@ -185,7 +188,7 @@ with app.app_context():
     insert_fund_data(fund_config)
     insert_round_data(round_config)
 
-    print(f"Inserting base sections config.")
+    print("Inserting base sections config.")
     insert_application_sections(COF_ROUND_3_WINDOW_1_ID, tree_base_sections)
     print("Inserting sections.")
     insert_application_sections(
