@@ -7,15 +7,15 @@ from db.queries import insert_assessment_sections
 from db.queries import insert_fund_data
 from db.queries import insert_round_data
 from db.queries import upsert_fields
-from scripts.deprecated_config import cof_form_config
-from scripts.deprecated_config.assessment_section_config import scored_sections
-from scripts.deprecated_config.assessment_section_config import (
+from scripts.deprecated_fund_config import cof_form_config
+from scripts.deprecated_fund_config.assessment_section_config import scored_sections
+from scripts.deprecated_fund_config.assessment_section_config import (
     unscored_sections,
 )
-from scripts.deprecated_config.sort_application_sections import (
+from scripts.deprecated_fund_config.sort_application_sections import (
     return_numerically_sorted_section_for_application,
 )
-from scripts.deprecated_config.sort_assessment_sections import (
+from scripts.deprecated_fund_config.sort_assessment_sections import (
     return_numerically_sorted_section_for_assessment,
 )
 
@@ -35,7 +35,7 @@ def create_sections(path_prefix, round_id, forms_config):
     ]
 
     # assessment_config = return_numerically_sorted_section_for_assessment(scored_sections, unscored_sections)
-
+    print(f"Inserting base sections config.")
     insert_application_sections(round_id, tree_base_sections)
     # -- load fields belonging to round --
     # inserted_field_ids = upsert_fields(assessment_config["all_fields"])
@@ -46,6 +46,7 @@ def create_sections(path_prefix, round_id, forms_config):
         sorted_application_sections = return_numerically_sorted_section_for_application(
             forms_config, tree_base_sections[0]["tree_path"]
         )["sorted_sections"]
+        print(f"Inserting forms config.")
         insert_application_sections(round_id, sorted_application_sections)
     # assessment_result = insert_assessment_sections(cof_form_config.COF_ROUND_2_ID, assessment_config)
 

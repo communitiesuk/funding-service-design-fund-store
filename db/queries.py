@@ -186,14 +186,14 @@ def insert_sections(sections):
 
 def insert_fund_data(fund_config):
     stmt = (
-        insert(Fund).values(
+        postgres_insert(Fund).values(
             id=bindparam("id"),
             name=bindparam("name"),
             title=bindparam("title"),
             short_name=bindparam("short_name"),
             description=bindparam("description"),
         )
-    ).returning(Fund.id)
+    ).on_conflict_do_nothing(index_elements=[Fund.id]).returning(Fund.id)
 
     update_params = {
         "id": fund_config["id"],
@@ -206,6 +206,7 @@ def insert_fund_data(fund_config):
     result = db.session.execute(stmt, update_params)
     inserted_fund_ids = [row.id for row in result]
     db.session.commit()
+    print(f"Inserted funds: '{inserted_fund_ids}'.")
     return inserted_fund_ids
 
 
@@ -254,10 +255,12 @@ def insert_round_data(round_config):
     result = db.session.execute(stmt, update_params)
     inserted_round_ids = [row.id for row in result]
     db.session.commit()
+    print(f"Inserted rounds: '{inserted_round_ids}'.")
     return inserted_round_ids
 
 
 def insert_application_sections(round_id, sorted_application_sections: dict):
+    print(f"Inserting forms config: '{sorted_application_sections}'.")
     inserted_section_ids = []
     for section in sorted_application_sections:
 
@@ -292,6 +295,7 @@ def insert_application_sections(round_id, sorted_application_sections: dict):
             }
             db.session.execute(form_stmt, form_params)
     db.session.commit()
+    print(f"inserted sections (ids): '{inserted_section_ids}'.")
     return inserted_section_ids
 
 
