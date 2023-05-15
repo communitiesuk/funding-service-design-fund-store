@@ -186,14 +186,18 @@ def insert_sections(sections):
 
 def insert_fund_data(fund_config):
     stmt = (
-        postgres_insert(Fund).values(
-            id=bindparam("id"),
-            name=bindparam("name"),
-            title=bindparam("title"),
-            short_name=bindparam("short_name"),
-            description=bindparam("description"),
+        (
+            postgres_insert(Fund).values(
+                id=bindparam("id"),
+                name=bindparam("name"),
+                title=bindparam("title"),
+                short_name=bindparam("short_name"),
+                description=bindparam("description"),
+            )
         )
-    ).on_conflict_do_nothing(index_elements=[Fund.id]).returning(Fund.id)
+        .on_conflict_do_nothing(index_elements=[Fund.id])
+        .returning(Fund.id)
+    )
 
     update_params = {
         "id": fund_config["id"],

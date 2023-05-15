@@ -1,8 +1,8 @@
-from scripts.common_fund_config.fund_base_tree_paths import COF_R3W1_BASE_PATH
+from app import app  # noqa: E402
+from db.queries import insert_application_sections
 from db.queries import insert_fund_data
 from db.queries import insert_round_data
-from db.queries import insert_application_sections
-from app import app  # noqa: E402
+from scripts.common_fund_config.fund_base_tree_paths import COF_R3W1_BASE_PATH
 
 tree_base_sections = [
     {
@@ -19,7 +19,10 @@ tree_base_sections = [
 
 
 sorted_application_r3w1_sections = [
-    {"section_name": "1. About your organisation", "tree_path": f"{tree_base_sections[0]['tree_path']}.1"},
+    {
+        "section_name": "1. About your organisation",
+        "tree_path": f"{tree_base_sections[0]['tree_path']}.1",
+    },
     {
         "section_name": "1.1 Organisation Information",
         "form_name": "organisation-information-cof-r3-w1",
@@ -30,7 +33,10 @@ sorted_application_r3w1_sections = [
         "form_name": "applicant-information-cof-r3-w1",
         "tree_path": f"{tree_base_sections[0]['tree_path']}.1.2",
     },
-    {"section_name": "2. About your project", "tree_path": f"{tree_base_sections[0]['tree_path']}.2"},
+    {
+        "section_name": "2. About your project",
+        "tree_path": f"{tree_base_sections[0]['tree_path']}.2",
+    },
     {
         "section_name": "2.1 Project Information",
         "form_name": "project-information-cof-r3-w1",
@@ -41,7 +47,10 @@ sorted_application_r3w1_sections = [
         "form_name": "asset-information-cof-r3-w1",
         "tree_path": f"{tree_base_sections[0]['tree_path']}.2.2",
     },
-    {"section_name": "3. Strategic case", "tree_path": f"{tree_base_sections[0]['tree_path']}.3"},
+    {
+        "section_name": "3. Strategic case",
+        "tree_path": f"{tree_base_sections[0]['tree_path']}.3",
+    },
     {
         "section_name": "3.1 Community Use",
         "form_name": "community-use-cof-r3-w1",
@@ -67,7 +76,10 @@ sorted_application_r3w1_sections = [
         "form_name": "environmental-sustainability-cof-r3-w1",
         "tree_path": f"{tree_base_sections[0]['tree_path']}.3.5",
     },
-    {"section_name": "4. Management case", "tree_path": f"{tree_base_sections[0]['tree_path']}.4"},
+    {
+        "section_name": "4. Management case",
+        "tree_path": f"{tree_base_sections[0]['tree_path']}.4",
+    },
     {
         "section_name": "4.1 Funding Required",
         "form_name": "funding-required-cof-r3-w1",
@@ -108,13 +120,19 @@ sorted_application_r3w1_sections = [
         "form_name": "upload-business-plan-cof-r3-w1",
         "tree_path": f"{tree_base_sections[0]['tree_path']}.4.8",
     },
-    {"section_name": "5. Subsidy control and state aid", "tree_path": f"{tree_base_sections[0]['tree_path']}.5"},
+    {
+        "section_name": "5. Subsidy control and state aid",
+        "tree_path": f"{tree_base_sections[0]['tree_path']}.5",
+    },
     {
         "section_name": "5.1 Project qualification",
         "form_name": "project-qualifications-cof-r3-w1",
         "tree_path": f"{tree_base_sections[0]['tree_path']}.5.1",
     },
-    {"section_name": "6. Check declarations", "tree_path": f"{tree_base_sections[0]['tree_path']}.6"},
+    {
+        "section_name": "6. Check declarations",
+        "tree_path": f"{tree_base_sections[0]['tree_path']}.6",
+    },
     {
         "section_name": "6.1 Project qualification",
         "form_name": "project-information-cof-r3-w1",
@@ -137,28 +155,30 @@ fund_config = {
     ),
 }
 
-round_config = [{
-    "id": "e85ad42f-73f5-4e1b-a1eb-6bc5d7f3d762",
-    "fund_id": "47aef2f5-3fcb-4d45-acb5-f0152b5f03c4",
-    "title": "Round 3 Window 1",
-    "short_name": "R3W1",
-    "opens": "2021-10-04 12:00:00",
-    "deadline": "2023-12-14 11:59:00",
-    "assessment_deadline": "2024-03-30 12:00:00",
-    "prospectus": "https://www.gov.uk/government/publications/community-ownership-fund-prospectus",
-    "privacy_notice": "https://www.gov.uk/government/publications/community-ownership-fund-privacy-notice/community-ownership-fund-privacy-notice",
-    "contact_email": "COF@levellingup.gov.uk",
-    "contact_phone": None,
-    "contact_textphone": None,
-    "support_times": "9am to 5pm",
-    "support_days": "Monday to Friday",
-    "instructions": (
-        "You must have received an invitation to apply. If we did not invite"
-        " you, first <a"
-        ' href="https://www.gov.uk/government/publications/community-ownership-fund-prospectus">'
-        " express your interest in the fund</a>."
-    ),
-}]
+round_config = [
+    {
+        "id": "e85ad42f-73f5-4e1b-a1eb-6bc5d7f3d762",
+        "fund_id": "47aef2f5-3fcb-4d45-acb5-f0152b5f03c4",
+        "title": "Round 3 Window 1",
+        "short_name": "R3W1",
+        "opens": "2021-10-04 12:00:00",
+        "deadline": "2023-12-14 11:59:00",
+        "assessment_deadline": "2024-03-30 12:00:00",
+        "prospectus": "https://www.gov.uk/government/publications/community-ownership-fund-prospectus",
+        "privacy_notice": "https://www.gov.uk/government/publications/community-ownership-fund-privacy-notice/community-ownership-fund-privacy-notice",
+        "contact_email": "COF@levellingup.gov.uk",
+        "contact_phone": None,
+        "contact_textphone": None,
+        "support_times": "9am to 5pm",
+        "support_days": "Monday to Friday",
+        "instructions": (
+            "You must have received an invitation to apply. If we did not invite you,"
+            " first <a"
+            ' href="https://www.gov.uk/government/publications/community-ownership-fund-prospectus">'
+            " express your interest in the fund</a>."
+        ),
+    }
+]
 
 with app.app_context():
     print("Inserting fund and round data.")
@@ -168,4 +188,6 @@ with app.app_context():
     print(f"Inserting base sections config.")
     insert_application_sections(COF_ROUND_3_WINDOW_1_ID, tree_base_sections)
     print("Inserting sections.")
-    insert_application_sections(COF_ROUND_3_WINDOW_1_ID, sorted_application_r3w1_sections)
+    insert_application_sections(
+        COF_ROUND_3_WINDOW_1_ID, sorted_application_r3w1_sections
+    )
