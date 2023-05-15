@@ -22,4 +22,9 @@ class DefaultConfig(object):
     # Frontend
     STATIC_FOLDER = "static"
     TEMPLATES_FOLDER = "templates"
-    FORCE_OPEN = strtobool(getenv("FORCE_OPEN", "True"))
+    FORCE_OPEN = strtobool(getenv("FORCE_OPEN", "False"))
+
+    # Database
+    SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL", "").replace(
+        "postgres://", "postgresql://"
+    )
