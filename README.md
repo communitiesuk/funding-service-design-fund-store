@@ -123,7 +123,7 @@ docker exec -ti <fund_store_container_id> sh -c "chmod +x scripts/load_cof_r3w1.
 ```
 To amend the round dates
 ```
-docker exec -ti a71b0b0ec8a6 scripts/amend_round_dates.py --round_id c603d114-5364-4474-a0c4-c41cbf4d3bbd --assessment_deadline_date "2023-03-30 12:00:00"
+docker exec -ti <fund_store_container_id> scripts/amend_round_dates.py --round_id c603d114-5364-4474-a0c4-c41cbf4d3bbd --assessment_deadline_date "2023-03-30 12:00:00"
 
 ```
 ```
