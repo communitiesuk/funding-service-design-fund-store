@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+# flake8: noqa
+import sys
+
+sys.path.insert(1, ".")
+
 from app import app  # noqa: E402
 from db.queries import insert_application_sections
 from db.queries import insert_fund_data
