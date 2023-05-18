@@ -107,7 +107,7 @@ You can also force all defined rounds to be open by setting the environment vari
 To seed fund & round data to db
 
 ```
-docker exec -ti <fund_store_container_id> scripts/load_cof_r2.py
+docker exec -ti <fund_store_container_id> python -m scripts.load_cof_r2
 
 if you are having a Permission issue:
 docker exec -ti <fund_store_container_id> sh -c "chmod +x scripts/load_cof_r2.py && ./scripts/load_cof_r2.py"
@@ -115,7 +115,7 @@ docker exec -ti <fund_store_container_id> sh -c "chmod +x scripts/load_cof_r2.py
 
 ```
 ```
-docker exec -ti <fund_store_container_id> scripts/load_cof_r3w1.py
+docker exec -ti <fund_store_container_id> python -m scripts.load_cof_r3w1
 
 if you are having a Permission issue:
 docker exec -ti <fund_store_container_id> sh -c "chmod +x scripts/load_cof_r3w1.py && ./scripts/load_cof_r3w1.py"
