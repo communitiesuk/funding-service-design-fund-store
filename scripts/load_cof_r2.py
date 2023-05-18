@@ -4,6 +4,7 @@ import sys
 
 sys.path.insert(1, ".")
 
+from app import app  # noqa: E402
 from config import Config  # noqa: E402
 from db.queries import insert_application_sections
 from db.queries import insert_assessment_sections
@@ -55,8 +56,6 @@ def create_sections(path_prefix, round_id, forms_config):
 
 
 if __name__ == "__main__":
-    from app import app  # noqa: E402
-
     with app.app_context():
 
         # -- load fund and rounds --
