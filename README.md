@@ -112,6 +112,19 @@ docker exec -ti <fund_store_container_id> scripts/amend_round_dates.py --round_i
 docker exec -ti <fund_store_container_id> scripts/amend_round_dates.py --round_id c603d114-5364-4474-a0c4-c41cbf4d3bbd --opens_date "2022-10-04 12:00:00" --deadline_date "2022-12-14 11:59:00" --assessment_deadline_date "2023-03-30 12:00:00"
 
 ```
+## How to use
+Enter the virtual environment and setup the db as described above, then:
+## How to run locally
+Enter the virtual environment and install dependencies as described above, then:
+
+### Create and seed local DB
+- Make sure your local `DATABASE_URL` env var is set to your local postgres db (this doesn't need to actually exist yet), eg:
+
+        DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5432/fsd_fund_store
+
+- Use `tasks\db_tasks.py` to create and seed this DB (follow command prompts for what data to create):
+
+        python -m scripts.{load_config_script}
 
 # Pipelines
 
