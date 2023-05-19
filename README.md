@@ -101,9 +101,9 @@ Enter the virtual environment and install dependencies as described above, then:
 
         DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5432/fsd_fund_store
 
-- Use `tasks\db_tasks.py` to create and seed this DB (follow command prompts for what data to create):
+- Use `tasks\db_tasks.py` to create and seed this DB:
 
-        python -m scripts.{load_config_script}
+        python -m scripts.load_{config_for_rounds}
 
 # Pipelines
 
