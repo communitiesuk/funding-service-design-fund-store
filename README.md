@@ -91,19 +91,27 @@ Ensure the following elements are present in your `manifest.yml`. The `run_migra
 
     services:
         - fund-store-dev-db
-## How to use
-Enter the virtual environment and setup the db as described above, then:
-## How to run locally
-Enter the virtual environment and install dependencies as described above, then:
 
-### Create and seed local DB
-- Make sure your local `DATABASE_URL` env var is set to your local postgres db (this doesn't need to actually exist yet), eg:
+# Seeding Fund Data
+To seed fund & round data to db
 
-        DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5432/fsd_fund_store
+```
+docker exec -ti <fund_store_container_id> python -m scripts.load_cof_r2
 
-- Use `tasks\db_tasks.py` to create and seed this DB:
+```
+```
+docker exec -ti <fund_store_container_id> python -m scripts.load_cof_r3w1
 
-        python -m scripts.load_{config_for_rounds}
+```
+To amend the round dates
+```
+docker exec -ti <fund_store_container_id> scripts/amend_round_dates.py --round_id c603d114-5364-4474-a0c4-c41cbf4d3bbd --assessment_deadline_date "2023-03-30 12:00:00"
+
+```
+```
+docker exec -ti <fund_store_container_id> scripts/amend_round_dates.py --round_id c603d114-5364-4474-a0c4-c41cbf4d3bbd --opens_date "2022-10-04 12:00:00" --deadline_date "2022-12-14 11:59:00" --assessment_deadline_date "2023-03-30 12:00:00"
+
+```
 
 # Pipelines
 
@@ -133,24 +141,3 @@ into your workflow. You will be notified of any pep8 errors during commits.
 
 In deploy.yml, there are three environment variables called users, spawn-rate and run-time. These are used
 to override the locust config if the performance tests need to run with different configs for fund store.
-
-# Seeding Fund Data
-To seed fund & round data to db
-
-```
-docker exec -ti <fund_store_container_id> python -m scripts.load_cof_r2
-
-```
-```
-docker exec -ti <fund_store_container_id> python -m scripts.load_cof_r3w1
-
-```
-To amend the round dates
-```
-docker exec -ti <fund_store_container_id> scripts/amend_round_dates.py --round_id c603d114-5364-4474-a0c4-c41cbf4d3bbd --assessment_deadline_date "2023-03-30 12:00:00"
-
-```
-```
-docker exec -ti <fund_store_container_id> scripts/amend_round_dates.py --round_id c603d114-5364-4474-a0c4-c41cbf4d3bbd --opens_date "2022-10-04 12:00:00" --deadline_date "2022-12-14 11:59:00" --assessment_deadline_date "2023-03-30 12:00:00"
-
-```
