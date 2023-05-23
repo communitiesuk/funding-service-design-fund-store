@@ -263,6 +263,44 @@ def insert_round_data(round_config):
     return inserted_round_ids
 
 
+def insert_base_sections(APPLICATION_BASE_PATH, ASSESSMENT_BASE_PATH, round_id):
+    tree_base_sections = [
+        {
+            "section_name": "Application",
+            "tree_path": APPLICATION_BASE_PATH,
+            "weighting": None,
+        },
+        {
+            "section_name": "Assessment",
+            "tree_path": ASSESSMENT_BASE_PATH,
+            "weighting": None,
+        },
+    ]
+    inserted_section_ids = []
+
+    for section in tree_base_sections:
+
+        stmt = (
+            insert(Section).values(
+                round_id=bindparam("round_id"),
+                title=bindparam("title"),
+                weighting=bindparam("weighting"),
+                path=bindparam("path"),
+            )
+        ).returning(Section.id)
+
+        update_params = {
+            "round_id": round_id,
+            "title": section["section_name"],
+            "weighting": None,
+            "path": Ltree(section["tree_path"]),
+        }
+
+        result = db.session.execute(stmt, update_params).fetchall()
+        inserted_section_id = result[0].id
+        inserted_section_ids.append(inserted_section_id)
+
+
 def insert_application_sections(round_id, sorted_application_sections: dict):
     print(f"Inserting forms config: '{sorted_application_sections}'.")
     inserted_section_ids = []
