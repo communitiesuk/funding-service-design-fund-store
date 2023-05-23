@@ -130,19 +130,6 @@ cof_r3w1_sections = [
     },
 ]
 
-fund_config = {
-    "id": COF_FUND_ID,
-    "name": "Community Ownership Fund",
-    "title": "funding to save an asset in your community",
-    "short_name": "COF",
-    "description": (
-        "The Community Ownership Fund is a £150 million fund over 4 years"
-        " to support community groups across England, Wales, Scotland and"
-        " Northern Ireland to take ownership of assets which are at risk"
-        " of being lost to the community."
-    ),
-}
-
 round_config = [
     {
         "id": COF_ROUND_3_WINDOW_1_ID,

@@ -3,11 +3,11 @@ from config.fund_loader_config.common_fund_config.fund_base_tree_paths import (
 )
 
 NIGHT_SHELTER_FUND_ID = "13b95669-ed98-4840-8652-d6b7a19964db"
-NIGHT_SHELTER_ROUND_1_ID = "fc7aa604-989e-4364-98a7-d1234271435a"
+NIGHT_SHELTER_ROUND_2_ID = "fc7aa604-989e-4364-98a7-d1234271435a"
 APPLICATION_BASE_PATH = ".".join([str(NIGHT_SHELTER_BASE_PATH), str(1)])
 ASSESSMENT_BASE_PATH = ".".join([str(NIGHT_SHELTER_BASE_PATH), str(2)])
 
-r1_application_sections = [
+r2_application_sections = [
     {
         "section_name": "About your organisation",
         "tree_path": f"{APPLICATION_BASE_PATH}.1",
@@ -135,24 +135,24 @@ r1_application_sections = [
 
 fund_config = {
     "id": NIGHT_SHELTER_FUND_ID,
-    "name": "Night Shelter Fund",
-    "title": "",
+    "name": "Night Shelter Transformation Fund",
+    "title": "funding to transform your night shelter services in England",
     "short_name": "NS",
     "description": "",
 }
 
 round_config = [
     {
-        "id": NIGHT_SHELTER_ROUND_1_ID,
+        "id": NIGHT_SHELTER_ROUND_2_ID,
         "fund_id": NIGHT_SHELTER_FUND_ID,
-        "title": "Round 1",
-        "short_name": "R1",
+        "title": "Round 2",
+        "short_name": "R2",
         "opens": "2020-05-31 12:00:00",
         "deadline": "2025-07-12 11:59:00",
         "assessment_deadline": "2025-08-09 12:00:00",
         "prospectus": "",
         "privacy_notice": "",
-        "contact_email": "",
+        "contact_email": "transformationfund@levellingup.gov.uk",
         "contact_phone": None,
         "contact_textphone": None,
         "support_times": "9am to 5pm",
