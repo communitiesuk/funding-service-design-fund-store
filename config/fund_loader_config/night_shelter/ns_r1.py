@@ -152,16 +152,11 @@ round_config = [
         "assessment_deadline": "2025-08-09 12:00:00",
         "prospectus": "",
         "privacy_notice": "",
-        "contact_email": "COF@levellingup.gov.uk",
+        "contact_email": "",
         "contact_phone": None,
         "contact_textphone": None,
         "support_times": "9am to 5pm",
         "support_days": "Monday to Friday",
-        "instructions": (
-            "You must have received an invitation to apply. If we did not invite you,"
-            " first <a"
-            ' href="https://www.gov.uk/government/publications/community-ownership-fund-prospectus">'
-            " express your interest in the fund</a>."
-        ),
+        "instructions": "",
     }
 ]
