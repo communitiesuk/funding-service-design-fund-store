@@ -139,6 +139,7 @@ fund_config = {
     "title": "funding to transform your night shelter services in England",
     "short_name": "NS",
     "description": "",
+    "welsh_available": False,
 }
 
 round_config = [

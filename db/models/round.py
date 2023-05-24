@@ -6,7 +6,6 @@ from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.types import Boolean
 
 
 BaseModel: DefaultMeta = db.Model
@@ -42,4 +41,3 @@ class Round(BaseModel):
     support_times = Column("support_times", db.String(), nullable=False, unique=False)
     support_days = Column("support_days", db.String(), nullable=False, unique=False)
     instructions = Column("instructions", db.String(), nullable=False, unique=False)
-    welsh_available = Column("welsh_available", Boolean, default=False, nullable=False)
