@@ -137,7 +137,7 @@ fund_config = {
     "id": NIGHT_SHELTER_FUND_ID,
     "name": "Night Shelter Transformation Fund",
     "title": "funding to transform your night shelter services in England",
-    "short_name": "NS",
+    "short_name": "NSTF",
     "description": "",
     "welsh_available": False,
 }
