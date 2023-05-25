@@ -10,6 +10,7 @@ from db.models.section import SectionField
 from sqlalchemy import bindparam
 from sqlalchemy import func
 from sqlalchemy import insert
+from sqlalchemy import update
 from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert as postgres_insert
 from sqlalchemy.sql import expression
@@ -339,6 +340,30 @@ def insert_application_sections(round_id, sorted_application_sections: dict):
     db.session.commit()
     print(f"inserted sections (ids): '{inserted_section_ids}'.")
     return inserted_section_ids
+
+
+def update_application_section_names(round_id, sorted_application_sections: List[dict]):
+
+    for section in sorted_application_sections:
+        section_path = section["tree_path"]
+        split_section_name_list = section["section_name"].lower().split()
+        try:
+            float(split_section_name_list[0])
+            split_section_name_list[1] = split_section_name_list[1].capitalize()
+        except ValueError:
+            split_section_name_list[0] = split_section_name_list[0].capitalize()
+        new_section_name = ' '.join(split_section_name_list)
+
+        # Update the section name
+        stmt = (
+            update(Section)
+            .where(Section.round_id == round_id)
+            .where(Section.path == Ltree(section_path))
+            .values(title=new_section_name)
+        )
+        db.session.execute(stmt)
+
+    db.session.commit()
 
 
 def __add__section_fields(field_section_links):
