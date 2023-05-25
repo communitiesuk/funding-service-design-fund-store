@@ -9,6 +9,7 @@ def main() -> None:
     print("Updating section names to sentance case.")
     update_application_section_names(COF_ROUND_3_WINDOW_1_ID, cof_r3w1_sections)
 
+
 if __name__ == "__main__":
     from app import app
 
