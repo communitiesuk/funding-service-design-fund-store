@@ -325,7 +325,7 @@ def insert_application_sections(round_id, sorted_application_sections: dict):
         update_params = {
             "round_id": round_id,
             "title": section["section_name"],
-            "weighting": None,
+            "weighting": section.get("weighting", None),
             "path": Ltree(section["tree_path"]),
         }
 

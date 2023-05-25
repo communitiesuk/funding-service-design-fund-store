@@ -99,7 +99,11 @@ cof_r2_sections = [
         "tree_path": f"{APPLICATION_BASE_PATH}.2.2",
         "form_name": "asset-information",
     },
-    {"section_name": "Strategic case", "tree_path": "1.1.3"},
+    {
+        "section_name": "Strategic case",
+        "tree_path": f"{APPLICATION_BASE_PATH}.3",
+        "weighting": 30,
+    },
     {
         "section_name": "Community Use",
         "tree_path": f"{APPLICATION_BASE_PATH}.3.1",
@@ -120,7 +124,11 @@ cof_r2_sections = [
         "tree_path": f"{APPLICATION_BASE_PATH}.3.4",
         "form_name": "environmental-sustainability",
     },
-    {"section_name": "Management case", "tree_path": f"{APPLICATION_BASE_PATH}.4"},
+    {
+        "section_name": "Management case",
+        "tree_path": f"{APPLICATION_BASE_PATH}.4",
+        "weighting": 30,
+    },
     {
         "section_name": "Funding Required",
         "tree_path": f"{APPLICATION_BASE_PATH}.4.1",
@@ -164,6 +172,7 @@ cof_r2_sections = [
     {
         "section_name": "Potential to deliver community benefits",
         "tree_path": f"{APPLICATION_BASE_PATH}.5",
+        "weighting": 30,
     },
     {
         "section_name": "Community Benefits",
@@ -173,6 +182,7 @@ cof_r2_sections = [
     {
         "section_name": "Added value to community",
         "tree_path": f"{APPLICATION_BASE_PATH}.6",
+        "weighting": 10,
     },
     {
         "section_name": "Value To The Community",
