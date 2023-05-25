@@ -159,5 +159,7 @@ round_config = [
         "support_times": "9am to 5pm",
         "support_days": "Monday to Friday",
         "instructions": "",
+        "feedback_link": "",
+        "project_name_field_id": "",
     }
 ]

@@ -10,8 +10,8 @@ from db.models.section import SectionField
 from sqlalchemy import bindparam
 from sqlalchemy import func
 from sqlalchemy import insert
-from sqlalchemy import update
 from sqlalchemy import select
+from sqlalchemy import update
 from sqlalchemy.dialects.postgresql import insert as postgres_insert
 from sqlalchemy.sql import expression
 from sqlalchemy_utils import Ltree
@@ -235,6 +235,8 @@ def insert_round_data(round_config):
             support_times=bindparam("support_times"),
             support_days=bindparam("support_days"),
             instructions=bindparam("instructions"),
+            project_name_field_id=bindparam("project_name_field_id"),
+            feedback_link=bindparam("feedback_link"),
         )
     ).returning(Round.id)
 
@@ -255,6 +257,8 @@ def insert_round_data(round_config):
             "support_times": item["support_times"],
             "support_days": item["support_days"],
             "instructions": item["instructions"],
+            "feedback_link": item["feedback_link"],
+            "project_name_field_id": item["project_name_field_id"],
         }
         for item in round_config
     ]
@@ -321,7 +325,7 @@ def insert_application_sections(round_id, sorted_application_sections: dict):
         update_params = {
             "round_id": round_id,
             "title": section["section_name"],
-            "weighting": None,
+            "weighting": section.get("weighting", None),
             "path": Ltree(section["tree_path"]),
         }
 
@@ -354,7 +358,7 @@ def update_application_section_names(round_id, sorted_application_sections: List
             split_section_name_list[1] = split_section_name_list[1].capitalize()
         except ValueError:
             split_section_name_list[0] = split_section_name_list[0].capitalize()
-        new_section_name = ' '.join(split_section_name_list)
+        new_section_name = " ".join(split_section_name_list)
 
         # Update the section name
         stmt = (

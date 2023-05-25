@@ -163,6 +163,8 @@ def seed_dynamic_data(request, app, clear_test_data, _db):
                 "support_times": "8am - 12:30pm",
                 "support_days": "Monday and Tuesday",
                 "instructions": "Instructions to fill out the form",
+                "project_name_field_id": "abc123",
+                "feedback_link": "www.feedback.link",
             }
             rounds.append(round_config)
 

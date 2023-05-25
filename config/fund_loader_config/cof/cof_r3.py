@@ -40,6 +40,7 @@ cof_r3w1_sections = [
     {
         "section_name": "Strategic case",
         "tree_path": f"{APPLICATION_BASE_PATH}.3",
+        "weighting": 53,
     },
     {
         "section_name": "3.1 Community use",
@@ -69,6 +70,7 @@ cof_r3w1_sections = [
     {
         "section_name": "Management case",
         "tree_path": f"{APPLICATION_BASE_PATH}.4",
+        "weighting": 47,
     },
     {
         "section_name": "4.1 Funding required",
@@ -155,5 +157,7 @@ round_config = [
             ' href="https://www.gov.uk/government/publications/community-ownership-fund-prospectus">'
             " express your interest in the fund</a>."
         ),
+        "feedback_link": "",
+        "project_name_field_id": "apGjFS",
     }
 ]

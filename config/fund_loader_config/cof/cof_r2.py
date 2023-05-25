@@ -35,6 +35,11 @@ rounds_config = [
             ' href="https://www.gov.uk/government/publications/community-ownership-fund-prospectus">'
             " express your interest in the fund</a>."
         ),
+        "feedback_link": (
+            "https://forms.office.com/Pages/ResponsePage.aspx?id=",
+            "EGg0v32c3kOociSi7zmVqN48ORk8WN5LlJITE3Swt-lURUNCR0dHMjgxWFZOMTMxQzlOTVIxVkQ0Sy4u",
+        ),
+        "project_name_field_id": "KAgrBz",
     },
     {
         "id": COF_ROUND_2_WINDOW_3_ID,
@@ -60,6 +65,11 @@ rounds_config = [
             ' href="https://www.gov.uk/government/publications/community-ownership-fund-prospectus">'
             " express your interest in the fund</a>."
         ),
+        "feedback_link": (
+            "https://forms.office.com/Pages/ResponsePage.aspx?id=",
+            "EGg0v32c3kOociSi7zmVqFJBHpeOL2tNnpiwpdL2iElUREIySU9OWTU4R0RTNjhBUDE1Q1VYVFBEMi4u",
+        ),
+        "project_name_field_id": "KAgrBz",
     },
 ]
 
@@ -89,7 +99,11 @@ cof_r2_sections = [
         "tree_path": f"{APPLICATION_BASE_PATH}.2.2",
         "form_name": "asset-information",
     },
-    {"section_name": "Strategic case", "tree_path": "1.1.3"},
+    {
+        "section_name": "Strategic case",
+        "tree_path": f"{APPLICATION_BASE_PATH}.3",
+        "weighting": 30,
+    },
     {
         "section_name": "Community Use",
         "tree_path": f"{APPLICATION_BASE_PATH}.3.1",
@@ -110,7 +124,11 @@ cof_r2_sections = [
         "tree_path": f"{APPLICATION_BASE_PATH}.3.4",
         "form_name": "environmental-sustainability",
     },
-    {"section_name": "Management case", "tree_path": f"{APPLICATION_BASE_PATH}.4"},
+    {
+        "section_name": "Management case",
+        "tree_path": f"{APPLICATION_BASE_PATH}.4",
+        "weighting": 30,
+    },
     {
         "section_name": "Funding Required",
         "tree_path": f"{APPLICATION_BASE_PATH}.4.1",
@@ -154,6 +172,7 @@ cof_r2_sections = [
     {
         "section_name": "Potential to deliver community benefits",
         "tree_path": f"{APPLICATION_BASE_PATH}.5",
+        "weighting": 30,
     },
     {
         "section_name": "Community Benefits",
@@ -163,6 +182,7 @@ cof_r2_sections = [
     {
         "section_name": "Added value to community",
         "tree_path": f"{APPLICATION_BASE_PATH}.6",
+        "weighting": 10,
     },
     {
         "section_name": "Value To The Community",
