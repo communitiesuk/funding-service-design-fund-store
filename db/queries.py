@@ -235,6 +235,8 @@ def insert_round_data(round_config):
             support_times=bindparam("support_times"),
             support_days=bindparam("support_days"),
             instructions=bindparam("instructions"),
+            project_name_field_id=bindparam("project_name_field_id"),
+            feedback_link=bindparam("feedback_link"),
         )
     ).returning(Round.id)
 
@@ -255,6 +257,8 @@ def insert_round_data(round_config):
             "support_times": item["support_times"],
             "support_days": item["support_days"],
             "instructions": item["instructions"],
+            "feedback_link": item["feedback_link"],
+            "project_name_field_id": item["project_name_field_id"],
         }
         for item in round_config
     ]

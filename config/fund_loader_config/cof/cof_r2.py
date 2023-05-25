@@ -35,6 +35,11 @@ rounds_config = [
             ' href="https://www.gov.uk/government/publications/community-ownership-fund-prospectus">'
             " express your interest in the fund</a>."
         ),
+        "feedback_link": (
+            "https://forms.office.com/Pages/ResponsePage.aspx?id=",
+            "EGg0v32c3kOociSi7zmVqN48ORk8WN5LlJITE3Swt-lURUNCR0dHMjgxWFZOMTMxQzlOTVIxVkQ0Sy4u",
+        ),
+        "project_name_field_id": "KAgrBz",
     },
     {
         "id": COF_ROUND_2_WINDOW_3_ID,
@@ -60,6 +65,11 @@ rounds_config = [
             ' href="https://www.gov.uk/government/publications/community-ownership-fund-prospectus">'
             " express your interest in the fund</a>."
         ),
+        "feedback_link": (
+            "https://forms.office.com/Pages/ResponsePage.aspx?id=",
+            "EGg0v32c3kOociSi7zmVqFJBHpeOL2tNnpiwpdL2iElUREIySU9OWTU4R0RTNjhBUDE1Q1VYVFBEMi4u",
+        ),
+        "project_name_field_id": "KAgrBz",
     },
 ]
 

@@ -155,5 +155,7 @@ round_config = [
             ' href="https://www.gov.uk/government/publications/community-ownership-fund-prospectus">'
             " express your interest in the fund</a>."
         ),
+        "feedback_link": "",
+        "project_name_field_id": "apGjFS",
     }
 ]
