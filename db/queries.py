@@ -10,8 +10,8 @@ from db.models.section import SectionField
 from sqlalchemy import bindparam
 from sqlalchemy import func
 from sqlalchemy import insert
-from sqlalchemy import update
 from sqlalchemy import select
+from sqlalchemy import update
 from sqlalchemy.dialects.postgresql import insert as postgres_insert
 from sqlalchemy.sql import expression
 from sqlalchemy_utils import Ltree
@@ -354,7 +354,7 @@ def update_application_section_names(round_id, sorted_application_sections: List
             split_section_name_list[1] = split_section_name_list[1].capitalize()
         except ValueError:
             split_section_name_list[0] = split_section_name_list[0].capitalize()
-        new_section_name = ' '.join(split_section_name_list)
+        new_section_name = " ".join(split_section_name_list)
 
         # Update the section name
         stmt = (
