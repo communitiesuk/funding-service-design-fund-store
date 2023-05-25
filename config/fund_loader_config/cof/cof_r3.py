@@ -14,12 +14,12 @@ cof_r3w1_sections = [
         "tree_path": f"{APPLICATION_BASE_PATH}.1",
     },
     {
-        "section_name": "1.1 Organisation Information",
+        "section_name": "1.1 Organisation information",
         "form_name": "organisation-information-cof-r3-w1",
         "tree_path": f"{APPLICATION_BASE_PATH}.1.1",
     },
     {
-        "section_name": "1.2 Applicant Information",
+        "section_name": "1.2 Applicant information",
         "form_name": "applicant-information-cof-r3-w1",
         "tree_path": f"{APPLICATION_BASE_PATH}.1.2",
     },
@@ -28,12 +28,12 @@ cof_r3w1_sections = [
         "tree_path": f"{APPLICATION_BASE_PATH}.2",
     },
     {
-        "section_name": "2.1 Project Information",
+        "section_name": "2.1 Project information",
         "form_name": "project-information-cof-r3-w1",
         "tree_path": f"{APPLICATION_BASE_PATH}.2.1",
     },
     {
-        "section_name": "2.2 Asset Information",
+        "section_name": "2.2 Asset information",
         "form_name": "asset-information-cof-r3-w1",
         "tree_path": f"{APPLICATION_BASE_PATH}.2.2",
     },
@@ -42,17 +42,17 @@ cof_r3w1_sections = [
         "tree_path": f"{APPLICATION_BASE_PATH}.3",
     },
     {
-        "section_name": "3.1 Community Use",
+        "section_name": "3.1 Community use",
         "form_name": "community-use-cof-r3-w1",
         "tree_path": f"{APPLICATION_BASE_PATH}.3.1",
     },
     {
-        "section_name": "3.2 Community Engagement",
+        "section_name": "3.2 Community engagement",
         "form_name": "community-engagement-cof-r3-w1",
         "tree_path": f"{APPLICATION_BASE_PATH}.3.2",
     },
     {
-        "section_name": "3.3 Local Support",
+        "section_name": "3.3 Local support",
         "form_name": "local-support-cof-r3-w1",
         "tree_path": f"{APPLICATION_BASE_PATH}.3.3",
     },
@@ -62,7 +62,7 @@ cof_r3w1_sections = [
         "tree_path": f"{APPLICATION_BASE_PATH}.3.4",
     },
     {
-        "section_name": "3.5 Environmental Sustainability",
+        "section_name": "3.5 Environmental sustainability",
         "form_name": "environmental-sustainability-cof-r3-w1",
         "tree_path": f"{APPLICATION_BASE_PATH}.3.5",
     },
@@ -71,7 +71,7 @@ cof_r3w1_sections = [
         "tree_path": f"{APPLICATION_BASE_PATH}.4",
     },
     {
-        "section_name": "4.1 Funding Required",
+        "section_name": "4.1 Funding required",
         "form_name": "funding-required-cof-r3-w1",
         "tree_path": f"{APPLICATION_BASE_PATH}.4.1",
     },
