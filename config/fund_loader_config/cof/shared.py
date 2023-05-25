@@ -9,4 +9,5 @@ fund_config = {
         " Northern Ireland to take ownership of assets which are at risk"
         " of being lost to the community."
     ),
+    "welsh_available": True,
 }

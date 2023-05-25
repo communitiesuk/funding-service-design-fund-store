@@ -194,6 +194,7 @@ def insert_fund_data(fund_config):
                 title=bindparam("title"),
                 short_name=bindparam("short_name"),
                 description=bindparam("description"),
+                welsh_available=bindparam("welsh_available"),
             )
         )
         .on_conflict_do_nothing(index_elements=[Fund.id])
@@ -206,6 +207,7 @@ def insert_fund_data(fund_config):
         "title": fund_config["title"],
         "short_name": fund_config["short_name"],
         "description": fund_config["description"],
+        "welsh_available": fund_config["welsh_available"],
     }
 
     result = db.session.execute(stmt, update_params)

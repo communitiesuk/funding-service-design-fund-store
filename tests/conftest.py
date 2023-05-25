@@ -139,6 +139,7 @@ def seed_dynamic_data(request, app, clear_test_data, _db):
             "title": f"Unit test fund title {fund_count}",  # {fund['short_name']}",
             "short_name": f"FND{fund_count}",  # fund["short_name"],
             "description": "testing description",
+            "welsh_available": True,
         }
         insert_fund_data(fund_config)
         rounds = []
