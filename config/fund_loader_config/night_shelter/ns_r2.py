@@ -18,7 +18,7 @@ r2_application_sections = [
         "tree_path": f"{APPLICATION_BASE_PATH}.1.1",
     },
     {
-        "section_name": "About your organisation",
+        "section_name": "1. About your organisation",
         "tree_path": f"{APPLICATION_BASE_PATH}.2",
     },
     {
@@ -42,7 +42,7 @@ r2_application_sections = [
         "tree_path": f"{APPLICATION_BASE_PATH}.2.4",
     },
     {
-        "section_name": "Your skills and experience",
+        "section_name": "2. Your skills and experience",
         "tree_path": f"{APPLICATION_BASE_PATH}.3",
         "weighting": 10,
     },
@@ -57,7 +57,7 @@ r2_application_sections = [
         "tree_path": f"{APPLICATION_BASE_PATH}.3.2",
     },
     {
-        "section_name": "Your proposal",
+        "section_name": "3. Your proposal",
         "tree_path": f"{APPLICATION_BASE_PATH}.4",
         "weighting": 45,
     },
@@ -92,7 +92,7 @@ r2_application_sections = [
         "tree_path": f"{APPLICATION_BASE_PATH}.4.6",
     },
     {
-        "section_name": "Outputs and outcomes",
+        "section_name": "4. Outputs and outcomes",
         "tree_path": f"{APPLICATION_BASE_PATH}.5",
         "weighting": 15,
     },
@@ -102,7 +102,7 @@ r2_application_sections = [
         "tree_path": f"{APPLICATION_BASE_PATH}.5.1",
     },
     {
-        "section_name": "Risk and deliverability",
+        "section_name": "5. Risk and deliverability",
         "tree_path": f"{APPLICATION_BASE_PATH}.6",
         "weighting": 15,
     },
@@ -112,7 +112,7 @@ r2_application_sections = [
         "tree_path": f"{APPLICATION_BASE_PATH}.6.1",
     },
     {
-        "section_name": "Value for money",
+        "section_name": "6. Value for money",
         "tree_path": f"{APPLICATION_BASE_PATH}.7",
         "weighting": 15,
     },
@@ -132,7 +132,7 @@ r2_application_sections = [
         "tree_path": f"{APPLICATION_BASE_PATH}.7.3",
     },
     {
-        "section_name": "Check declarations",
+        "section_name": "7. Check declarations",
         "tree_path": f"{APPLICATION_BASE_PATH}.8",
     },
     {
@@ -157,7 +157,7 @@ round_config = [
         "fund_id": NIGHT_SHELTER_FUND_ID,
         "title": "Round 2",
         "short_name": "R2",
-        "opens": "2023-06-07 12:00:00",
+        "opens": "2023-05-07 12:00:00",
         "deadline": "2023-07-05 11:59:00",
         "assessment_deadline": "2023-08-09 12:00:00",
         "prospectus": "",
