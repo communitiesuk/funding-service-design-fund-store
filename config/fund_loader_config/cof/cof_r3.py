@@ -157,7 +157,10 @@ round_config = [
             ' href="https://www.gov.uk/government/publications/community-ownership-fund-prospectus">'
             " express your interest in the fund</a>."
         ),
-        "feedback_link": "",
+        "feedback_link": (
+            "https://forms.office.com/Pages/ResponsePage.aspx?id="
+            "EGg0v32c3kOociSi7zmVqFJBHpeOL2tNnpiwpdL2iElURUY1WkhaS0NFMlZVQUhYQ1NaN0E4RjlQMC4u"
+        ),
         "project_name_field_id": "apGjFS",
     }
 ]
