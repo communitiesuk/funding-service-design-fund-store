@@ -168,7 +168,7 @@ round_config = [
         "support_times": "9am to 5pm",
         "support_days": "Monday to Friday",
         "instructions": "",
-        "feedback_link": "",
+        "feedback_link": "https://forms.office.com/e/n6J9KPebUy",
         "project_name_field_id": "YVsPtE",
     }
 ]
