@@ -190,10 +190,10 @@ def insert_fund_data(fund_config):
         (
             postgres_insert(Fund).values(
                 id=bindparam("id"),
-                name=bindparam("name"),
-                title=bindparam("title"),
+                name_json=bindparam("name_json"),
+                title_json=bindparam("title_json"),
                 short_name=bindparam("short_name"),
-                description=bindparam("description"),
+                description_json=bindparam("description_json"),
                 welsh_available=bindparam("welsh_available"),
             )
         )
@@ -203,10 +203,10 @@ def insert_fund_data(fund_config):
 
     update_params = {
         "id": fund_config["id"],
-        "name": fund_config["name"],
-        "title": fund_config["title"],
+        "name_json": fund_config["name_json"],
+        "title_json": fund_config["title_json"],
         "short_name": fund_config["short_name"],
-        "description": fund_config["description"],
+        "description_json": fund_config["description_json"],
         "welsh_available": fund_config["welsh_available"],
     }
 
@@ -221,7 +221,7 @@ def insert_round_data(round_config):
     stmt = (
         insert(Round).values(
             id=bindparam("id"),
-            title=bindparam("title"),
+            title_json=bindparam("title_json"),
             short_name=bindparam("short_name"),
             opens=bindparam("opens"),
             deadline=bindparam("deadline"),
@@ -243,7 +243,7 @@ def insert_round_data(round_config):
     update_params = [
         {
             "id": item["id"],
-            "title": item["title"],
+            "title_json": item["title_json"],
             "short_name": item["short_name"],
             "opens": item["opens"],
             "deadline": item["deadline"],

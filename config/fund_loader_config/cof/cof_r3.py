@@ -136,7 +136,7 @@ round_config = [
     {
         "id": COF_ROUND_3_WINDOW_1_ID,
         "fund_id": COF_FUND_ID,
-        "title": "Round 3 Window 1",
+        "title_json": {"en": "Round 3 Window 1"},
         "short_name": "R3W1",
         "opens": "2023-05-31 12:00:00",
         "deadline": "2023-07-12 11:59:00",

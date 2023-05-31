@@ -145,7 +145,7 @@ r2_application_sections = [
 fund_config = {
     "id": NIGHT_SHELTER_FUND_ID,
     "name": "Night Shelter Transformation Fund",
-    "title": "funding to transform your night shelter services in England",
+    "title_json": {"en": "funding to transform your night shelter services in England"},
     "short_name": "NSTF",
     "description": "",
     "welsh_available": False,
@@ -155,7 +155,7 @@ round_config = [
     {
         "id": NIGHT_SHELTER_ROUND_2_ID,
         "fund_id": NIGHT_SHELTER_FUND_ID,
-        "title": "Round 2",
+        "title_json": {"en": "Round 2"},
         "short_name": "R2",
         "opens": "2023-06-07 12:00:00",
         "deadline": "2023-07-05 11:59:00",

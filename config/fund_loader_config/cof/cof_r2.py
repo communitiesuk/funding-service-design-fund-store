@@ -13,7 +13,7 @@ ASSESSMENT_BASE_PATH = ".".join([str(COF_R2_W2_BASE_PATH), str(2)])
 rounds_config = [
     {
         "id": COF_ROUND_2_WINDOW_2_ID,
-        "title": "Round 2 Window 2",
+        "title_json": {"en": "Round 2 Window 2"},
         "short_name": "R2W2",
         "opens": "2022-10-04 12:00:00",
         "deadline": "2022-12-14 11:59:00",
@@ -43,7 +43,7 @@ rounds_config = [
     },
     {
         "id": COF_ROUND_2_WINDOW_3_ID,
-        "title": "Round 2 Window 3",
+        "title_json": {"en": "Round 2 Window 3"},
         "short_name": "R2W3",
         "opens": "2022-10-04 12:00:00",
         "deadline": "2023-04-14 11:59:00",
