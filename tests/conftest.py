@@ -199,9 +199,9 @@ def mock_get_fund_round(mocker):
     mock_fund: Fund = Fund(
         id=uuid4(),
         short_name="FND1",
-        name="Fund Name 1",
-        title="Fund 1",
-        description="description text",
+        name_json={"en": "Fund Name 1"},
+        title_json={"en": "Fund 1"},
+        description_json={"en": "description text"},
     )
     round_config = {
         "id": uuid4(),
@@ -218,7 +218,9 @@ def mock_get_fund_round(mocker):
         "support_days": "",
         "support_times": "",
     }
-    mock_round: Round = Round(title="Round 1", short_name="RND1", **round_config)
+    mock_round: Round = Round(
+        title_json={"en": "Round 1"}, short_name="RND1", **round_config
+    )
     mocker.patch("api.routes.get_all_funds", return_value=[mock_fund])
     mocker.patch("api.routes.get_fund_by_id", return_value=mock_fund)
     mocker.patch("api.routes.get_fund_by_short_name", return_value=mock_fund)

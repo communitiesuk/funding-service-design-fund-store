@@ -52,9 +52,8 @@ def filter_round_by_lang(round_data, lang_key: str = "en"):
         for k, v in data.items():
             if k == "title_json":
                 out["title"] = v[lang_key]
-            continue
-
-        out[k] = v
+                continue
+            out[k] = v
         return out
 
     if isinstance(round_data, dict):
