@@ -98,11 +98,8 @@ class Section(BaseModel):
 
     form_name = relationship("FormName")
 
-    def title(self, lang_key):
-        return self.title_json.get(lang_key, self.title_json.get("en"))
-
     def __str__(self):
-        return self.title
+        return self.title_json.get("en")
 
     def __repr__(self):
-        return "Section({})".format(self.title)
+        return "Section({})".format(self.title_json)

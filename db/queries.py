@@ -101,10 +101,10 @@ def get_application_sections_for_round(
     if not application_level:
         return None
 
-    query = f"{application_level.path}.*{'{1}'}"
+    query = f"{application_level.path}.*{{1}}"
     lquery = expression.cast(query, LQUERY)
     application_sections = db.session.scalars(
-        select(Section).filter(Section.path.lquery(lquery))
+        select(Section).filter(Section.path.lquery(lquery)).order_by(Section.path)
     ).all()
 
     return application_sections
@@ -144,7 +144,7 @@ def get_assessment_sections_for_round(
         # select(Section).join(Translation, onclause=f"section.title_content_id
         #  = translation.content_id and translation.language='{language}'",
         # isouter=True).filter(Section.path.lquery(lquery))
-        .filter(Section.path.lquery(lquery))
+        .filter(Section.path.lquery(lquery)).order_by(Section.path)
     ).all()
 
     return assessment_sections
