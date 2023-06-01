@@ -254,6 +254,7 @@ def insert_round_data(round_config):
             round_record.instructions = item["instructions"]
             round_record.project_name_field_id = item["project_name_field_id"]
             round_record.feedback_link = item["feedback_link"]
+            round_record.application_guidance = item["application_guidance"]
 
             updated_rounds[item["id"]] = round_record
 
@@ -277,6 +278,7 @@ def insert_round_data(round_config):
                 instructions=item["instructions"],
                 project_name_field_id=item["project_name_field_id"],
                 feedback_link=item["feedback_link"],
+                application_guidance=item["application_guidance"],
             )
             db.session.add(new_round)
 
