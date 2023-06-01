@@ -31,9 +31,9 @@ def test_get_application_sections(seed_dynamic_data):
         seed_dynamic_data["funds"][0]["rounds"][0]["id"],
     )
     assert len(sections) == 2
-    assert sections[0].title == "Middle1"
+    assert sections[0].title_json == {"en": "Middle1"}
     assert len(sections[0].children) == 1
-    assert sections[1].title == "Middle2"
+    assert sections[1].title_json == {"en": "Middle2"}
     assert len(sections[1].children) == 1
 
 
@@ -44,9 +44,9 @@ def test_get_assessment_sections(seed_dynamic_data):
         "",
     )
     assert len(sections) == 1
-    assert sections[0].title == "assess section 1"
+    assert sections[0].title_json == {"en": "assess section 1"}
     assert len(sections[0].children) == 1
-    assert sections[0].children[0].title == "assess section 1 a"
+    assert sections[0].children[0].title_json == {"en": "assess section 1 a"}
     assert len(sections[0].children[0].children) == 0
 
 
