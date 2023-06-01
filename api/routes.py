@@ -118,15 +118,11 @@ def get_rounds_for_fund(fund_id):
 
 def get_sections_for_round_application(fund_id, round_id):
     language = request.args.get("language", "en").replace("?", "")
-    print(request.args.get("language"), "language")
     sections = get_application_sections_for_round(fund_id, round_id)
     if sections:
         section_schema = SECTION_SCHEMA_MAP.get(language)
-        print(language)
-        print(section_schema)
         serialiser = section_schema()
         dumped = serialiser.dump(sections, many=True)
-        print(dumped)
         return dumped
     abort(404)
 
