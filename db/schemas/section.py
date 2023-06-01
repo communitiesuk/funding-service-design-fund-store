@@ -1,7 +1,9 @@
 import contextlib
+from operator import itemgetter
 
 from db.models.section import Section
 from db.models.section import SectionField
+from marshmallow import post_dump
 from marshmallow.fields import Method
 from marshmallow.fields import String
 from marshmallow_sqlalchemy import auto_field
@@ -59,6 +61,16 @@ class EnglishSectionSchema(SectionSchema):
     ):
         return obj.title_json.get("en")
 
+    def sort_children(self, data):
+        if data.get("children"):
+            sorted_children = sorted(data["children"], key=itemgetter("path"))
+            data["children"] = sorted_children
+        return data
+
+    @post_dump
+    def sort_children_post_dump(self, data, **kwargs):
+        return self.sort_children(data)
+
     children = Nested("EnglishSectionSchema", many=True, allow_none=True)
     form_name = Method("get_form_name")
     title = Method("get_title")
@@ -75,6 +87,16 @@ class WelshSectionSchema(SectionSchema):
         obj,
     ):
         return obj.title_json.get("cy")
+
+    def sort_children(self, data):
+        if data.get("children"):
+            sorted_children = sorted(data["children"], key=itemgetter("path"))
+            data["children"] = sorted_children
+        return data
+
+    @post_dump
+    def sort_children_post_dump(self, data, **kwargs):
+        return self.sort_children(data)
 
     children = Nested("WelshSectionSchema", many=True, allow_none=True)
     form_name = Method("get_form_name")
