@@ -198,7 +198,16 @@ def insert_fund_data(fund_config):
                 welsh_available=bindparam("welsh_available"),
             )
         )
-        .on_conflict_do_nothing(index_elements=[Fund.id])
+        .on_conflict_do_update(
+            index_elements=[Fund.id],
+            set_={
+                "name_json": bindparam("name_json"),
+                "title_json": bindparam("title_json"),
+                "short_name": bindparam("short_name"),
+                "description_json": bindparam("description_json"),
+                "welsh_available": bindparam("welsh_available"),
+            },
+        )
         .returning(Fund.id)
     )
 
@@ -274,12 +283,12 @@ def insert_round_data(round_config):
 def insert_base_sections(APPLICATION_BASE_PATH, ASSESSMENT_BASE_PATH, round_id):
     tree_base_sections = [
         {
-            "section_name": "Application",
+            "section_name": {"en": "Application", "cy": "Application"},
             "tree_path": APPLICATION_BASE_PATH,
             "weighting": None,
         },
         {
-            "section_name": "Assessment",
+            "section_name": {"en": "Assessment", "cy": "Assessment"},
             "tree_path": ASSESSMENT_BASE_PATH,
             "weighting": None,
         },
@@ -291,7 +300,7 @@ def insert_base_sections(APPLICATION_BASE_PATH, ASSESSMENT_BASE_PATH, round_id):
         stmt = (
             insert(Section).values(
                 round_id=bindparam("round_id"),
-                title=bindparam("title"),
+                title_json=bindparam("title_json"),
                 weighting=bindparam("weighting"),
                 path=bindparam("path"),
             )
@@ -299,7 +308,7 @@ def insert_base_sections(APPLICATION_BASE_PATH, ASSESSMENT_BASE_PATH, round_id):
 
         update_params = {
             "round_id": round_id,
-            "title": section["section_name"],
+            "title_json": section["section_name"],
             "weighting": None,
             "path": Ltree(section["tree_path"]),
         }
@@ -317,7 +326,7 @@ def insert_application_sections(round_id, sorted_application_sections: dict):
         stmt = (
             insert(Section).values(
                 round_id=bindparam("round_id"),
-                title=bindparam("title"),
+                title_json=bindparam("title_json"),
                 weighting=bindparam("weighting"),
                 path=bindparam("path"),
             )
@@ -325,7 +334,7 @@ def insert_application_sections(round_id, sorted_application_sections: dict):
 
         update_params = {
             "round_id": round_id,
-            "title": section["section_name"],
+            "title_json": section["section_name"],
             "weighting": section.get("weighting", None),
             "path": Ltree(section["tree_path"]),
         }
@@ -334,14 +343,14 @@ def insert_application_sections(round_id, sorted_application_sections: dict):
         inserted_section_id = result[0].id
         inserted_section_ids.append(inserted_section_id)
 
-        if section.get("form_name"):
+        if section.get("form_name_json"):
             form_stmt = insert(FormName).values(
                 section_id=bindparam("section_id"),
-                form_name=bindparam("form_name"),
+                form_name_json=bindparam("form_name_json"),
             )
             form_params = {
                 "section_id": inserted_section_id,
-                "form_name": section["form_name"],
+                "form_name_json": section["form_name_json"],
             }
             db.session.execute(form_stmt, form_params)
     db.session.commit()
@@ -350,7 +359,7 @@ def insert_application_sections(round_id, sorted_application_sections: dict):
 
 
 def update_application_section_names(round_id, sorted_application_sections: List[dict]):
-
+    # TODO : Update this function to work with json objects in sorted_application_sections
     for section in sorted_application_sections:
         section_path = section["tree_path"]
         split_section_name_list = section["section_name"].lower().split()
@@ -366,7 +375,7 @@ def update_application_section_names(round_id, sorted_application_sections: List
             update(Section)
             .where(Section.round_id == round_id)
             .where(Section.path == Ltree(section_path))
-            .values(title=new_section_name)
+            .values(title_json=new_section_name)
         )
         db.session.execute(stmt)
 
