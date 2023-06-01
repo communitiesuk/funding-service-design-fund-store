@@ -49,17 +49,14 @@ class SectionSchema(SQLAlchemyAutoSchema):
     weighting = Method("get_weighting")
 
 
-class EnglishSectionSchema(SectionSchema):
-    def get_form_name(self, obj):
+class LocalizedSectionSchema(SectionSchema):
+    def get_form_name(self, obj, lang_code):
         with contextlib.suppress(ValueError):
             (form_name_container,) = obj.form_name
-            return form_name_container.form_name_json["en"]
+            return form_name_container.form_name_json[lang_code]
 
-    def get_title(
-        self,
-        obj,
-    ):
-        return obj.title_json.get("en")
+    def get_title(self, obj, lang_code):
+        return obj.title_json.get(lang_code)
 
     def sort_children(self, data):
         if data.get("children"):
@@ -70,33 +67,26 @@ class EnglishSectionSchema(SectionSchema):
     @post_dump
     def sort_children_post_dump(self, data, **kwargs):
         return self.sort_children(data)
+
+
+class EnglishSectionSchema(LocalizedSectionSchema):
+    def get_form_name(self, obj):
+        return super().get_form_name(obj, "en")
+
+    def get_title(self, obj):
+        return super().get_title(obj, "en")
 
     children = Nested("EnglishSectionSchema", many=True, allow_none=True)
     form_name = Method("get_form_name")
     title = Method("get_title")
 
 
-class WelshSectionSchema(SectionSchema):
+class WelshSectionSchema(LocalizedSectionSchema):
     def get_form_name(self, obj):
-        with contextlib.suppress(ValueError):
-            (form_name_container,) = obj.form_name
-            return form_name_container.form_name_json["cy"]
+        return super().get_form_name(obj, "cy")
 
-    def get_title(
-        self,
-        obj,
-    ):
-        return obj.title_json.get("cy")
-
-    def sort_children(self, data):
-        if data.get("children"):
-            sorted_children = sorted(data["children"], key=itemgetter("path"))
-            data["children"] = sorted_children
-        return data
-
-    @post_dump
-    def sort_children_post_dump(self, data, **kwargs):
-        return self.sort_children(data)
+    def get_title(self, obj):
+        return super().get_title(obj, "cy")
 
     children = Nested("WelshSectionSchema", many=True, allow_none=True)
     form_name = Method("get_form_name")
