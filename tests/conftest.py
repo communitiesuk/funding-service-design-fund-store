@@ -135,10 +135,14 @@ def seed_dynamic_data(request, app, clear_test_data, _db):
         # short_suffix = fund_id[0:4]
         fund_config = {
             "id": fund["id"],
-            "name": f"Unit Test Fund {fund_count}",  # fund['short_name']}",
-            "title": f"Unit test fund title {fund_count}",  # {fund['short_name']}",
+            "name_json": {
+                "en": f"Unit Test Fund {fund_count}"
+            },  # fund['short_name']}",
+            "title_json": {
+                "en": f"Unit test fund title {fund_count}"
+            },  # {fund['short_name']}",
             "short_name": f"FND{fund_count}",  # fund["short_name"],
-            "description": "testing description",
+            "description_json": {"en": "testing description"},
             "welsh_available": True,
         }
         insert_fund_data(fund_config)
@@ -149,7 +153,9 @@ def seed_dynamic_data(request, app, clear_test_data, _db):
             # round_short_suffix = round_id[0:4]
             round_config = {
                 "id": round["id"],
-                "title": f"Unit Test Round {round_count}",  # {round['short_name']}",
+                "title_json": {
+                    "en": f"Unit Test Round {round_count}"
+                },  # {round['short_name']}",
                 "short_name": f"RND{round_count}",  # round["short_name"],
                 "opens": "2023-01-01 12:00:00",
                 "deadline": "2023-12-31 12:00:00",
