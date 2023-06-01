@@ -1,3 +1,5 @@
+import contextlib
+
 from db.models.section import Section
 from db.models.section import SectionField
 from marshmallow.fields import Method
@@ -17,15 +19,11 @@ class SectionFieldSchema(SQLAlchemyAutoSchema):
     def get_display_type(self, obj):
         return obj.field.display_type
 
-    def get_title(self, obj):
-        return obj.field.title
-
     def get_field_type(self, obj):
         return obj.field.field_type
 
     display_type = Method("get_display_type")
     field_type = Method("get_field_type")
-    title = Method("get_title")
 
 
 class SectionSchema(SQLAlchemyAutoSchema):
@@ -33,13 +31,57 @@ class SectionSchema(SQLAlchemyAutoSchema):
         model = Section
 
     def get_form_name(self, obj):
-        return obj.form_name[0].form_name if obj.form_name else None
+        raise NotImplementedError
+
+    def get_title(
+        self,
+        obj,
+    ):
+        raise NotImplementedError
 
     def get_weighting(self, obj):
         return obj.weighting if obj.weighting else None
 
-    children = Nested("SectionSchema", many=True, allow_none=True)
     path = String()
     fields = Nested("SectionFieldSchema", many=True, allow_none=True)
-    form_name = Method("get_form_name")
     weighting = Method("get_weighting")
+
+
+class EnglishSectionSchema(SectionSchema):
+    def get_form_name(self, obj):
+        with contextlib.suppress(ValueError):
+            (form_name_container,) = obj.form_name
+            return form_name_container.form_name_json["en"]
+
+    def get_title(
+        self,
+        obj,
+    ):
+        return obj.title_json.get("en")
+
+    children = Nested("EnglishSectionSchema", many=True, allow_none=True)
+    form_name = Method("get_form_name")
+    title = Method("get_title")
+
+
+class WelshSectionSchema(SectionSchema):
+    def get_form_name(self, obj):
+        with contextlib.suppress(ValueError):
+            (form_name_container,) = obj.form_name
+            return form_name_container.form_name_json["cy"]
+
+    def get_title(
+        self,
+        obj,
+    ):
+        return obj.title_json.get("cy")
+
+    children = Nested("WelshSectionSchema", many=True, allow_none=True)
+    form_name = Method("get_form_name")
+    title = Method("get_title")
+
+
+SECTION_SCHEMA_MAP = {
+    "en": EnglishSectionSchema,
+    "cy": WelshSectionSchema,
+}

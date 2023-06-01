@@ -11,6 +11,7 @@ from sqlalchemy import bindparam
 from sqlalchemy import func
 from sqlalchemy import insert
 from sqlalchemy import select
+from sqlalchemy import text
 from sqlalchemy import update
 from sqlalchemy.dialects.postgresql import insert as postgres_insert
 from sqlalchemy.sql import expression
@@ -93,7 +94,7 @@ def get_application_sections_for_round(
     application_level = db.session.scalar(
         select(Section)
         .filter(Section.round_id == round_id)
-        .filter(Section.title == "Application")
+        .filter(text("section.title_json->>'en' = 'Application'"))
         .join(Round)
         .filter(Round.fund_id == fund_id)
     )
@@ -117,7 +118,7 @@ def get_assessment_sections_for_round(
     assessment_level = db.session.scalar(
         select(Section)
         .filter(Section.round_id == round_id)
-        .filter(Section.title == "Assessment")
+        .filter(text("section.title_json->>'en' = 'Assessment'"))
         .join(Round)
         .filter(Round.fund_id == fund_id)
     )

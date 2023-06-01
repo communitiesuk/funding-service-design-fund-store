@@ -9,7 +9,7 @@ from db.queries import get_rounds_for_fund_by_id
 from db.queries import get_rounds_for_fund_by_short_name
 from db.schemas.fund import FundSchema
 from db.schemas.round import RoundSchema
-from db.schemas.section import SectionSchema
+from db.schemas.section import SECTION_SCHEMA_MAP
 from distutils.util import strtobool
 from flask import abort
 from flask import request
@@ -18,23 +18,12 @@ from fsd_utils.locale_selector.get_lang import get_lang
 
 def filter_fund_by_lang(fund_data, lang_key: str = "en"):
     def filter_fund(data):
-        out = {}
-        for k, v in data.items():
-            if k == "name_json":
-                out["name"] = v[lang_key]
-                continue
-
-            if k == "title_json":
-                out["title"] = v[lang_key]
-                continue
-
-            if k == "description_json":
-                out["description"] = v[lang_key]
-                continue
-
-            out[k] = v
-
-        return out
+        data["name"] = data["name_json"].get(lang_key) or data["name_json"]["en"]
+        data["title"] = data["title_json"].get(lang_key) or data["title_json"]["en"]
+        data["description"] = (
+            data["description_json"].get(lang_key) or data["description_json"]["en"]
+        )
+        return data
 
     if isinstance(fund_data, dict):
         fund = filter_fund(fund_data)
@@ -48,13 +37,8 @@ def filter_fund_by_lang(fund_data, lang_key: str = "en"):
 
 def filter_round_by_lang(round_data, lang_key: str = "en"):
     def filter_round(data):
-        out = {}
-        for k, v in data.items():
-            if k == "title_json":
-                out["title"] = v[lang_key]
-                continue
-            out[k] = v
-        return out
+        data["title"] = data["title_json"].get(lang_key) or data["title_json"]["en"]
+        return data
 
     if isinstance(round_data, dict):
         round = filter_round(round_data)
@@ -67,7 +51,7 @@ def filter_round_by_lang(round_data, lang_key: str = "en"):
 
 
 def get_funds():
-    language = request.args.get("language", "en")
+    language = request.args.get("language", "en").replace("?", "")
     funds = get_all_funds()
 
     if funds:
@@ -80,7 +64,7 @@ def get_funds():
 
 
 def get_fund(fund_id):
-    language = request.args.get("language", "en")
+    language = request.args.get("language", "en").replace("?", "")
     short_name_arg = request.args.get("use_short_name")
     use_short_name = short_name_arg and strtobool(short_name_arg)
 
@@ -97,7 +81,7 @@ def get_fund(fund_id):
 
 
 def get_round(fund_id, round_id):
-    language = request.args.get("language", "en")
+    language = request.args.get("language", "en").replace("?", "")
     short_name_arg = request.args.get("use_short_name")
     use_short_name = short_name_arg and strtobool(short_name_arg)
 
@@ -115,7 +99,7 @@ def get_round(fund_id, round_id):
 
 
 def get_rounds_for_fund(fund_id):
-    language = request.args.get("language", "en")
+    language = request.args.get("language", "en").replace("?", "")
     short_name_arg = request.args.get("use_short_name")
     use_short_name = short_name_arg and strtobool(short_name_arg)
 
@@ -126,26 +110,33 @@ def get_rounds_for_fund(fund_id):
 
     if rounds:
         serialiser = RoundSchema()
-        return filter_round_by_lang(
-            round_data=serialiser.dump(rounds), lang_key=language
-        )
+        dumped = [serialiser.dump(r) for r in rounds]
+        return filter_round_by_lang(round_data=dumped, lang_key=language)
 
     abort(404)
 
 
 def get_sections_for_round_application(fund_id, round_id):
+    language = request.args.get("language", "en").replace("?", "")
+    print(request.args.get("language"), "language")
     sections = get_application_sections_for_round(fund_id, round_id)
     if sections:
-        serialiser = SectionSchema()
-        return serialiser.dump(sections, many=True)
-
+        section_schema = SECTION_SCHEMA_MAP.get(language)
+        print(language)
+        print(section_schema)
+        serialiser = section_schema()
+        dumped = serialiser.dump(sections, many=True)
+        print(dumped)
+        return dumped
     abort(404)
 
 
 def get_sections_for_round_assessment(fund_id, round_id):
+    language = request.args.get("language", "en").replace("?", "")
     sections = get_assessment_sections_for_round(fund_id, round_id, get_lang())
     if sections:
-        serialiser = SectionSchema()
+        section_schema = SECTION_SCHEMA_MAP.get(language)
+        serialiser = section_schema()
         return serialiser.dump(sections, many=True)
 
     abort(404)
