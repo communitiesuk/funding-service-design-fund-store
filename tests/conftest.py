@@ -69,49 +69,49 @@ def seed_dynamic_data(request, app, clear_test_data, _db):
                                 Section(
                                     id=1000,
                                     round_id=round_id_1,
-                                    title="Application",
+                                    title_json={"en": "Application"},
                                     path=Ltree("0.1"),
                                 ),
                                 Section(
                                     id=1001,
                                     round_id=round_id_1,
-                                    title="Middle1",
+                                    title_json={"en": "Middle1"},
                                     path=Ltree("0.1.1"),
                                 ),
                                 Section(
                                     id=1002,
                                     round_id=round_id_1,
-                                    title="Bottom1",
+                                    title_json={"en": "Bottom1"},
                                     path=Ltree("0.1.1.1"),
                                 ),
                                 Section(
                                     id=1003,
                                     round_id=round_id_1,
-                                    title="Middle2",
+                                    title_json={"en": "Middle2"},
                                     path=Ltree("0.1.2"),
                                 ),
                                 Section(
                                     id=1004,
                                     round_id=round_id_1,
-                                    title="Bottom2",
+                                    title_json={"en": "Bottom2"},
                                     path=Ltree("0.1.2.1"),
                                 ),
                                 Section(
                                     id=1005,
                                     round_id=round_id_1,
-                                    title="Assessment",
+                                    title_json={"en": "Assessment"},
                                     path=Ltree("0.2"),
                                 ),
                                 Section(
                                     id=1006,
                                     round_id=round_id_1,
-                                    title="assess section 1",
+                                    title_json={"en": "assess section 1"},
                                     path=Ltree("0.2.1"),
                                 ),
                                 Section(
                                     id=1007,
                                     round_id=round_id_1,
-                                    title="assess section 1 a",
+                                    title_json={"en": "assess section 1 a"},
                                     path=Ltree("0.2.1.1"),
                                 ),
                             ],
@@ -242,20 +242,28 @@ def mock_get_fund_round(mocker):
 def mock_get_sections(mocker):
     mock_sections = Section(
         id=0,
-        title="Top",
+        title_json={"en": "Top"},
         path="0",
         children=[
             Section(
                 id=1,
-                title="Middle",
+                title_json={"en": "Middle"},
                 path="0.1",
-                children=[Section(id=2, title="Bottom", path="0.1.1", children=[])],
+                children=[
+                    Section(
+                        id=2, title_json={"en": "Bottom"}, path="0.1.1", children=[]
+                    )
+                ],
             ),
             Section(
                 id=3,
-                title="Middle2",
+                title_json={"en": "Middle2"},
                 path="0.2",
-                children=[Section(id=4, title="Bottom2", path="0.2.1", children=[])],
+                children=[
+                    Section(
+                        id=4, title_json={"en": "Bottom2"}, path="0.2.1", children=[]
+                    )
+                ],
             ),
         ],
     )
