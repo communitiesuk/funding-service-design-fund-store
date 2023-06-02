@@ -39,9 +39,9 @@ english_to_welsh_title = {
 english_to_welsh_description = {
     key.casefold(): value
     for key, value in {
-        # TODO: Add welsh description ?
+        # TODO: Provide welsh translation
         "The Community Ownership Fund is a £150 million fund over 4 years to support community groups across England, Wales, Scotland and Northern Ireland to take ownership of assets which are at risk of being lost to the community.": (  # noqa
-            "test"
+            "The Community Ownership Fund is a £150 million fund over 4 years to support community groups across England, Wales, Scotland and Northern Ireland to take ownership of assets which are at risk of being lost to the community."  # noqa
         )
     }.items()
 }
@@ -49,10 +49,10 @@ english_to_welsh_description = {
 english_to_welsh_round_title = {
     key.casefold(): value
     for key, value in {
-        # TODO: Add welsh round title ?
-        "Round 2 Window 3": "r2w3test",
-        "Round 2 Window 2": "r2w2test",
-        "Round 3 Window 1": "r3w1test",
+        # TODO: Provide welsh translation
+        "Round 2 Window 3": "Round 2 Window 3",
+        "Round 2 Window 2": "Round 2 Window 2",
+        "Round 3 Window 1": "Round 3 Window 1",
     }.items()
 }
 
