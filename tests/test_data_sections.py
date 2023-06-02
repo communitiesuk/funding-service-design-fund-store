@@ -31,10 +31,11 @@ def test_get_application_sections(seed_dynamic_data):
         seed_dynamic_data["funds"][0]["rounds"][0]["id"],
     )
     assert len(sections) == 2
-    assert sections[0].title_json == {"en": "Middle1"}
-    assert len(sections[0].children) == 1
-    assert sections[1].title_json == {"en": "Middle2"}
-    assert len(sections[1].children) == 1
+    first, second = sections
+    assert first.title_json == {"en": "Middle1"}
+    assert len(first.children) == 1
+    assert second.title_json == {"en": "Middle2"}
+    assert len(second.children) == 1
 
 
 def test_get_assessment_sections(seed_dynamic_data):
