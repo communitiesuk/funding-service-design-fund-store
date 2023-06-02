@@ -1,7 +1,7 @@
 """
 
 Revision ID: eada7e01b1c2
-Revises: afc0d0e35053
+Revises: c8404dc10813
 Create Date: 2023-05-31 15:18:39.533053
 
 FS-2701: Purpose of this script is converting the name, title and description columns to jsonb,
@@ -20,7 +20,7 @@ from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = "eada7e01b1c2"
-down_revision = "afc0d0e35053"
+down_revision = "c8404dc10813"
 branch_labels = None
 depends_on = None
 
