@@ -14,7 +14,7 @@ r2_application_sections = [
     },
     {
         "section_name": {"en": "Name your application", "cy": ""},
-        "form_name": {"en": "name-your-application-ns", "cy": ""},
+        "form_name_json": {"en": "name-your-application-ns", "cy": ""},
         "tree_path": f"{APPLICATION_BASE_PATH}.1.1",
     },
     {
@@ -23,22 +23,22 @@ r2_application_sections = [
     },
     {
         "section_name": {"en": "1.1 Organisation information", "cy": ""},
-        "form_name": {"en": "organisation-information-ns", "cy": ""},
+        "form_name_json": {"en": "organisation-information-ns", "cy": ""},
         "tree_path": f"{APPLICATION_BASE_PATH}.2.1",
     },
     {
         "section_name": {"en": "1.2 Organisation type", "cy": ""},
-        "form_name": {"en": "organisation-type-ns", "cy": ""},
+        "form_name_json": {"en": "organisation-type-ns", "cy": ""},
         "tree_path": f"{APPLICATION_BASE_PATH}.2.2",
     },
     {
         "section_name": {"en": "1.3 Applicant information", "cy": ""},
-        "form_name": {"en": "applicant-information-ns", "cy": ""},
+        "form_name_json": {"en": "applicant-information-ns", "cy": ""},
         "tree_path": f"{APPLICATION_BASE_PATH}.2.3",
     },
     {
         "section_name": {"en": "1.4 Joint applications", "cy": ""},
-        "form_name": {"en": "joint-applications-ns", "cy": ""},
+        "form_name_json": {"en": "joint-applications-ns", "cy": ""},
         "tree_path": f"{APPLICATION_BASE_PATH}.2.4",
     },
     {
@@ -48,12 +48,12 @@ r2_application_sections = [
     },
     {
         "section_name": {"en": "2.1 Staff and volunteers", "cy": ""},
-        "form_name": {"en": "staff-and-volunteers-ns", "cy": ""},
+        "form_name_json": {"en": "staff-and-volunteers-ns", "cy": ""},
         "tree_path": f"{APPLICATION_BASE_PATH}.3.1",
     },
     {
         "section_name": {"en": "2.2 Current services", "cy": ""},
-        "form_name": {"en": "current-services-ns", "cy": ""},
+        "form_name_json": {"en": "current-services-ns", "cy": ""},
         "tree_path": f"{APPLICATION_BASE_PATH}.3.2",
     },
     {
@@ -63,32 +63,32 @@ r2_application_sections = [
     },
     {
         "section_name": {"en": "3.1 Objectives and activities", "cy": ""},
-        "form_name": {"en": "objectives-and-activities-ns", "cy": ""},
+        "form_name_json": {"en": "objectives-and-activities-ns", "cy": ""},
         "tree_path": f"{APPLICATION_BASE_PATH}.4.1",
     },
     {
         "section_name": {"en": "3.2 Project milestones", "cy": ""},
-        "form_name": {"en": "project-milestones-ns", "cy": ""},
+        "form_name_json": {"en": "project-milestones-ns", "cy": ""},
         "tree_path": f"{APPLICATION_BASE_PATH}.4.2",
     },
     {
         "section_name": {"en": "3.3 Local need and support", "cy": ""},
-        "form_name": {"en": "local-need-and-support-ns", "cy": ""},
+        "form_name_json": {"en": "local-need-and-support-ns", "cy": ""},
         "tree_path": f"{APPLICATION_BASE_PATH}.4.3",
     },
     {
         "section_name": {"en": "3.4 Proposed services", "cy": ""},
-        "form_name": {"en": "proposed-services-ns", "cy": ""},
+        "form_name_json": {"en": "proposed-services-ns", "cy": ""},
         "tree_path": f"{APPLICATION_BASE_PATH}.4.4",
     },
     {
         "section_name": {"en": "3.5 Working in partnership", "cy": ""},
-        "form_name": {"en": "working-in-partnership-ns", "cy": ""},
+        "form_name_json": {"en": "working-in-partnership-ns", "cy": ""},
         "tree_path": f"{APPLICATION_BASE_PATH}.4.5",
     },
     {
         "section_name": {"en": "3.6 Proposal sustainability", "cy": ""},
-        "form_name": {"en": "proposal-sustainability-ns", "cy": ""},
+        "form_name_json": {"en": "proposal-sustainability-ns", "cy": ""},
         "tree_path": f"{APPLICATION_BASE_PATH}.4.6",
     },
     {
@@ -98,7 +98,7 @@ r2_application_sections = [
     },
     {
         "section_name": {"en": "4.1 Outputs and outcomes", "cy": ""},
-        "form_name": {"en": "outputs-and-outcomes-ns", "cy": ""},
+        "form_name_json": {"en": "outputs-and-outcomes-ns", "cy": ""},
         "tree_path": f"{APPLICATION_BASE_PATH}.5.1",
     },
     {
@@ -108,7 +108,7 @@ r2_application_sections = [
     },
     {
         "section_name": {"en": "5.1 Risk and deliverability", "cy": ""},
-        "form_name": {"en": "risk-and-deliverability-ns", "cy": ""},
+        "form_name_json": {"en": "risk-and-deliverability-ns", "cy": ""},
         "tree_path": f"{APPLICATION_BASE_PATH}.6.1",
     },
     {
@@ -118,17 +118,17 @@ r2_application_sections = [
     },
     {
         "section_name": {"en": "6.1 Funding required", "cy": ""},
-        "form_name": {"en": "funding-required-ns", "cy": ""},
+        "form_name_json": {"en": "funding-required-ns", "cy": ""},
         "tree_path": f"{APPLICATION_BASE_PATH}.7.1",
     },
     {
         "section_name": {"en": "6.2 Building works", "cy": ""},
-        "form_name": {"en": "building-works-ns", "cy": ""},
+        "form_name_json": {"en": "building-works-ns", "cy": ""},
         "tree_path": f"{APPLICATION_BASE_PATH}.7.2",
     },
     {
         "section_name": {"en": "6.3 Match funding", "cy": ""},
-        "form_name": {"en": "match-funding-ns", "cy": ""},
+        "form_name_json": {"en": "match-funding-ns", "cy": ""},
         "tree_path": f"{APPLICATION_BASE_PATH}.7.3",
     },
     {
@@ -137,7 +137,7 @@ r2_application_sections = [
     },
     {
         "section_name": {"en": "7.1 Declarations", "cy": ""},
-        "form_name": {"en": "declarations-ns", "cy": ""},
+        "form_name_json": {"en": "declarations-ns", "cy": ""},
         "tree_path": f"{APPLICATION_BASE_PATH}.8.1",
     },
 ]
