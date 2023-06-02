@@ -35,7 +35,7 @@ cof_r3w1_sections = [
         },
         "form_name_json": {
             "en": "applicant-information-cof-r3-w1",
-            "cy": "gwybodaeth-am-yr-ymgeisydd-r3-w1",
+            "cy": "gwybodaeth-am-yr-ymgeisydd-cof-r3-w1",
         },
         "tree_path": f"{APPLICATION_BASE_PATH}.1.2",
     },
@@ -64,7 +64,7 @@ cof_r3w1_sections = [
         },
         "form_name_json": {
             "en": "asset-information-cof-r3-w1",
-            "cy": "gwybodaeth-am-yr-ased-r3-w1",
+            "cy": "gwybodaeth-am-yr-ased-cof-r3-w1",
         },
         "tree_path": f"{APPLICATION_BASE_PATH}.2.2",
     },
