@@ -124,7 +124,7 @@ def get_sections_for_round_application(fund_id, round_id):
         serialiser = section_schema()
         sections_for_round = serialiser.dump(sections, many=True)
         for i in sections_for_round:
-            i["children"].sort(key=lambda x: x['path'])
+            i["children"].sort(key=lambda x: x["path"])
         return sections_for_round
     abort(404)
 
