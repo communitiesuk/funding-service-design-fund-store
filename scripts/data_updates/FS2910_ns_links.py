@@ -27,7 +27,7 @@ def update_rounds_with_links(rounds):
 
 def main() -> None:
     current_app.logger.warning("Updating prospectus and privacy links for NSTF R2")
-    update_rounds_with_links(ns_r2.rounds_config)
+    update_rounds_with_links(ns_r2.round_config)
     current_app.logger.warning("Updates complete")
 
 
