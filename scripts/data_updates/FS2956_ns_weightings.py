@@ -3,6 +3,7 @@ from db import db
 from db.models.section import Section
 from flask import current_app
 from sqlalchemy import update
+from sqlalchemy_utils import Ltree
 
 
 def update_section_weightings(section):
@@ -12,7 +13,7 @@ def update_section_weightings(section):
     current_app.logger.warning("\t\tUpdating weighting")
     stmt = (
         update(Section)
-        .where(Section.path == section["tree_path"])
+        .where(Section.path == Ltree(section["tree_path"]))
         .values(weighting=section["weighting"])
     )
 
@@ -30,7 +31,6 @@ def main() -> None:
     for section in ns_sections:
         if section["tree_path"] in sections_to_update:
             update_section_weightings(section)
-    update_section_weightings(ns_r2.rounds_config)
     current_app.logger.warning("Updates complete")
 
 
