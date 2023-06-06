@@ -1,9 +1,9 @@
 from db.queries import get_application_sections_for_round
-from db.schemas.section import SectionSchema
-from scripts.data_updates.FS2956_ns_weightings import update_section_weightings
 from db.queries import get_round_by_id
 from db.schemas.round import RoundSchema
+from db.schemas.section import SectionSchema
 from scripts.data_updates.FS2910_ns_links import update_rounds_with_links
+from scripts.data_updates.FS2956_ns_weightings import update_section_weightings
 
 
 def test_update_section_weightings(seed_dynamic_data):
@@ -34,6 +34,8 @@ def test_update_section_weightings(seed_dynamic_data):
         if "skill" in s.title_json["en"]:
             section = s
     assert section.weighting == 12
+
+
 from db.queries import get_round_by_id
 from db.schemas.round import RoundSchema
 from scripts.data_updates.FS2910_ns_links import update_rounds_with_links
