@@ -26,7 +26,7 @@ def test_update_links_present(seed_dynamic_data):
 def test_update_links_not_present(seed_dynamic_data):
     r = get_round_by_id(
         seed_dynamic_data["funds"][0]["id"],
-        seed_dynamic_data["funds"][0]["rounds"][0]["id"],
+        seed_dynamic_data["funds"][0]["rounds"][1]["id"],
     )
     round_data = RoundSchema().dump(r)
     round_data["privacy_notice"] = ""
@@ -36,7 +36,7 @@ def test_update_links_not_present(seed_dynamic_data):
 
     r = get_round_by_id(
         seed_dynamic_data["funds"][0]["id"],
-        seed_dynamic_data["funds"][0]["rounds"][0]["id"],
+        seed_dynamic_data["funds"][0]["rounds"][1]["id"],
     )
 
     assert r.privacy_notice == "http://google.com"
