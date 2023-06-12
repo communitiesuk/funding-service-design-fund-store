@@ -22,7 +22,7 @@ babel==2.12.1
     # via
     #   -r requirements.txt
     #   flask-babel
-bandit==1.7.4
+bandit==1.7.5
     # via -r requirements-dev.in
 black==22.6.0
     # via -r requirements-dev.in
@@ -76,12 +76,7 @@ clickclick==20.10.2
     #   -r requirements.txt
     #   connexion
 colorama==0.4.6
-    # via
-    #   -r requirements.txt
-    #   bandit
-    #   build
-    #   click
-    #   pytest
+    # via -r requirements.txt
 colored==1.4.4
     # via -r requirements-dev.in
 commonmark==0.9.1
@@ -101,9 +96,7 @@ deepdiff==5.8.1
 distlib==0.3.4
     # via virtualenv
 exceptiongroup==1.1.1
-    # via
-    #   -r requirements.txt
-    #   pytest
+    # via -r requirements.txt
 filelock==3.7.1
     # via virtualenv
 flask==2.2.4
@@ -356,15 +349,14 @@ requests==2.27.1
 rich==12.6.0
     # via
     #   -r requirements.txt
+    #   bandit
     #   funding-service-design-utils
 ruamel-yaml==0.17.21
     # via
     #   -r requirements.txt
     #   prance
 ruamel-yaml-clib==0.2.6
-    # via
-    #   -r requirements.txt
-    #   ruamel-yaml
+    # via -r requirements.txt
 s3transfer==0.6.0
     # via
     #   -r requirements.txt
@@ -415,11 +407,7 @@ toml==0.10.2
 tomli==2.0.1
     # via
     #   -r requirements.txt
-    #   black
-    #   build
-    #   mypy
     #   pep517
-    #   pytest
 typing-extensions==4.5.0
     # via
     #   -r requirements.txt
