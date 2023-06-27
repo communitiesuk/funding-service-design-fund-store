@@ -136,3 +136,27 @@ def get_sections_for_round_assessment(fund_id, round_id):
         return serialiser.dump(sections, many=True)
 
     abort(404)
+
+
+def get_available_flag_allocations(fund_id, round_id):
+    return [
+        {"key": "TEAM_1", "value": "Team 1"},
+        {"key": "TEAM_2", "value": "Team 2"},
+        {"key": "ANOTHER_TEAM", "value": "Another team"},
+    ]
+
+
+def get_available_tags(fund_id, round_id):
+    return [
+        {"key": "RECOMMEND_NO", "value": "Recommend no"},
+        {"key": "RECOMMEND_YES", "value": "Recommend yes"},
+        {
+            "key": "RECOMMEND_FURTHER_DISCUSSION",
+            "value": "Recommend further discussion",
+        },
+        {"key": "COMMERCIAL_FAIL", "value": "Commercial fail"},
+        {"key": "COMMERCIAL_PASS", "value": "Commercial pass"},
+        {"key": "BILLY_SOLE", "value": "Billy Sole"},
+        {"key": "ALEX_MURPHY", "value": "Alex Murphy"},
+        {"key": "DAVE_JONES", "value": "Dave Jones"},
+    ]
