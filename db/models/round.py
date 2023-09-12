@@ -76,8 +76,8 @@ class Round(BaseModel):
         default=False,
         nullable=False,
     )
-    mark_as_complete_available = Column(
-        "mark_as_complete_available",
+    mark_as_complete_enabled = Column(
+        "mark_as_complete_enabled",
         db.Boolean,
         default=False,
         nullable=False,
