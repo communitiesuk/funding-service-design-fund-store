@@ -55,3 +55,6 @@ environments:
   test:
     deployment:
       rolling: 'recreate'
+    network:
+      vpc:
+        security_groups: [sg-0cf75a004dbade7b8] # add Bastion security group
