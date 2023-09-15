@@ -19,8 +19,8 @@ from config.fund_loader_config.cof.deprecated_fund_config.sort_assessment_sectio
 from db.models.section import Section
 from db.queries import get_application_sections_for_round
 from db.queries import get_assessment_sections_for_round
-from db.queries import insert_application_sections
 from db.queries import insert_assessment_sections
+from db.queries import insert_or_update_application_sections
 from db.queries import upsert_fields
 from fsd_test_utils.test_config.useful_config import UsefulConfig
 
@@ -57,7 +57,7 @@ def test_load_application_sections(seed_dynamic_data):
     sorted_application_sections = return_numerically_sorted_section_for_application(
         COF_R2_ORDERED_FORMS_CONFIG, "0.1"
     )["sorted_sections"]
-    result = insert_application_sections(
+    result = insert_or_update_application_sections(
         seed_dynamic_data["funds"][0]["rounds"][0]["id"], sorted_application_sections
     )
     assert len(result) == 28

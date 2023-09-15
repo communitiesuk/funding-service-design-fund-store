@@ -96,9 +96,9 @@ Ensure the following elements are present in your `manifest.yml`. The `run_migra
 To seed fund & round data to db
 
 ```
-docker exec -ti <fund_store_container_id> python -m scripts.load_cof_r2
-docker exec -ti <fund_store_container_id> python -m scripts.load_cof_r3w1
-docker exec -ti <fund_store_container_id> python -m scripts.load_ns_r2
+docker exec -ti <fund_store_container_id> python -m scripts.fund_round_loaders.load_cof_r2
+docker exec -ti <fund_store_container_id> python -m scripts.fund_round_loaders.load_cof_r3w1
+docker exec -ti <fund_store_container_id> python -m scripts.fund_round_loaders.load_ns_r2
 ```
 To amend the round dates
 ```
@@ -120,7 +120,8 @@ To truncate data before re-loading it run
 
 - Create and seed using the following scripts:
 
-        python -m scripts.{load_config_script}
+        python -m scripts.fund_round_loaders.{load_config_script}
+
 ### Build with Paketo
 
 [Pack](https://buildpacks.io/docs/tools/pack/cli/pack_build/)
