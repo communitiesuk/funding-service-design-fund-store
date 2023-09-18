@@ -1,18 +1,29 @@
-from scripts.fund_round_loaders.load_cof_r2 import main as load_cof_r2
-from scripts.fund_round_loaders.load_cof_r3w1 import main as load_cof_r3w1
-from scripts.fund_round_loaders.load_cof_r3w2 import main as load_cof_r3w2
-from scripts.fund_round_loaders.load_ns_r2 import main as load_ns_r2
+import importlib
+import os
+
+from app import app
 
 
-def main() -> None:
-    load_cof_r2()
-    load_cof_r3w1()
-    load_cof_r3w2()
-    load_ns_r2()
+def load_all_fund_rounds() -> None:
+    # Get a list of all Python files in the fund_round_loaders directory
+    loader_module_names = [
+        f for f in os.listdir("scripts/fund_round_loaders") if f.endswith(".py")
+    ]
+    for module_name in loader_module_names:
+        # Remove the ".py" extension to get the module name
+        module_name_without_extension = module_name[:-3]
+
+        # Dynamically import the module
+        loader_module = importlib.import_module(
+            f"scripts.fund_round_loaders.{module_name_without_extension}"
+        )
+
+        # Call the main function from the imported module
+        if hasattr(loader_module, "main"):
+            print(f"Calling main from {module_name_without_extension}")
+            loader_module.main()
 
 
 if __name__ == "__main__":
-    from app import app
-
     with app.app_context():
-        main()
+        load_all_fund_rounds()
