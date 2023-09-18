@@ -272,6 +272,7 @@ cof_r3w2_sections = [
             "cy": "1. Ynglŷn â'ch sefydliad",
         },
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.1",
+        "requires_feedback": True,
     },
     {
         "section_name": {
@@ -279,8 +280,8 @@ cof_r3w2_sections = [
             "cy": "1.1 Gwybodaeth am y sefydliad",
         },
         "form_name_json": {
-            "en": "organisation-information-cof-r3-w1",
-            "cy": "gwybodaeth-am-y-sefydliad-cof-r3-w1",
+            "en": "organisation-information-cof-r3-w2",
+            "cy": "gwybodaeth-am-y-sefydliad-cof-r3-w2",
         },
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.1.1",
     },
@@ -290,8 +291,8 @@ cof_r3w2_sections = [
             "cy": "1.2 Gwybodaeth am yr ymgeisydd",
         },
         "form_name_json": {
-            "en": "applicant-information-cof-r3-w1",
-            "cy": "gwybodaeth-am-yr-ymgeisydd-cof-r3-w1",
+            "en": "applicant-information-cof-r3-w2",
+            "cy": "gwybodaeth-am-yr-ymgeisydd-cof-r3-w2",
         },
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.1.2",
     },
@@ -301,6 +302,7 @@ cof_r3w2_sections = [
             "cy": "2. Ynglŷn â'ch prosiect",
         },
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.2",
+        "requires_feedback": True,
     },
     {
         "section_name": {
@@ -308,8 +310,8 @@ cof_r3w2_sections = [
             "cy": "2.1 Gwybodaeth am y prosiect",
         },
         "form_name_json": {
-            "en": "project-information-cof-r3-w1",
-            "cy": "gwybodaeth-am-y-prosiect-cof-r3-w1",
+            "en": "project-information-cof-r3-w2",
+            "cy": "gwybodaeth-am-y-prosiect-cof-r3-w2",
         },
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.2.1",
     },
@@ -320,20 +322,21 @@ cof_r3w2_sections = [
         },
         "form_name_json": {
             "en": "asset-information-cof-r3-w2",
-            "cy": "gwybodaeth-am-yr-ased-cof-r3-w1",
+            "cy": "gwybodaeth-am-yr-ased-cof-r3-w2",
         },
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.2.2",
     },
     {
         "section_name": {"en": "3. Strategic case", "cy": "3. Achos strategol"},
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.3",
+        "requires_feedback": True,
         "weighting": 53,
     },
     {
         "section_name": {"en": "3.1 Community use", "cy": "3.1 Defnydd cymunedol"},
         "form_name_json": {
-            "en": "community-use-cof-r3-w1",
-            "cy": "defnydd-cymunedol-cof-r3-w1",
+            "en": "community-use-cof-r3-w2",
+            "cy": "defnydd-cymunedol-cof-r3-w2",
         },
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.3.1",
     },
@@ -343,16 +346,16 @@ cof_r3w2_sections = [
             "cy": "3.2 Ymgysylltu â'r gymuned",
         },
         "form_name_json": {
-            "en": "community-engagement-cof-r3-w1",
-            "cy": "ymgysylltiad-cymunedol-cof-r3-w1",
+            "en": "community-engagement-cof-r3-w2",
+            "cy": "ymgysylltiad-cymunedol-cof-r3-w2",
         },
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.3.2",
     },
     {
         "section_name": {"en": "3.3 Local support", "cy": "3.3 Cefnogaeth leol"},
         "form_name_json": {
-            "en": "local-support-cof-r3-w1",
-            "cy": "cefnogaeth-leol-cof-r3-w1",
+            "en": "local-support-cof-r3-w2",
+            "cy": "cefnogaeth-leol-cof-r3-w2",
         },
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.3.3",
     },
@@ -362,8 +365,8 @@ cof_r3w2_sections = [
             "cy": "3.4 Buddion i'r gymuned",
         },
         "form_name_json": {
-            "en": "community-benefits-cof-r3-w1",
-            "cy": "buddion-cymunedol-cof-r3-w1",
+            "en": "community-benefits-cof-r3-w2",
+            "cy": "buddion-cymunedol-cof-r3-w2",
         },
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.3.4",
     },
@@ -373,8 +376,8 @@ cof_r3w2_sections = [
             "cy": "3.5 Cynaliadwyedd amgylcheddol",
         },
         "form_name_json": {
-            "en": "environmental-sustainability-cof-r3-w1",
-            "cy": "cynaliadwyedd-amgylcheddol-cof-r3-w1",
+            "en": "environmental-sustainability-cof-r3-w2",
+            "cy": "cynaliadwyedd-amgylcheddol-cof-r3-w2",
         },
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.3.5",
     },
@@ -382,6 +385,7 @@ cof_r3w2_sections = [
         "section_name": {"en": "4. Management case", "cy": "4. Achos rheoli"},
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.4",
         "weighting": 47,
+        "requires_feedback": True,
     },
     {
         "section_name": {
@@ -390,28 +394,28 @@ cof_r3w2_sections = [
         },
         "form_name_json": {
             "en": "funding-required-cof-r3-w2",
-            "cy": "cyllid-sydd-ei-angen-cof-r3-w1",
+            "cy": "cyllid-sydd-ei-angen-cof-r3-w2",
         },
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.4.1",
     },
     {
         "section_name": {"en": "4.2 Feasibility", "cy": "4.2 Dichonoldeb"},
         "form_name_json": {
-            "en": "feasibility-cof-r3-w1",
-            "cy": "dichonoldeb-cof-r3-w1",
+            "en": "feasibility-cof-r3-w2",
+            "cy": "dichonoldeb-cof-r3-w2",
         },
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.4.2",
     },
     {
         "section_name": {"en": "4.3 Risk", "cy": "4.3 Risg"},
-        "form_name_json": {"en": "risk-cof-r3-w1", "cy": "risg-cof-r3-w1"},
+        "form_name_json": {"en": "risk-cof-r3-w2", "cy": "risg-cof-r3-w2"},
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.4.3",
     },
     {
         "section_name": {"en": "4.4 Operational costs", "cy": "4.4 Costau gweithredol"},
         "form_name_json": {
             "en": "operational-costs-cof-r3-w2",
-            "cy": "costau-gweithredol-cof-r3-w1",
+            "cy": "costau-gweithredol-cof-r3-w2",
         },
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.4.4",
     },
@@ -421,8 +425,8 @@ cof_r3w2_sections = [
             "cy": "4.5 Sgiliau ac Adnoddau",
         },
         "form_name_json": {
-            "en": "skills-and-resources-cof-r3-w1",
-            "cy": "sgiliau-ac-adnoddau-cof-r3-w1",
+            "en": "skills-and-resources-cof-r3-w2",
+            "cy": "sgiliau-ac-adnoddau-cof-r3-w2",
         },
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.4.5",
     },
@@ -432,8 +436,8 @@ cof_r3w2_sections = [
             "cy": "4.6 Cynrychiolaeth gymunedol",
         },
         "form_name_json": {
-            "en": "community-representation-cof-r3-w1",
-            "cy": "cynrychiolaeth-gymunedol-cof-r3-w1",
+            "en": "community-representation-cof-r3-w2",
+            "cy": "cynrychiolaeth-gymunedol-cof-r3-w2",
         },
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.4.6",
     },
@@ -443,8 +447,8 @@ cof_r3w2_sections = [
             "cy": "4.7 Cynhwysiant ac Integreiddio",
         },
         "form_name_json": {
-            "en": "inclusiveness-and-integration-cof-r3-w1",
-            "cy": "cynhwysiant-ac-integreiddio-cof-r3-w1",
+            "en": "inclusiveness-and-integration-cof-r3-w2",
+            "cy": "cynhwysiant-ac-integreiddio-cof-r3-w2",
         },
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.4.7",
     },
@@ -454,8 +458,8 @@ cof_r3w2_sections = [
             "cy": "4.8 Lanlwythwch y cynllun busnes",
         },
         "form_name_json": {
-            "en": "upload-business-plan-cof-r3-w1",
-            "cy": "lanlwythwch-y-cynllun-busnes-cof-r3-w1",
+            "en": "upload-business-plan-cof-r3-w2",
+            "cy": "lanlwythwch-y-cynllun-busnes-cof-r3-w2",
         },
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.4.8",
     },
@@ -472,8 +476,8 @@ cof_r3w2_sections = [
             "cy": "5.1 Cymhwystra'r prosiect",
         },
         "form_name_json": {
-            "en": "project-qualifications-cof-r3-w1",
-            "cy": "cymhwysedd-y-prosiect-cof-r3-w1",
+            "en": "project-qualifications-cof-r3-w2",
+            "cy": "cymhwysedd-y-prosiect-cof-r3-w2",
         },
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.5.1",
     },
@@ -484,8 +488,8 @@ cof_r3w2_sections = [
     {
         "section_name": {"en": "6.1 Declarations", "cy": "6.1 Datganiadau"},
         "form_name_json": {
-            "en": "declarations-cof-r3-w1",
-            "cy": "cadarnhadau-terfynol-cof-r3-w1",
+            "en": "declarations-cof-r3-w2",
+            "cy": "cadarnhadau-terfynol-cof-r3-w2",
         },
         "tree_path": f"{APPLICATION_BASE_PATH_COF_R3_W2}.6.1",
     },
@@ -522,6 +526,10 @@ round_config = [
         ),
         "project_name_field_id": "apGjFS",
         "application_guidance": COF_APPLICATION_GUIDANCE,
+        "all_uploaded_documents_section_available": True,
+        "application_fields_download_available": True,
+        "display_logo_on_pdf_exports": False,
+        "requires_feedback": False,
     }
 ]
 
@@ -556,5 +564,9 @@ round_config_w2 = [
         ),
         "project_name_field_id": "apGjFS",
         "application_guidance": COF_APPLICATION_GUIDANCE,
+        "all_uploaded_documents_section_available": True,
+        "application_fields_download_available": True,
+        "display_logo_on_pdf_exports": False,
+        "requires_feedback": True,
     }
 ]

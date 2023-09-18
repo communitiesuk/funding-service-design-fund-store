@@ -266,6 +266,16 @@ def insert_round_data(round_config):
             round_record.project_name_field_id = item["project_name_field_id"]
             round_record.feedback_link = item["feedback_link"]
             round_record.application_guidance = item["application_guidance"]
+            round_record.all_uploaded_documents_section_available = item[
+                "all_uploaded_documents_section_available"
+            ]
+            round_record.application_fields_download_available = item[
+                "application_fields_download_available"
+            ]
+            round_record.display_logo_on_pdf_exports = item[
+                "display_logo_on_pdf_exports"
+            ]
+            round_record.requires_feedback = item["requires_feedback"]
 
             updated_rounds[item["id"]] = round_record
 
@@ -290,6 +300,14 @@ def insert_round_data(round_config):
                 project_name_field_id=item["project_name_field_id"],
                 feedback_link=item["feedback_link"],
                 application_guidance=item["application_guidance"],
+                all_uploaded_documents_section_available=item[
+                    "all_uploaded_documents_section_available"
+                ],
+                application_fields_download_available=item[
+                    "application_fields_download_available"
+                ],
+                display_logo_on_pdf_exports=item["display_logo_on_pdf_exports"],
+                requires_feedback=item["requires_feedback"],
             )
             db.session.add(new_round)
 
@@ -326,6 +344,7 @@ def insert_base_sections(APPLICATION_BASE_PATH, ASSESSMENT_BASE_PATH, round_id):
             section_record.round_id = round_id
             section_record.title_json = section["section_name"]
             section_record.weighting = section.get("weighting", None)
+            section_record.requires_feedback = section.get("requires_feedback") or False
 
             updated_sections[section["tree_path"]] = section_record
         else:
@@ -335,6 +354,7 @@ def insert_base_sections(APPLICATION_BASE_PATH, ASSESSMENT_BASE_PATH, round_id):
                 title_json=section["section_name"],
                 weighting=section.get("weighting", None),
                 path=Ltree(section["tree_path"]),
+                requires_feedback=section.get("requires_feedback") or False,
             )
             db.session.add(new_section)
 
@@ -360,6 +380,7 @@ def insert_or_update_application_sections(round_id, sorted_application_sections:
             section_record.round_id = round_id
             section_record.title_json = section["section_name"]
             section_record.weighting = (section.get("weighting", None),)
+            section_record.requires_feedback = section.get("requires_feedback") or False
 
             updated_sections[section_record.id] = section_record
             print(f"Prepared section UPDATE '{section_record}'.")
@@ -370,6 +391,7 @@ def insert_or_update_application_sections(round_id, sorted_application_sections:
                 title_json=section["section_name"],
                 weighting=section.get("weighting", None),
                 path=Ltree(section["tree_path"]),
+                requires_feedback=section.get("requires_feedback") or False,
             )
             db.session.add(new_section)
             db.session.commit()

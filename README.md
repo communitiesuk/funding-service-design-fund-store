@@ -105,6 +105,12 @@ To seed all fund-round data to db:
 docker exec -ti $(docker ps -qf "name=fund-store") python -m scripts.load_all_fund_rounds
 ```
 
+To load on an environment via cloudfoundry (modify appropriately):
+
+```bash
+cf run-task funding-service-design-fund-store[-dev|-test] --command "python -m scripts.load_all_fund_rounds"
+```
+
 To amend the round dates
 ```
 docker exec -ti $(docker ps -qf "name=fund-store") python -m scripts.amend_round_dates --round_id c603d114-5364-4474-a0c4-c41cbf4d3bbd --deadline_date "2023-03-30 12:00:00"
