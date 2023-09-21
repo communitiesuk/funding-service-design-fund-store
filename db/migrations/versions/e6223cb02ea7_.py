@@ -33,7 +33,7 @@ def upgrade():
         )
     )
     with op.batch_alter_table("round", schema=None) as batch_op:
-        batch_op.alter_column("mark_as_complete_enabled", nullable=False)
+        batch_op.alter_column("mark_as_complete_enabled", nullable=False, default=True)
 
     # ### end Alembic commands ###
 
