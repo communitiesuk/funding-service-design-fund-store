@@ -20,7 +20,7 @@ CYP_R1_ASSESSMENT_DEADLINE_DATE = datetime(
     2023, 12, 24, 12, 0, 0, tzinfo=timezone.utc
 )  # 2023-12-24 12:00:00
 
-CYP_PROSPECTS_LINK = "https://www.gov.uk/government/publications/the-children-and-young-peoples-resettlement-fund-prospectus/the-children-and-young-peoples-resettlement-fund-prospectus"  # noqa
+CYP_PROSPECTS_LINK = ""
 CYP_APPLICATION_GUIDANCE = (
     "<h2 class='govuk-heading govuk-heading-s'>Before you start</h2><p"
     f" class='govuk-body'><a href='{CYP_PROSPECTS_LINK}'>Read the fund's"
