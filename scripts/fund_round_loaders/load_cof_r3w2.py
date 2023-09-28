@@ -24,6 +24,7 @@ def main() -> None:
         COF_ROUND_3_WINDOW_2_ID,
     )
     print("Inserting sections.")
+    print("Hello World")
     insert_or_update_application_sections(COF_ROUND_3_WINDOW_2_ID, cof_r3w2_sections)
 
 
