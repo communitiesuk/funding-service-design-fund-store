@@ -176,5 +176,6 @@ round_config = [
         "display_logo_on_pdf_exports": False,
         "requires_feedback": True,
         "mark_as_complete_enabled": True,
+        "guidance_url": "",
     }
 ]
