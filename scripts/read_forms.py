@@ -1,6 +1,8 @@
 import json
 import os
 
+from bs4 import BeautifulSoup
+
 
 def evaluate_page(page, index, all_pages, results):
     next_page_path = page["next"][0]["path"]
@@ -34,12 +36,33 @@ def strip_leading_numbers(text):
 
 
 def build_display_for_components(components):
-    pass
+    results = []
+    for c in components:
+
+        text = []
+        if ("type" in c) and (
+            c["type"].casefold() == "html" or c["type"].casefold() == "para"
+        ):
+            text = [c["content"]]
+        elif "hint" in c:
+            soup = BeautifulSoup(c["hint"], "html.parser")
+            text = [e.text for e in soup.children]
+        component = {
+            "title": c["title"] if "title" in c else None,
+            "text": text,
+            "hide_title": c["options"]["hideTitle"]
+            if "hideTitle" in c["options"]
+            else False,
+        }
+
+        results.append(component)
+    return results
 
 
 def build_page_display(is_first_page, page):
     results = {}
     if is_first_page:
+        # Several forms start with a page full of guidance text, which we don't need to include here
         is_just_html_start_page = all(
             [
                 (c["type"].casefold() == "para" or c["type"].casefold() == "html")
