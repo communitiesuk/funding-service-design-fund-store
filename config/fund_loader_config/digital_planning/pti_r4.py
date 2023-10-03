@@ -30,7 +30,7 @@ PTI_APPLICATION_GUIDANCE = (
     " questions</a>.</p>"
 )
 
-R4_application_sections = [
+r4_application_sections = [
     {
         "section_name": {"en": "Before you start", "cy": ""},
         "tree_path": f"{APPLICATION_BASE_PATH}.1",
@@ -49,7 +49,7 @@ fund_config = {
         "cy": "",
     },
     "title_json": {
-        "en": "funding to adopt modern planning practices",
+        "en": "",  # TODO(adamdavies1) add title here
         "cy": "",
     },
     "short_name": "PTI",
