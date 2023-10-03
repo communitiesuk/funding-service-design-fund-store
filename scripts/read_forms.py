@@ -1,40 +1,26 @@
-# import copy
-# import json
-# import os
-# from bs4 import BeautifulSoup
+import json
+import os
 
 
-def determine_if_just_html_start_page(components):
-    return all(
-        [
-            (c["type"].casefold() == "para" or c["type"].casefold() == "html")
-            for c in components
-        ]
+def evaluate_page(page, index, all_pages, results):
+    next_page_path = page["next"][0]["path"]
+    results[index] = page
+    if next_page_path != "/summary":
+        next_page = next(p for p in all_pages if p["path"] == next_page_path)
+        evaluate_page(next_page, index + 1, all_pages, results)
+
+
+def build_page_index(form_data):
+    start_page = form_data["startPage"]
+    first_page = next(p for p in form_data["pages"] if p["path"] == start_page)
+
+    page_index = {}
+    index = 1
+
+    evaluate_page(
+        page=first_page, index=index, all_pages=form_data["pages"], results=page_index
     )
-
-
-def remove_lowest_in_hierarchy(number_str: str):
-    result = ""
-
-    last_dot_idx = number_str.rfind(".")
-    result = number_str[:last_dot_idx]
-
-    return result
-
-
-def increment_lowest_in_hierarchy(number_str: str):
-    result = ""
-    split_by_dots = number_str.split(".")
-    if not split_by_dots[-1]:
-        split_by_dots.pop()
-    to_inc = int(split_by_dots[-1])
-    split_by_dots.pop()
-    to_inc += 1
-    if split_by_dots:
-        result = (".").join(split_by_dots)
-        result += "."
-    result += f"{to_inc}"
-    return result
+    return page_index
 
 
 def strip_leading_numbers(text):
@@ -47,61 +33,43 @@ def strip_leading_numbers(text):
     return result.strip()
 
 
-# def build_display_for_components(components):
-#     results = []
-#     for c in components:
-
-#         text = []
-#         if ("type" in c) and (
-#             c["type"].casefold() == "html" or c["type"].casefold() == "para"
-#         ):
-#             text = [c["content"]]
-#         elif "hint" in c:
-#             soup = BeautifulSoup(c["hint"], "html.parser")
-#             text = [e.text for e in soup.children]
-#         component = {
-#             "title": c["title"] if "title" in c else None,
-#             "text": text,
-#             "hide_title": c["options"]["hideTitle"]
-#             if "hideTitle" in c["options"]
-#             else False,
-#         }
-
-#         results.append(component)
-#     return results
+def build_display_for_components(components):
+    pass
 
 
-# def build_page_display(is_first_page, page):
-#     results = {}
-#     if is_first_page:
-#         # Several forms start with a page full of guidance text, which we don't need to include here
-#         is_just_html_start_page = determine_if_just_html_start_page(page["components"])
-#         if is_just_html_start_page:
-#             results["page_title"] = strip_leading_numbers(page["title"])
-#             results["page_children"] = []
-#             return results
+def build_page_display(is_first_page, page):
+    results = {}
+    if is_first_page:
+        is_just_html_start_page = all(
+            [
+                (c["type"].casefold() == "para" or c["type"].casefold() == "html")
+                for c in page["components"]
+            ]
+        )
+        if is_just_html_start_page:
+            results["page_title"] = strip_leading_numbers(page["title"])
+            results["page_children"] = []
+            return results
 
-#     results["page_title"] = page["title"]
-#     results["page_children"] = build_display_for_components(page["components"])
-#     return results
-
-
-# def build_display_for_form(form_data: dict):
-
-#     page_index = build_page_index(form_data)
-
-#     display_index = {}
-#     for idx, page in page_index.items():
-#         display_index[idx] = build_page_display(
-#             is_first_page=(str(idx) == "1"), page=page["page"]
-#         )
-
-#     return display_index
+    results["page_title"] = page["title"]
+    results["page_children"] = build_display_for_components(page["components"])
+    return results
 
 
-# def build_form(form_name: str, path_to_forms: str):
-#     path_to_form = os.path.join(path_to_forms, f"{form_name}.json")
-#     with open(path_to_form, "r") as f:
-#         form_data = json.load(f)
+def build_display_for_form(form_data: dict):
 
-#     return build_display_for_form(form_data)
+    page_index = build_page_index(form_data)
+
+    display_index = {}
+    for idx, page in page_index.items():
+        display_index[idx] = build_page_display(is_first_page=(idx == 1), page=page)
+
+    return display_index
+
+
+def build_form(form_name: str, path_to_forms: str):
+    path_to_form = os.path.join(path_to_forms, f"{form_name}.json")
+    with open(path_to_form, "r") as f:
+        form_data = json.load(f)
+
+    return build_display_for_form(form_data)
