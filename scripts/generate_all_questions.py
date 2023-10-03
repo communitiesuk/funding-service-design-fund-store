@@ -146,7 +146,7 @@ def build_questions_for_form(air: Airium, form_name: str, path_to_forms: str):
 def print_components(air: Airium, components: list, level_above):
     idx_component = 1
     for c in components:
-        if not c["hide_title"]:
+        if not c["hide_title"] and c["title"] is not None:
             with air.h4(klass="govuk-heading-s"):
                 air(f"{level_above}{idx_component}. {c['title']}")
 
@@ -197,6 +197,7 @@ def print_html(
                                 f" {page['page_title']}"
                             )
 
+                    print_components(air, page["page_children"], 0)
                     # print page["page_children"]
 
                 # form_first_page, pages = build_questions_for_form(air, form_name, forms_dir)
