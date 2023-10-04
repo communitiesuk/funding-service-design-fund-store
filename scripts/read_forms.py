@@ -17,45 +17,52 @@ def find_highest_position_in_hierarchy(
 ):
     if not is_root:
         if page["path"] in results.keys():
-            existing_level_in_results = results[page["path"]] or 999
-            if existing_level_in_results and current_level < existing_level_in_results:
+            existing_level_in_results = results[page["path"]]
+            if current_level < existing_level_in_results:
                 results[page["path"]] = current_level
+
         else:
             results[page["path"]] = current_level
     else:
         results[page["path"]] = current_level
 
-    for next_page_config in page["next"]:
-        if next_page_config["path"] in parent_nexts:
-            continue
+    next_from_this_page = page["next"]
 
-        all_next_paths_for_this_page = [
-            n["path"] for n in page["next"] if n["path"] != next_page_config["path"]
+    for next_page_config in next_from_this_page:
+        next_page_path = next_page_config["path"]
+        # if this next page is also a next page from somewhere above this page in the hierarchy, skip it
+        if next_page_path in parent_nexts:
+            continue
+        next_page = next(p for p in all_pages if p["path"] == next_page_path)
+
+        # all the other options for next, that are siblings to this next page
+        siblings_to_this_next_page = [
+            n["path"] for n in next_from_this_page if n["path"] != next_page_path
         ]
 
+        # add this layer of siblings to the all_parents list so that the next level down gets the right set
         all_parent_nexts = copy.copy(parent_nexts)
-        all_parent_nexts.extend(all_next_paths_for_this_page)
-        next_page = next(p for p in all_pages if p["path"] == next_page_config["path"])
+        all_parent_nexts.extend(siblings_to_this_next_page)
 
-        # if len(page["next"]) == 1:
-        #     next_level = current_level
-        # else:
-
+        # Get every child of every sibling to this next page
         all_child_nexts = []
         for sibling_page in [
-            sp for sp in all_pages if sp["path"] in all_next_paths_for_this_page
+            sp for sp in all_pages if sp["path"] in siblings_to_this_next_page
         ]:
             get_all_child_nexts(sibling_page, all_child_nexts, all_pages)
 
+        # get every child of every sibling to the parent page
         all_cousins_children = []
         for sibling_page in [sp for sp in all_pages if sp["path"] in siblings]:
             get_all_child_nexts(sibling_page, all_cousins_children, all_pages)
 
-        if next_page_config["path"] in all_child_nexts:
+        if next_page_path in all_child_nexts:
             next_level = current_level
-        elif next_page_config["path"] in all_cousins_children:
+        elif len(next_from_this_page) == 1 and next_page_path in all_cousins_children:
+            next_level = current_level
+        elif next_page_path in all_cousins_children:
             next_level = current_level - 1
-        elif len(page["next"]) == 1:
+        elif len(next_from_this_page) == 1:
             next_level = current_level
         else:
             next_level = current_level + 1
@@ -67,7 +74,7 @@ def find_highest_position_in_hierarchy(
             all_parent_nexts,
             next_level,
             is_root=False,
-            siblings=all_next_paths_for_this_page,
+            siblings=siblings_to_this_next_page,
         )
 
 
