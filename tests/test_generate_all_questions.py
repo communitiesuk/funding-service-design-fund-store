@@ -6,8 +6,36 @@ from db.models.section import Section
 from scripts.generate_all_questions import build_section_header
 from scripts.generate_all_questions import find_forms_dir
 from scripts.read_forms import build_display_for_form
+from scripts.read_forms import build_hierarchy
 from scripts.read_forms import build_page_index
+from scripts.read_forms import increment_lowest_in_hierarchy
 from scripts.read_forms import strip_leading_numbers
+
+
+def test_build_hierarchy():
+    path_to_form = (
+        "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
+        "fsd_config/form_jsons/cyp_r1/about-your-organisation-cyp.json"
+    )
+    with open(path_to_form, "r") as f:
+        form_data = json.load(f)
+
+    results = build_hierarchy(form_data)
+    assert results
+
+
+@pytest.mark.parametrize(
+    "number,exp",
+    [
+        ("5.1", "5.2."),
+        ("5.1.", "5.2."),
+        ("5.1.2", "5.1.3."),
+        ("5", "6."),
+        ("5.1.2.3.4.5", "5.1.2.3.4.6."),
+    ],
+)
+def test_increment_lowest_in_hierarchy(number, exp):
+    assert increment_lowest_in_hierarchy(number) == exp
 
 
 @pytest.mark.parametrize(
@@ -37,6 +65,19 @@ def test_build_display_for_form_cyp_r1_risk():
     assert len(result) == 4
 
 
+def test_build_page_index_cyp_r1_about_org():
+
+    path_to_form = (
+        "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
+        "fsd_config/form_jsons/cyp_r1/about-your-organisation-cyp.json"
+    )
+    with open(path_to_form, "r") as f:
+        form_data = json.load(f)
+
+    index = build_page_index(form_data)
+    assert len(index) == 4
+
+
 def test_build_page_index_cyp_r1_risk():
 
     path_to_form = (
@@ -48,7 +89,7 @@ def test_build_page_index_cyp_r1_risk():
 
     index = build_page_index(form_data)
     assert len(index) == 4
-    assert index[4]["path"] == "/organisation-governance-structure"
+    assert index["4"]["page"]["path"] == "/organisation-governance-structure"
 
 
 # def test_build_questions_cyp_r1_name_your_application():
