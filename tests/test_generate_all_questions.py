@@ -21,7 +21,17 @@ def test_build_hierarchy():
         form_data = json.load(f)
 
     results = build_hierarchy(form_data)
-    assert results
+    org_details_level = results["/organisation-details"]
+    assert results["/alternative-organisation-name"] == org_details_level + 1
+    assert (
+        results["/tell-us-about-your-organisations-main-activities"]
+        == org_details_level
+    )
+    assert results["/how-is-your-organisation-classified"] == org_details_level
+    assert (
+        results["/how-is-your-organisation-classified-other"] == org_details_level + 1
+    )
+    assert results["/organsiation-address"] == org_details_level
 
 
 @pytest.mark.parametrize(
