@@ -1,15 +1,183 @@
+import copy
 import json
 import os
 
 from bs4 import BeautifulSoup
 
 
-def evaluate_page(page, index, all_pages, results):
-    next_page_path = page["next"][0]["path"]
-    results[index] = page
-    if next_page_path != "/summary":
-        next_page = next(p for p in all_pages if p["path"] == next_page_path)
-        evaluate_page(next_page, index + 1, all_pages, results)
+def get_all_child_nexts(page, child_nexts, all_pages):
+    child_nexts.extend([n["path"] for n in page["next"]])
+    for next_page_config in page["next"]:
+        next_page = next(p for p in all_pages if p["path"] == next_page_config["path"])
+        get_all_child_nexts(next_page, child_nexts, all_pages)
+
+
+def find_highest_position_in_hierarchy(
+    all_pages, page, results, parent_nexts: list, current_level, is_root, siblings
+):
+    if not is_root:
+        if page["path"] in results.keys():
+            existing_level_in_results = results[page["path"]] or 999
+            if existing_level_in_results and current_level < existing_level_in_results:
+                results[page["path"]] = current_level
+        else:
+            results[page["path"]] = current_level
+    else:
+        results[page["path"]] = current_level
+
+    for next_page_config in page["next"]:
+        if next_page_config["path"] in parent_nexts:
+            continue
+
+        all_next_paths_for_this_page = [
+            n["path"] for n in page["next"] if n["path"] != next_page_config["path"]
+        ]
+
+        all_parent_nexts = copy.copy(parent_nexts)
+        all_parent_nexts.extend(all_next_paths_for_this_page)
+        next_page = next(p for p in all_pages if p["path"] == next_page_config["path"])
+
+        # if len(page["next"]) == 1:
+        #     next_level = current_level
+        # else:
+
+        all_child_nexts = []
+        for sibling_page in [
+            sp for sp in all_pages if sp["path"] in all_next_paths_for_this_page
+        ]:
+            get_all_child_nexts(sibling_page, all_child_nexts, all_pages)
+
+        all_cousins_children = []
+        for sibling_page in [sp for sp in all_pages if sp["path"] in siblings]:
+            get_all_child_nexts(sibling_page, all_cousins_children, all_pages)
+
+        if next_page_config["path"] in all_child_nexts:
+            next_level = current_level
+        elif next_page_config["path"] in all_cousins_children:
+            next_level = current_level - 1
+        elif len(page["next"]) == 1:
+            next_level = current_level
+        else:
+            next_level = current_level + 1
+
+        find_highest_position_in_hierarchy(
+            all_pages,
+            next_page,
+            results,
+            all_parent_nexts,
+            next_level,
+            is_root=False,
+            siblings=all_next_paths_for_this_page,
+        )
+
+
+def build_hierarchy(form_data):
+    results = {}
+    all_pages = form_data["pages"]
+    start_page = form_data["startPage"]
+    first_page = next(p for p in form_data["pages"] if p["path"] == start_page)
+    find_highest_position_in_hierarchy(
+        all_pages=all_pages,
+        page=first_page,
+        results=results,
+        parent_nexts=[],
+        is_root=True,
+        current_level=1,
+        siblings=[],
+    )
+    return results
+    # for page in form_data["pages"]:
+    #     idx = 1
+
+
+def determine_if_just_html_start_page(components):
+    return all(
+        [
+            (c["type"].casefold() == "para" or c["type"].casefold() == "html")
+            for c in components
+        ]
+    )
+
+
+def increment_lowest_in_hierarchy(number_str: str):
+    result = ""
+    split_by_dots = number_str.split(".")
+    if not split_by_dots[-1]:
+        split_by_dots.pop()
+    to_inc = int(split_by_dots[-1])
+    split_by_dots.pop()
+    to_inc += 1
+    if split_by_dots:
+        result = (".").join(split_by_dots)
+        result += "."
+    result += f"{to_inc}"
+    return result
+
+
+def evaluate_page(
+    paths_to_do: list,
+    conditions,
+    page,
+    index,
+    all_pages,
+    results,
+    parent_paths,
+    is_sub_page=False,
+    is_sub_sub_page=False,
+):
+    if page["path"] in parent_paths:
+        return
+    results[index] = {"page": page}
+    paths_to_do.remove(page["path"])
+    if len(page["next"]) == 1:
+        for next_page_config in page["next"]:
+            next_page_path = next_page_config["path"]
+            if is_sub_page and next_page_path in parent_paths:
+                continue
+            if next_page_path in paths_to_do and next_page_path != "/summary":
+                next_page = next(p for p in all_pages if p["path"] == next_page_path)
+                if determine_if_just_html_start_page(page["components"]):
+                    new_index = f"{index}.0"
+                else:
+                    new_index = str(index)
+                evaluate_page(
+                    paths_to_do,
+                    conditions,
+                    next_page,
+                    increment_lowest_in_hierarchy(new_index),
+                    all_pages,
+                    results,
+                    parent_paths=[],
+                    is_sub_page=False,
+                )
+    else:
+        sub_page_idx = f"{index}.0"
+        for next_page_config in page["next"]:
+            if next_page_config["path"] in paths_to_do:
+                # condition = next(c for c in conditions if c["name"] == next_page_config["name"])
+                next_page = next(
+                    p for p in all_pages if p["path"] == next_page_config["path"]
+                )
+                if is_sub_page:
+                    this_parent_paths = parent_paths
+                else:
+                    this_parent_paths = [
+                        p["path"]
+                        for p in page["next"]
+                        if p["path"] != next_page_config["path"]
+                    ]
+                sub_page_idx = increment_lowest_in_hierarchy(str(sub_page_idx))
+                evaluate_page(
+                    paths_to_do,
+                    conditions,
+                    next_page,
+                    sub_page_idx,
+                    all_pages,
+                    results,
+                    parent_paths=this_parent_paths,
+                    is_sub_page=True,
+                    is_sub_sub_page=is_sub_page,
+                )
 
 
 def build_page_index(form_data):
@@ -17,10 +185,18 @@ def build_page_index(form_data):
     first_page = next(p for p in form_data["pages"] if p["path"] == start_page)
 
     page_index = {}
-    index = 1
+    index = "1"
+
+    paths_to_pages = {page["path"]: page for page in form_data["pages"]}
 
     evaluate_page(
-        page=first_page, index=index, all_pages=form_data["pages"], results=page_index
+        paths_to_do=list(paths_to_pages.keys()),
+        conditions=form_data["conditions"],
+        page=first_page,
+        index=index,
+        all_pages=form_data["pages"],
+        results=page_index,
+        parent_paths=[],
     )
     return page_index
 
@@ -63,12 +239,7 @@ def build_page_display(is_first_page, page):
     results = {}
     if is_first_page:
         # Several forms start with a page full of guidance text, which we don't need to include here
-        is_just_html_start_page = all(
-            [
-                (c["type"].casefold() == "para" or c["type"].casefold() == "html")
-                for c in page["components"]
-            ]
-        )
+        is_just_html_start_page = determine_if_just_html_start_page(page["components"])
         if is_just_html_start_page:
             results["page_title"] = strip_leading_numbers(page["title"])
             results["page_children"] = []
@@ -85,7 +256,9 @@ def build_display_for_form(form_data: dict):
 
     display_index = {}
     for idx, page in page_index.items():
-        display_index[idx] = build_page_display(is_first_page=(idx == 1), page=page)
+        display_index[idx] = build_page_display(
+            is_first_page=(str(idx) == "1"), page=page["page"]
+        )
 
     return display_index
 

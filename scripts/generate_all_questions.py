@@ -193,7 +193,7 @@ def print_html(
                     else:
                         with air.h4(klass="govuk-heading-s"):
                             air(
-                                f"{idx_section}.{idx_form}.{page_idx-1}."
+                                f"{idx_section}.{idx_form}.{page_idx}."
                                 f" {page['page_title']}"
                             )
 
