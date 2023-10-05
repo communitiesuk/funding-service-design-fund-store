@@ -27,6 +27,10 @@ def find_highest_position_in_hierarchy(
         results[page["path"]] = current_level
 
     next_from_this_page = page["next"]
+    # get every child of every sibling to the parent page
+    all_page_siblings_children = []
+    for sibling_page in [sp for sp in all_pages if sp["path"] in siblings]:
+        get_all_child_nexts(sibling_page, all_page_siblings_children, all_pages)
 
     for next_page_config in next_from_this_page:
         next_page_path = next_page_config["path"]
@@ -51,16 +55,32 @@ def find_highest_position_in_hierarchy(
         ]:
             get_all_child_nexts(sibling_page, all_child_nexts, all_pages)
 
-        # get every child of every sibling to the parent page
-        all_cousins_children = []
-        for sibling_page in [sp for sp in all_pages if sp["path"] in siblings]:
-            get_all_child_nexts(sibling_page, all_cousins_children, all_pages)
+        is_in_descendants_of_every_sibling = True
+        for sibling_page in [p for p in all_pages if p["path"] in siblings]:
+            child_nexts = []
+            get_all_child_nexts(sibling_page, child_nexts, all_pages)
+            if next_page_path not in child_nexts:
+                is_in_descendants_of_every_sibling = False
 
         if next_page_path in all_child_nexts:
             next_level = current_level
-        elif len(next_from_this_page) == 1 and next_page_path in all_cousins_children:
+
+        # The next 2 clauses don't work together
+        elif (
+            len(next_from_this_page) == 1
+            and next_page_path in all_page_siblings_children
+        ):
+            # This one works where there is only one next page eg. main-activites -> how classified
             next_level = current_level
-        elif next_page_path in all_cousins_children:
+
+        elif is_in_descendants_of_every_sibling and len(siblings) > 0:
+            # this one works where multiple options lead back to the same end,
+            # eg. charity/reg company/other -> org-address
+            next_level = current_level - 1
+
+        elif next_page_path in all_page_siblings_children:
+            # This next page is also the next page of this next page's parent's sibling
+            # (eg. alt-org-name -> main activites)
             next_level = current_level - 1
         elif len(next_from_this_page) == 1:
             next_level = current_level
