@@ -18,6 +18,7 @@ from scripts.read_forms import strip_leading_numbers
 metadata_path = "/Users/sarahsloan/dev/temp/metadata_applicant_ns.json"
 
 
+@pytest.mark.skip(reason="TDD")
 def test_generate_metadata():
     path_to_form = (
         "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
@@ -30,6 +31,7 @@ def test_generate_metadata():
         json.dump(metadata, f)
 
 
+@pytest.mark.skip(reason="TDD")
 def test_generate_test_data():
     output_folder = "/Users/sarahsloan/dev/temp/"
     files_to_generate = [START_TO_MAIN_ACTIVITIES, HOW_IS_ORG_CLASSIFIED, JOINT_BID]
