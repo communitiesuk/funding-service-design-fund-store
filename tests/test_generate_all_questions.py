@@ -75,6 +75,15 @@ def test_generate_metadata():
         )
         p["all_possible_previous"] = list(all_possible_previous)
 
+        # get everything that is directly after all the possible previos to this page
+        all_possible_previous_direct_next = set()
+        for prev in p["all_possible_previous"]:
+            prev_page = next(
+                page for page in form_data["all_pages"] if page["path"] == prev
+            )
+            all_possible_previous_direct_next.update(prev_page["next_paths"])
+        p["all_possible_previous_direct_next"] = list(all_possible_previous_direct_next)
+
         # everything that could come after this page
         all_possible_after = set()
         get_all_child_nexts(
@@ -103,11 +112,14 @@ def generate_index(page, results: dict, idx, all_pages, start_page=False):
             next_idx = idx + 1
 
         # if this next path is also a next path of the immediate previous, go back a level
-        if next_path in page["direct_next_of_direct_previous"]:
+        elif next_path in page["direct_next_of_direct_previous"]:
+            next_idx = idx - 1
+
+        elif next_path in page["all_possible_previous_direct_next"]:
             next_idx = idx - 1
 
         # if this page and all it's siblings eventually go back to this same next page, go back a level
-        if (
+        elif (
             len(page["direct_next_of_direct_previous"]) <= 1
         ):  # and page["direct_next_of_direct_previous"][0] == page["path"]:
             pass
@@ -153,6 +165,18 @@ HOW_IS_ORG_CLASSIFIED = {
         "/organisation-address",
     ],
 }
+JOINT_BID = {
+    "file_name": "joint_bid_out_and_back.json",
+    "start_page": "/joint-bid",
+    "end_page": "/website-and-social-media",
+    "pages": [
+        "/partner-organisation-details",
+        "/work-with-partner-organisations",
+        "/agreement-exists",
+        "/website-and-social-media",
+        "/joint-bid",
+    ],
+}
 
 
 def test_generate_test_data():
@@ -160,7 +184,7 @@ def test_generate_test_data():
     with open("/Users/sarahsloan/dev/temp/metadata_about_your_org_cyp.json", "r") as f:
         all_data = json.load(f)
 
-    files_to_generate = [START_TO_MAIN_ACTIVITIES, HOW_IS_ORG_CLASSIFIED]
+    files_to_generate = [START_TO_MAIN_ACTIVITIES, HOW_IS_ORG_CLASSIFIED, JOINT_BID]
 
     for file in files_to_generate:
         cutdown_data = {"start_page": file["start_page"], "all_pages": []}
@@ -177,6 +201,25 @@ def test_generate_test_data():
 
         with open(os.path.join(output_folder, file["file_name"]), "w") as f_out:
             json.dump(cutdown_data, f_out)
+
+
+def test_generate_index_branch_out_multi_pages_back_to_parent_sibling():
+    with open("/Users/sarahsloan/dev/temp/joint_bid_out_and_back.json", "r") as f:
+        form_data = json.load(f)
+
+    results = {}
+
+    first_page = next(
+        p for p in form_data["all_pages"] if p["path"] == form_data["start_page"]
+    )
+    generate_index(first_page, results, 1, form_data["all_pages"])
+
+    assert len(results) == 5
+    start_level = results["/joint-bid"]
+    assert results["/partner-organisation-details"] == start_level + 1
+    assert results["/work-with-partner-organisations"] == start_level + 1
+    assert results["/agreement-exists"] == start_level + 1
+    assert results["/website-and-social-media"] == start_level
 
 
 def test_generate_index_branch_out_all_back_to_new():
