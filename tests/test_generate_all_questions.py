@@ -16,28 +16,81 @@ from scripts.read_forms import remove_lowest_in_hierarchy
 from scripts.read_forms import strip_leading_numbers
 
 
-@pytest.mark.skip(reason="TDD")
+metadata_path = "/Users/sarahsloan/dev/temp/metadata_applicant_ns.json"
+
+
 def test_generate_metadata():
     path_to_form = (
         "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
-        "fsd_config/form_jsons/cyp_r1/about-your-organisation-cyp.json"
+        "fsd_config/form_jsons/night_shelter/applicant-information-ns.json"
     )
     with open(path_to_form, "r") as f:
         form_data = json.load(f)
     metadata = generate_metadata(full_form_data=form_data)
-    with open("/Users/sarahsloan/dev/temp/metadata_about_your_org_cyp.json", "w") as f:
+    with open(metadata_path, "w") as f:
         json.dump(metadata, f)
 
 
-@pytest.mark.skip(reason="TDD")
 def test_generate_test_data():
     output_folder = "/Users/sarahsloan/dev/temp/"
     files_to_generate = [START_TO_MAIN_ACTIVITIES, HOW_IS_ORG_CLASSIFIED, JOINT_BID]
     generate_test_data(
         target_test_files=files_to_generate,
-        in_path="/Users/sarahsloan/dev/temp/metadata_about_your_org_cyp.json",
+        in_path=metadata_path,
         out_folder=output_folder,
     )
+    "/Users/sarahsloan/dev/temp/metadata_applicant_ns.json"
+
+
+def test_generate_index_applicant_ns():
+    with open("/Users/sarahsloan/dev/temp/metadata_applicant_ns.json", "r") as f:
+        form_data = json.load(f)
+
+    results = {}
+
+    first_page = next(
+        p for p in form_data["all_pages"] if p["path"] == form_data["start_page"]
+    )
+    generate_index(first_page, results, 1, form_data["all_pages"])
+
+    assert len(results) == 4
+    start_level = results["/13-applicant-information"]
+    assert results["/lead-contact-details"] == start_level
+    assert results["/authorised-signatory-details"] == start_level + 1
+    assert results["/summary"] == start_level
+
+
+def test_generate_index_risk_cyp():
+    with open("/Users/sarahsloan/dev/temp/metadata_risk_cyp.json", "r") as f:
+        form_data = json.load(f)
+
+    results = {}
+
+    first_page = next(
+        p for p in form_data["all_pages"] if p["path"] == form_data["start_page"]
+    )
+    generate_index(first_page, results, 1, form_data["all_pages"])
+
+    assert len(results) == 5
+    start_level = results["/intro-risk-and-deliverability"]
+    for _, value in results.items():
+        assert value == start_level
+
+
+def test_generate_index_name_app_cyp():
+    with open("/Users/sarahsloan/dev/temp/metadata_name_app_cyp.json", "r") as f:
+        form_data = json.load(f)
+
+    results = {}
+
+    first_page = next(
+        p for p in form_data["all_pages"] if p["path"] == form_data["start_page"]
+    )
+    generate_index(first_page, results, 1, form_data["all_pages"])
+
+    assert len(results) == 2
+    start_level = results["/name-your-application"]
+    assert results["/summary"] == start_level
 
 
 def test_generate_index_branch_out_multi_pages_back_to_parent_sibling():
