@@ -14,7 +14,7 @@ from airium import Airium  # noqa: E402
 import os.path  # noqa: E402
 import json  # noqa: E402
 from bs4 import BeautifulSoup  # noqa: E402
-from scripts.read_forms import strip_leading_numbers, build_form  # noqa: E402
+from scripts.read_forms import strip_leading_numbers  # , build_form  # noqa: E402
 
 
 air = Airium()
@@ -182,9 +182,11 @@ def print_html(
 
             idx_form = 1
             for child_form in section_children[anchor]:
-                form_name = child_form.form_name[0].form_name_json[lang]
+                # form_name = child_form.form_name[0].form_name_json[lang]
 
-                form_index = build_form(form_name=form_name, path_to_forms=forms_dir)
+                form_index = (
+                    {}
+                )  # build_form(form_name=form_name, path_to_forms=forms_dir)
 
                 for page_idx, page in form_index.items():
                     if page_idx == 1:

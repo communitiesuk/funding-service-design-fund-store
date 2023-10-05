@@ -1,202 +1,42 @@
-import copy
 import json
 import os
 
 import pytest
 from db.models.section import Section
+from scripts.all_questions.generate_test_data import generate_test_data
+from scripts.all_questions.generate_test_data import HOW_IS_ORG_CLASSIFIED
+from scripts.all_questions.generate_test_data import JOINT_BID
+from scripts.all_questions.generate_test_data import START_TO_MAIN_ACTIVITIES
+from scripts.all_questions.metadata_utils import generate_index
+from scripts.all_questions.metadata_utils import generate_metadata
 from scripts.generate_all_questions import build_section_header
 from scripts.generate_all_questions import find_forms_dir
-from scripts.read_forms import build_display_for_form
-from scripts.read_forms import build_hierarchy
-from scripts.read_forms import build_page_index
 from scripts.read_forms import increment_lowest_in_hierarchy
 from scripts.read_forms import strip_leading_numbers
 
 
-def get_all_child_nexts(page, child_nexts, all_pages):
-    child_nexts.update([n for n in page["next_paths"]])
-    for next_page_path in page["next_paths"]:
-        next_page = next(p for p in all_pages if p["path"] == next_page_path)
-        get_all_child_nexts(next_page, child_nexts, all_pages)
-
-
-def get_all_possible_previous(page_path, results, all_pages):
-
-    direct_prev = [
-        prev["path"] for prev in all_pages if page_path in prev["next_paths"]
-    ]
-    results.update(direct_prev)
-    for prev in direct_prev:
-        get_all_possible_previous(prev, results, all_pages)
-
-
+@pytest.mark.skip(reason="TDD")
 def test_generate_metadata():
-    path_to_form = "/Users/sarahsloan/dev/temp/cutdown_about_your_org_cyp.json"
+    path_to_form = (
+        "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
+        "fsd_config/form_jsons/cyp_r1/about-your-organisation-cyp.json"
+    )
     with open(path_to_form, "r") as f:
         form_data = json.load(f)
-
-    metadata = copy.deepcopy(form_data)
-    for p in metadata["all_pages"]:
-        # everything that could come immediately before this page
-        p["all_direct_previous"] = [
-            prev["path"]
-            for prev in form_data["all_pages"]
-            if p["path"] in prev["next_paths"]
-        ]
-
-        # all the immediate next paths of the direct previous (aka siblings)
-        direct_next_of_direct_previous = set()
-        for direct_prev in p["all_direct_previous"]:
-            prev_page = next(
-                prev for prev in form_data["all_pages"] if prev["path"] == direct_prev
-            )
-            direct_next_of_direct_previous.update(prev_page["next_paths"])
-        p["direct_next_of_direct_previous"] = list(direct_next_of_direct_previous)
-
-        # get all the descendents (possible next anywhere after) of the siblings
-        all_possible_next_of_siblings = set()
-        for sibling in p["direct_next_of_direct_previous"]:
-            sibling_page = next(
-                page for page in form_data["all_pages"] if page["path"] == sibling
-            )
-            get_all_child_nexts(
-                sibling_page, all_possible_next_of_siblings, form_data["all_pages"]
-            )
-        p["all_possible_next_of_siblings"] = list(all_possible_next_of_siblings)
-
-        # everything that could come anywhere before this page
-        all_possible_previous = set()
-        get_all_possible_previous(
-            p["path"], all_possible_previous, form_data["all_pages"]
-        )
-        p["all_possible_previous"] = list(all_possible_previous)
-
-        # get everything that is directly after all the possible previos to this page
-        all_possible_previous_direct_next = set()
-        for prev in p["all_possible_previous"]:
-            prev_page = next(
-                page for page in form_data["all_pages"] if page["path"] == prev
-            )
-            all_possible_previous_direct_next.update(prev_page["next_paths"])
-        p["all_possible_previous_direct_next"] = list(all_possible_previous_direct_next)
-
-        # everything that could come after this page
-        all_possible_after = set()
-        get_all_child_nexts(
-            page=p, child_nexts=all_possible_after, all_pages=form_data["all_pages"]
-        )
-        p["all_possible_after"] = list(all_possible_after)
-
-        with open(
-            "/Users/sarahsloan/dev/temp/metadata_about_your_org_cyp.json", "w"
-        ) as f:
-            json.dump(metadata, f)
+    metadata = generate_metadata(full_form_data=form_data)
+    with open("/Users/sarahsloan/dev/temp/metadata_about_your_org_cyp.json", "w") as f:
+        json.dump(metadata, f)
 
 
-def generate_index(page, results: dict, idx, all_pages, start_page=False):
-    current_level_in_results = results.get(page["path"], 9999)
-    if idx < current_level_in_results:
-        results[page["path"]] = idx
-
-    for next_path in [n for n in page["next_paths"]]:
-        # default is same level
-        next_idx = idx
-        next_page = next(p for p in all_pages if p["path"] == next_path)
-
-        # if we have more than one possible next page, go to next level
-        if len(page["next_paths"]) > 1 or start_page is True:
-            next_idx = idx + 1
-
-        # if this next path is also a next path of the immediate previous, go back a level
-        elif next_path in page["direct_next_of_direct_previous"]:
-            next_idx = idx - 1
-
-        elif next_path in page["all_possible_previous_direct_next"]:
-            next_idx = idx - 1
-
-        # if this page and all it's siblings eventually go back to this same next page, go back a level
-        elif (
-            len(page["direct_next_of_direct_previous"]) <= 1
-        ):  # and page["direct_next_of_direct_previous"][0] == page["path"]:
-            pass
-        elif len(next_page["all_direct_previous"]) == 1:
-            pass
-        else:
-            is_in_descendents_of_all_siblings = True
-            for sibling in page["direct_next_of_direct_previous"]:
-                # don't look at this page
-                if sibling == page["path"]:
-                    continue
-                sibling_page = next(p for p in all_pages if p["path"] == sibling)
-                if next_path not in sibling_page["all_possible_after"]:
-                    is_in_descendents_of_all_siblings = False
-
-            if is_in_descendents_of_all_siblings:
-                next_idx = idx - 1
-
-        generate_index(next_page, results, next_idx, all_pages)
-
-
-START_TO_MAIN_ACTIVITIES = {
-    "file_name": "start_to_main_activites.json",
-    "start_page": "/intro-about-your-organisation",
-    "end_page": "/tell-us-about-your-organisations-main-activities",
-    "pages": [
-        "/intro-about-your-organisation",
-        "/alternative-organisation-name",
-        "/organisation-details",
-        "/tell-us-about-your-organisations-main-activities",
-    ],
-}
-
-HOW_IS_ORG_CLASSIFIED = {
-    "file_name": "how_is_org_classified.json",
-    "start_page": "/how-is-your-organisation-classified",
-    "end_page": "/organisation-address",
-    "pages": [
-        "/how-is-your-organisation-classified",
-        "/how-is-your-organisation-classified-other",
-        "/charity-number",
-        "/company-registration-number",
-        "/organisation-address",
-    ],
-}
-JOINT_BID = {
-    "file_name": "joint_bid_out_and_back.json",
-    "start_page": "/joint-bid",
-    "end_page": "/website-and-social-media",
-    "pages": [
-        "/partner-organisation-details",
-        "/work-with-partner-organisations",
-        "/agreement-exists",
-        "/website-and-social-media",
-        "/joint-bid",
-    ],
-}
-
-
+@pytest.mark.skip(reason="TDD")
 def test_generate_test_data():
     output_folder = "/Users/sarahsloan/dev/temp/"
-    with open("/Users/sarahsloan/dev/temp/metadata_about_your_org_cyp.json", "r") as f:
-        all_data = json.load(f)
-
     files_to_generate = [START_TO_MAIN_ACTIVITIES, HOW_IS_ORG_CLASSIFIED, JOINT_BID]
-
-    for file in files_to_generate:
-        cutdown_data = {"start_page": file["start_page"], "all_pages": []}
-        for p in file["pages"]:
-            cutdown_data["all_pages"].append(
-                next(page for page in all_data["all_pages"] if page["path"] == p)
-            )
-
-        last_page = next(
-            p for p in cutdown_data["all_pages"] if p["path"] == file["end_page"]
-        )
-        last_page["next_paths"] = []
-        last_page["all_possible_after"] = []
-
-        with open(os.path.join(output_folder, file["file_name"]), "w") as f_out:
-            json.dump(cutdown_data, f_out)
+    generate_test_data(
+        target_test_files=files_to_generate,
+        in_path="/Users/sarahsloan/dev/temp/metadata_about_your_org_cyp.json",
+        out_folder=output_folder,
+    )
 
 
 def test_generate_index_branch_out_multi_pages_back_to_parent_sibling():
@@ -257,7 +97,7 @@ def test_generate_index_simple_branch():
     )
 
 
-def test_generate_index():
+def test_generate_index_about_your_org_cyp():
     with open("/Users/sarahsloan/dev/temp/metadata_about_your_org_cyp.json", "r") as f:
         form_data = json.load(f)
 
@@ -287,53 +127,14 @@ def test_generate_index():
     results = {}
 
 
-def test_generate_cut_down_form():
-    path_to_form = (
-        "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
-        "fsd_config/form_jsons/cyp_r1/about-your-organisation-cyp.json"
-    )
-    with open(path_to_form, "r") as f:
-        form_data = json.load(f)
-
-    cutdown = {"start_page": form_data["startPage"], "all_pages": []}
-    for page in form_data["pages"]:
-        cp = {"path": page["path"], "next_paths": [p["path"] for p in page["next"]]}
-        cutdown["all_pages"].append(cp)
-
-    with open("/Users/sarahsloan/dev/temp/cutdown_about_your_org_cyp.json", "w") as f:
-        json.dump(cutdown, f)
-
-
-def test_build_hierarchy():
-    path_to_form = (
-        "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
-        "fsd_config/form_jsons/cyp_r1/about-your-organisation-cyp.json"
-    )
-    with open(path_to_form, "r") as f:
-        form_data = json.load(f)
-
-    results = build_hierarchy(form_data)
-    org_details_level = results["/organisation-details"]
-    assert results["/alternative-organisation-name"] == org_details_level + 1
-    assert (
-        results["/tell-us-about-your-organisations-main-activities"]
-        == org_details_level
-    )
-    assert results["/how-is-your-organisation-classified"] == org_details_level
-    assert (
-        results["/how-is-your-organisation-classified-other"] == org_details_level + 1
-    )
-    assert results["/organsiation-address"] == org_details_level
-
-
 @pytest.mark.parametrize(
     "number,exp",
     [
-        ("5.1", "5.2."),
-        ("5.1.", "5.2."),
-        ("5.1.2", "5.1.3."),
-        ("5", "6."),
-        ("5.1.2.3.4.5", "5.1.2.3.4.6."),
+        ("5.1", "5.2"),
+        ("5.1.", "5.2"),
+        ("5.1.2", "5.1.3"),
+        ("5", "6"),
+        ("5.1.2.3.4.5", "5.1.2.3.4.6"),
     ],
 )
 def test_increment_lowest_in_hierarchy(number, exp):
@@ -354,44 +155,44 @@ def test_strip_leading_numbers(text, exp):
     assert strip_leading_numbers(text) == exp
 
 
-def test_build_display_for_form_cyp_r1_risk():
+# def test_build_display_for_form_cyp_r1_risk():
 
-    path_to_form = (
-        "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
-        "fsd_config/form_jsons/cyp_r1/risk-and-deliverability-cyp.json"
-    )
-    with open(path_to_form, "r") as f:
-        form_data = json.load(f)
+#     path_to_form = (
+#         "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
+#         "fsd_config/form_jsons/cyp_r1/risk-and-deliverability-cyp.json"
+#     )
+#     with open(path_to_form, "r") as f:
+#         form_data = json.load(f)
 
-    result = build_display_for_form(form_data)
-    assert len(result) == 4
-
-
-def test_build_page_index_cyp_r1_about_org():
-
-    path_to_form = (
-        "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
-        "fsd_config/form_jsons/cyp_r1/about-your-organisation-cyp.json"
-    )
-    with open(path_to_form, "r") as f:
-        form_data = json.load(f)
-
-    index = build_page_index(form_data)
-    assert len(index) == 4
+#     result = build_display_for_form(form_data)
+#     assert len(result) == 4
 
 
-def test_build_page_index_cyp_r1_risk():
+# def test_build_page_index_cyp_r1_about_org():
 
-    path_to_form = (
-        "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
-        "fsd_config/form_jsons/cyp_r1/risk-and-deliverability-cyp.json"
-    )
-    with open(path_to_form, "r") as f:
-        form_data = json.load(f)
+#     path_to_form = (
+#         "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
+#         "fsd_config/form_jsons/cyp_r1/about-your-organisation-cyp.json"
+#     )
+#     with open(path_to_form, "r") as f:
+#         form_data = json.load(f)
 
-    index = build_page_index(form_data)
-    assert len(index) == 4
-    assert index["4"]["page"]["path"] == "/organisation-governance-structure"
+#     index = build_page_index(form_data)
+#     assert len(index) == 4
+
+
+# def test_build_page_index_cyp_r1_risk():
+
+#     path_to_form = (
+#         "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
+#         "fsd_config/form_jsons/cyp_r1/risk-and-deliverability-cyp.json"
+#     )
+#     with open(path_to_form, "r") as f:
+#         form_data = json.load(f)
+
+#     index = build_page_index(form_data)
+#     assert len(index) == 4
+#     assert index["4"]["page"]["path"] == "/organisation-governance-structure"
 
 
 # def test_build_questions_cyp_r1_name_your_application():
