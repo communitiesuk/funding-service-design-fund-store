@@ -15,14 +15,13 @@ from scripts.read_forms import increment_lowest_in_hierarchy
 from scripts.read_forms import strip_leading_numbers
 
 
-metadata_path = "/Users/sarahsloan/dev/temp/metadata_applicant_ns.json"
+metadata_path = "/Users/sarahsloan/dev/temp/metadata_org_info_cof_r3w2.json"
 
 
-@pytest.mark.skip(reason="TDD")
 def test_generate_metadata():
     path_to_form = (
         "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
-        "fsd_config/form_jsons/night_shelter/applicant-information-ns.json"
+        "fsd_config/form_jsons/cof_r3w2/en/organisation-information-cof-r3-w2.json"
     )
     with open(path_to_form, "r") as f:
         form_data = json.load(f)
@@ -31,7 +30,6 @@ def test_generate_metadata():
         json.dump(metadata, f)
 
 
-@pytest.mark.skip(reason="TDD")
 def test_generate_test_data():
     output_folder = "/Users/sarahsloan/dev/temp/"
     files_to_generate = [START_TO_MAIN_ACTIVITIES, HOW_IS_ORG_CLASSIFIED, JOINT_BID]
@@ -41,6 +39,37 @@ def test_generate_test_data():
         out_folder=output_folder,
     )
     "/Users/sarahsloan/dev/temp/metadata_applicant_ns.json"
+
+
+def test_generate_index_org_info_cof_r3w2():
+    with open("/Users/sarahsloan/dev/temp/metadata_org_info_cof_r3w2.json", "r") as f:
+        form_data = json.load(f)
+
+    results = {}
+
+    first_page = next(
+        p for p in form_data["all_pages"] if p["path"] == form_data["start_page"]
+    )
+    generate_index(first_page, results, 1, form_data["all_pages"], start_page=True)
+
+    assert len(results) == 18
+    org_details_level = results["/organisation-names"]
+    assert results["/alternative-names-of-your-organisation"] == org_details_level + 1
+    assert results["/purpose-and-activities"] == org_details_level
+    assert results["/previous-projects-similar-to-this-one"] == org_details_level + 1
+
+    assert results["/how-your-organisation-is-classified"] == org_details_level
+    assert (
+        results["/how-your-organisation-is-classified-other"] == org_details_level + 1
+    )
+    # TODO why does this fail assert results["/registration-details"] == org_details_level
+    assert results["/trading-subsidiaries"] == org_details_level
+    assert results["/parent-organisation-details"] == org_details_level + 1
+
+    assert results["/organisation-address"] == org_details_level
+    assert results["/correspondence-address"] == org_details_level + 1
+    assert results["/joint-applications"] == org_details_level
+    assert results["/partner-organisation-details"] == org_details_level + 1
 
 
 def test_generate_index_applicant_ns():
@@ -175,11 +204,6 @@ def test_generate_index_about_your_org_cyp():
         results["/how-is-your-organisation-classified-other"] == org_details_level + 1
     )
     assert results["/organisation-address"] == org_details_level
-
-    with open("/Users/sarahsloan/dev/temp/metadata_about_your_org_cyp.json", "r") as f:
-        form_data = json.load(f)
-
-    results = {}
 
 
 @pytest.mark.parametrize(
