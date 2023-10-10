@@ -15,7 +15,8 @@ import os.path  # noqa: E402
 import json  # noqa: E402
 from bs4 import BeautifulSoup  # noqa: E402
 from scripts.read_forms import (  # noqa: E402
-    increment_lowest_in_hierarchy,  # noqa: E402
+    increment_lowest_in_hierarchy,
+    remove_lowest_in_hierarchy,  # noqa: E402
     strip_leading_numbers,  # noqa: E402
 )  # , build_form  # noqa: E402
 from scripts.all_questions.metadata_utils import generate_index  # noqa: E402
@@ -75,9 +76,6 @@ def build_section_header(section: Section, lang="en"):
     title = strip_leading_numbers(title)
     anchor = title.casefold().replace(" ", "-")
     return anchor, title
-    # section_header[anchor] = title
-    # section_headers[f"{anchor}_form_name"]= s["form_name"]["form_name_json"]["lang"]
-    # return section_header
 
 
 def build_components_from_page(p, include_html_components=True):
@@ -160,28 +158,112 @@ def print_components(air: Airium, components: list, level_above):
                 air(t)
 
 
-def print_html_for_page(air: Airium, page, all_pages, this_idx, form_json_page):
+def print_html_for_page(
+    air: Airium,
+    page,
+    form_metadata,
+    this_idx,
+    form_json_page,
+    page_index,
+    parent_hierarchy_level,
+    pages_to_do,
+    is_form_heading,
+):
+    page_path = page["path"]
+    # If we've already done this page, don't do it again
+    if page_path not in pages_to_do:
+        return
+
     title = strip_leading_numbers(form_json_page["title"])
-    with air.h3(klass="govuk-heading-m"):
-        air(f"{this_idx}. {title}")
+
+    level_in_hrch = page_index[page_path]
+    hierarchy_difference = level_in_hrch - parent_hierarchy_level
+
+    # If we are going up a level in the hierarchy, and this isn't the last branch
+    # that goes there, don't do it yet
+    all_siblings = set(
+        prev for prev in page["direct_next_of_direct_previous"] if prev != page_path
+    )
+    if pages_to_do.intersection(all_siblings) and hierarchy_difference < 0:
+        return
+
+    if (
+        pages_to_do.intersection(page["all_direct_previous"])
+        and hierarchy_difference < 0
+    ):
+        return
+
+    base_heading_number = this_idx
+    if hierarchy_difference < 0:
+        # go back a level
+        base_heading_number = remove_lowest_in_hierarchy(base_heading_number)
+    elif hierarchy_difference > 0:
+        # increase level
+        base_heading_number = f"{this_idx}.0"
+
+    new_heading_number = increment_lowest_in_hierarchy(base_heading_number)
+
+    if is_form_heading:
+        with air.h3(klass="govuk-heading-m"):
+            air(f"{new_heading_number}. {title}")
+
+    else:
+        with air.h4(klass="govuk-heading-s"):
+            air(f"{new_heading_number}. {title}")
+    pages_to_do.remove(page_path)
+
+    for next_page_path in page["next_paths"]:
+        next_page = next(
+            p for p in form_metadata["all_pages"] if p["path"] == next_page_path
+        )
+        next_form_json_page = next(
+            p
+            for p in form_metadata["full_json"]["pages"]
+            if p["path"] == next_page_path
+        )
+        print_html_for_page(
+            air=air,
+            page=next_page,
+            form_metadata=form_metadata,
+            this_idx=new_heading_number,
+            form_json_page=next_form_json_page,
+            page_index=page_index,
+            parent_hierarchy_level=level_in_hrch,
+            pages_to_do=pages_to_do,
+            is_form_heading=False,
+        )
 
 
 def print_html_for_form(air: Airium, section_idx: int, form_metadata):
+    pages_to_do = set(
+        p["path"] for p in form_metadata["all_pages"] if p["path"] != "/summary"
+    )
     start_page_path = form_metadata["start_page"]
-    # index = form_metadata["index"]
-    # start_page = next(
-    #     p for p in form_metadata["all_pages"] if p["path"] == start_page_path
-    # )
+    index = form_metadata["index"]
+    start_page = next(
+        p for p in form_metadata["all_pages"] if p["path"] == start_page_path
+    )
     form_json_page = next(
         p for p in form_metadata["full_json"]["pages"] if p["path"] == start_page_path
     )
 
-    title = strip_leading_numbers(form_json_page["title"])
-    with air.h3(klass="govuk-heading-m"):
-        air(f"{section_idx}. {title}")
+    # title = strip_leading_numbers(form_json_page["title"])
+    # with air.h3(klass="govuk-heading-m"):
+    #     air(f"{section_idx}. {title}")
 
     # idx = increment_lowest_in_hierarchy(f"{section_idx}.0")
-    # print_html_for_page(air, start_page, form_metadata, this_idx=idx, form_json_page=form_json_page)
+    current_hierarchy_level = 0
+    print_html_for_page(
+        air,
+        start_page,
+        form_metadata,
+        this_idx=section_idx,
+        form_json_page=form_json_page,
+        page_index=index,
+        parent_hierarchy_level=current_hierarchy_level,
+        pages_to_do=pages_to_do,
+        is_form_heading=True,
+    )
 
 
 def print_html(sections: dict, lang) -> str:
@@ -201,7 +283,7 @@ def print_html(sections: dict, lang) -> str:
             form_idx = f"{idx_section}.0"
             for form in details["forms"]:
                 form_idx = increment_lowest_in_hierarchy(form_idx)
-                print_html_for_form(air, form_idx, form)
+                print_html_for_form(air, idx_section, form)
 
             idx_section += 1
 
