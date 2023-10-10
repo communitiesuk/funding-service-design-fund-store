@@ -19,8 +19,9 @@ from scripts.read_forms import (  # noqa: E402
     remove_lowest_in_hierarchy,  # noqa: E402
     strip_leading_numbers,  # noqa: E402
 )  # , build_form  # noqa: E402
-from scripts.all_questions.metadata_utils import generate_index  # noqa: E402
-from scripts.all_questions.metadata_utils import generate_metadata  # noqa: E402
+from scripts.all_questions.metadata_utils import (  # noqa: E402
+    generate_section_headings,
+)  # noqa: E402
 
 
 air = Airium()
@@ -168,6 +169,8 @@ def print_html_for_page(
     parent_hierarchy_level,
     pages_to_do,
     is_form_heading,
+    place_in_siblings_list,
+    index_of_printed_headers,
 ):
     page_path = page["path"]
     # If we've already done this page, don't do it again
@@ -199,9 +202,10 @@ def print_html_for_page(
         base_heading_number = remove_lowest_in_hierarchy(base_heading_number)
     elif hierarchy_difference > 0:
         # increase level
-        base_heading_number = f"{this_idx}.0"
+        base_heading_number = f"{this_idx}.{place_in_siblings_list}"
 
     new_heading_number = increment_lowest_in_hierarchy(base_heading_number)
+    index_of_printed_headers[page_path] = new_heading_number
 
     if is_form_heading:
         with air.h3(klass="govuk-heading-m"):
@@ -212,6 +216,7 @@ def print_html_for_page(
             air(f"{new_heading_number}. {title}")
     pages_to_do.remove(page_path)
 
+    sibling_tracker = 0
     for next_page_path in page["next_paths"]:
         next_page = next(
             p for p in form_metadata["all_pages"] if p["path"] == next_page_path
@@ -231,7 +236,10 @@ def print_html_for_page(
             parent_hierarchy_level=level_in_hrch,
             pages_to_do=pages_to_do,
             is_form_heading=False,
+            place_in_siblings_list=sibling_tracker,
+            index_of_printed_headers=index_of_printed_headers,
         )
+        sibling_tracker += 1
 
 
 def print_html_for_form(air: Airium, section_idx: int, form_metadata):
@@ -240,6 +248,7 @@ def print_html_for_form(air: Airium, section_idx: int, form_metadata):
     )
     start_page_path = form_metadata["start_page"]
     index = form_metadata["index"]
+    index_of_printed_headers = {}
     start_page = next(
         p for p in form_metadata["all_pages"] if p["path"] == start_page_path
     )
@@ -263,6 +272,8 @@ def print_html_for_form(air: Airium, section_idx: int, form_metadata):
         parent_hierarchy_level=current_hierarchy_level,
         pages_to_do=pages_to_do,
         is_form_heading=True,
+        place_in_siblings_list=0,
+        index_of_printed_headers=index_of_printed_headers,
     )
 
 
@@ -280,10 +291,24 @@ def print_html(sections: dict, lang) -> str:
             with air.h2(klass="govuk-heading-l", id=anchor):
                 air(f"{idx_section}. {details['title_text']}")
 
-            form_idx = f"{idx_section}.0"
-            for form in details["forms"]:
-                form_idx = increment_lowest_in_hierarchy(form_idx)
-                print_html_for_form(air, idx_section, form)
+            form_print_headings = details["form_print_headings"]
+            for heading in sorted(
+                form_print_headings,
+                key=lambda item: str((form_print_headings[item])["heading_number"]),
+            ):
+                header_info = form_print_headings[heading]
+                if header_info["is_form_heading"]:
+                    with air.h3(klass="govuk-heading-m"):
+                        air(f"{header_info['heading_number']}. {header_info['title']}")
+
+                else:
+                    with air.h4(klass="govuk-heading-s"):
+                        air(f"{header_info['heading_number']}. {header_info['title']}")
+
+            # form_idx = f"{idx_section}.0"
+            # for form in details["forms"]:
+            #     form_idx = increment_lowest_in_hierarchy(form_idx)
+            # print_html_for_form(air, idx_section, form)
 
             idx_section += 1
 
@@ -368,38 +393,42 @@ def generate_all_questions(
             forms_dir, fund_short_code, round_short_code, lang
         )
 
-        section_map = {}
+        section_map = generate_section_headings(
+            sections=sections, path_to_form_jsons=path_to_form_jsons, lang=lang
+        )
+        # {}
 
-        for section in sections:
-            anchor, text = build_section_header(section, lang=lang)
-            form_metadatas = []
-            for child_form in section.children:
-                form_name = child_form.form_name[0].form_name_json[lang]
-                path_to_form = os.path.join(path_to_form_jsons, f"{form_name}.json")
-                with open(path_to_form, "r") as f:
-                    form_data = json.load(f)
-                    form_metadata = generate_metadata(form_data)
-                    form_index = {}
+        # for section in sections:
+        #     anchor, text = build_section_header(section, lang=lang)
+        #     form_metadatas = []
+        #     for child_form in section.children:
+        #         form_name = child_form.form_name[0].form_name_json[lang]
+        #         path_to_form = os.path.join(path_to_form_jsons, f"{form_name}.json")
+        #         with open(path_to_form, "r") as f:
+        #             form_data = json.load(f)
+        #             form_metadata = generate_metadata(form_data)
+        #             form_print_headings = generate_print_headers_for_form()
+        #             form_index = {}
 
-                    first_page = next(
-                        p
-                        for p in form_metadata["all_pages"]
-                        if p["path"] == form_metadata["start_page"]
-                    )
-                    generate_index(
-                        page=first_page,
-                        results=form_index,
-                        idx=1,
-                        all_pages=form_metadata["all_pages"],
-                        start_page=True,
-                    )
-                    form_metadata["index"] = form_index
-                    form_metadata["full_json"] = form_data
-                    form_metadatas.append(form_metadata)
-            section_map[anchor] = {
-                "title_text": text,
-                "forms": form_metadatas,
-            }
+        #             first_page = next(
+        #                 p
+        #                 for p in form_metadata["all_pages"]
+        #                 if p["path"] == form_metadata["start_page"]
+        #             )
+        #             generate_index(
+        #                 page=first_page,
+        #                 results=form_index,
+        #                 idx=1,
+        #                 all_pages=form_metadata["all_pages"],
+        #                 start_page=True,
+        #             )
+        #             form_metadata["index"] = form_index
+        #             form_metadata["full_json"] = form_data
+        #             form_metadatas.append(form_metadata)
+        #     section_map[anchor] = {
+        #         "title_text": text,
+        #         "forms": form_metadatas,
+        #     }
 
         html_str = print_html(
             sections=section_map,
