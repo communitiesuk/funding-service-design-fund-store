@@ -432,6 +432,20 @@ def test_remove_lowest_in_hierarchy(number, exp):
 @pytest.mark.parametrize(
     "number,exp",
     [
+        ("5.1", "5"),
+        ("5.0.0", "5.0"),
+        ("5.1.2", "5.1"),
+        ("5", ""),
+        ("5.1.2.3.4.6", "5.1.2.3.4"),
+    ],
+)
+def test_remove_lowest_in_hierarchy(number, exp):
+    assert remove_lowest_in_hierarchy(number) == exp
+
+
+@pytest.mark.parametrize(
+    "number,exp",
+    [
         ("5.1", "5.2"),
         ("5.1.", "5.2"),
         ("5.1.2", "5.1.3"),
@@ -455,57 +469,6 @@ def test_increment_lowest_in_hierarchy(number, exp):
 )
 def test_strip_leading_numbers(text, exp):
     assert strip_leading_numbers(text) == exp
-
-
-# def test_build_display_for_form_cyp_r1_risk():
-
-#     path_to_form = (
-#         "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
-#         "fsd_config/form_jsons/cyp_r1/risk-and-deliverability-cyp.json"
-#     )
-#     with open(path_to_form, "r") as f:
-#         form_data = json.load(f)
-
-#     result = build_display_for_form(form_data)
-#     assert len(result) == 4
-
-
-# def test_build_page_index_cyp_r1_about_org():
-
-#     path_to_form = (
-#         "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
-#         "fsd_config/form_jsons/cyp_r1/about-your-organisation-cyp.json"
-#     )
-#     with open(path_to_form, "r") as f:
-#         form_data = json.load(f)
-
-#     index = build_page_index(form_data)
-#     assert len(index) == 4
-
-
-# def test_build_page_index_cyp_r1_risk():
-
-#     path_to_form = (
-#         "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
-#         "fsd_config/form_jsons/cyp_r1/risk-and-deliverability-cyp.json"
-#     )
-#     with open(path_to_form, "r") as f:
-#         form_data = json.load(f)
-
-#     index = build_page_index(form_data)
-#     assert len(index) == 4
-#     assert index["4"]["page"]["path"] == "/organisation-governance-structure"
-
-
-# def test_build_questions_cyp_r1_name_your_application():
-#     path = "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/fsd_config/form_jsons/cyp_r1/"
-#     pages = build_questions(None, "name-your-application-cyp", path)
-#     assert len(pages) == 1
-#     assert pages[1]["title"] == "Name your application"
-#     assert len(pages[1]["components"]) == 1
-#     assert pages[1]["components"][0]["title"] == "Name your application"
-#     assert pages[1]["components"][0]["hide_title"] is True
-#     assert len(pages[1]["components"][0]["text"]) == 2
 
 
 @pytest.mark.parametrize(
