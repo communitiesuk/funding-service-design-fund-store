@@ -13,6 +13,15 @@ def determine_if_just_html_start_page(components):
     )
 
 
+def remove_lowest_in_hierarchy(number_str: str):
+    result = ""
+
+    last_dot_idx = number_str.rfind(".")
+    result = number_str[:last_dot_idx]
+
+    return result
+
+
 def increment_lowest_in_hierarchy(number_str: str):
     result = ""
     split_by_dots = number_str.split(".")
