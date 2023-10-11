@@ -1,7 +1,23 @@
 # import copy
 # import json
-# import os
+import os
+
 # from bs4 import BeautifulSoup
+
+
+def find_forms_dir(path_to_form_jsons, fund_short_name, round_short_name, lang):
+    round_folder_path = os.path.join(
+        path_to_form_jsons,
+        f"{fund_short_name.casefold()}_{round_short_name.casefold()}",
+    )
+    if not os.path.isdir(round_folder_path):
+        print(f"ERROR Could not find form_jsons at {round_folder_path}")
+
+    path_with_lang = os.path.join(round_folder_path, lang)
+    if not os.path.isdir(path_with_lang):
+        return round_folder_path
+    else:
+        return path_with_lang
 
 
 def determine_if_just_html_start_page(components):

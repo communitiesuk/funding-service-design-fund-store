@@ -11,13 +11,8 @@ from db.queries import (  # noqa: E402
 )  # noqa: E402
 from app import create_app  # noqa: E402
 from airium import Airium  # noqa: E402
-import os.path  # noqa: E402
-import json  # noqa: E402
-from bs4 import BeautifulSoup  # noqa: E402
 from scripts.read_forms import (  # noqa: E402
-    increment_lowest_in_hierarchy,
-    remove_lowest_in_hierarchy,  # noqa: E402
-    strip_leading_numbers,  # noqa: E402
+    find_forms_dir,
 )  # , build_form  # noqa: E402
 from scripts.all_questions.metadata_utils import (  # noqa: E402
     generate_section_headings,
@@ -57,224 +52,65 @@ def print_html_toc(air: Airium, sections: dict):
                     air(details["title_text"])
 
 
-def find_forms_dir(path_to_form_jsons, fund_short_name, round_short_name, lang):
-    round_folder_path = os.path.join(
-        path_to_form_jsons,
-        f"{fund_short_name.casefold()}_{round_short_name.casefold()}",
-    )
-    if not os.path.isdir(round_folder_path):
-        print(f"ERROR Could not find form_jsons at {round_folder_path}")
+# def build_questions_for_form(air: Airium, form_name: str, path_to_forms: str):
+#     path_to_form = os.path.join(path_to_forms, f"{form_name}.json")
+#     with open(path_to_form, "r") as f:
+#         form_data = json.load(f)
 
-    path_with_lang = os.path.join(round_folder_path, lang)
-    if not os.path.isdir(path_with_lang):
-        return round_folder_path
-    else:
-        return path_with_lang
+#     pages = {}
+#     index = 1
+#     start_page = form_data["startPage"]
+#     first_page = next(p for p in form_data["pages"] if p["path"] == start_page)
+#     is_just_html_start_page = all(
+#         [
+#             (c["type"].casefold() == "para" or c["type"].casefold() == "html")
+#             for c in first_page["components"]
+#         ]
+#     )
+#     if is_just_html_start_page:
+#         real_first_page_path = first_page["next"][0]["path"]
+#         real_first_page = next(
+#             p for p in form_data["pages"] if p["path"] == real_first_page_path
+#         )
+#         form_first_page = {
+#             "title": real_first_page["title"],
+#             "components": build_components_from_page(
+#                 real_first_page, include_html_components=False
+#             ),
+#         }
+#     else:
+#         form_first_page = {
+#             "title": first_page["title"],
+#             "components": build_components_from_page(
+#                 first_page, include_html_components=True
+#             ),
+#         }
+#     for p in form_data["pages"]:
+#         if p["path"] == "/summary" or p["path"] == start_page:
+#             continue
+#         components = build_components_from_page(p)
 
-
-def build_section_header(section: Section, lang="en"):
-    title = section.title_json[lang]
-    title = strip_leading_numbers(title)
-    anchor = title.casefold().replace(" ", "-")
-    return anchor, title
-
-
-def build_components_from_page(p, include_html_components=True):
-    components = []
-    for c in p["components"]:
-        text = []
-        if (
-            include_html_components
-            and ("type" in c)
-            and (c["type"].casefold() == "html" or c["type"].casefold() == "para")
-        ):
-            text = [c["content"]]
-        elif "hint" in c:
-            soup = BeautifulSoup(c["hint"], "html.parser")
-            text = [e.text for e in soup.children]
-        component = {
-            "title": c["title"] if "title" in c else None,
-            "text": text,
-            "hide_title": c["options"]["hideTitle"]
-            if "hideTitle" in c["options"]
-            else False,
-        }
-        components.append(component)
-    return components
-
-
-def build_questions_for_form(air: Airium, form_name: str, path_to_forms: str):
-    path_to_form = os.path.join(path_to_forms, f"{form_name}.json")
-    with open(path_to_form, "r") as f:
-        form_data = json.load(f)
-
-    pages = {}
-    index = 1
-    start_page = form_data["startPage"]
-    first_page = next(p for p in form_data["pages"] if p["path"] == start_page)
-    is_just_html_start_page = all(
-        [
-            (c["type"].casefold() == "para" or c["type"].casefold() == "html")
-            for c in first_page["components"]
-        ]
-    )
-    if is_just_html_start_page:
-        real_first_page_path = first_page["next"][0]["path"]
-        real_first_page = next(
-            p for p in form_data["pages"] if p["path"] == real_first_page_path
-        )
-        form_first_page = {
-            "title": real_first_page["title"],
-            "components": build_components_from_page(
-                real_first_page, include_html_components=False
-            ),
-        }
-    else:
-        form_first_page = {
-            "title": first_page["title"],
-            "components": build_components_from_page(
-                first_page, include_html_components=True
-            ),
-        }
-    for p in form_data["pages"]:
-        if p["path"] == "/summary" or p["path"] == start_page:
-            continue
-        components = build_components_from_page(p)
-
-        page = {"title": p["title"], "components": components}
-        pages[index] = page
-        index += 1
-    return form_first_page, pages
+#         page = {"title": p["title"], "components": components}
+#         pages[index] = page
+#         index += 1
+#     return form_first_page, pages
 
 
 def print_components(air: Airium, components: list, level_above):
-    idx_component = 1
     for c in components:
         if not c["hide_title"] and c["title"] is not None:
             with air.h4(klass="govuk-heading-s"):
-                air(f"{level_above}{idx_component}. {c['title']}")
+                air(f"{c['title']}")
 
         for t in c["text"]:
-            with air.p(klass="govuk-body"):
-                air(t)
-
-
-def print_html_for_page(
-    air: Airium,
-    page,
-    form_metadata,
-    this_idx,
-    form_json_page,
-    page_index,
-    parent_hierarchy_level,
-    pages_to_do,
-    is_form_heading,
-    place_in_siblings_list,
-    index_of_printed_headers,
-):
-    page_path = page["path"]
-    # If we've already done this page, don't do it again
-    if page_path not in pages_to_do:
-        return
-
-    title = strip_leading_numbers(form_json_page["title"])
-
-    level_in_hrch = page_index[page_path]
-    hierarchy_difference = level_in_hrch - parent_hierarchy_level
-
-    # If we are going up a level in the hierarchy, and this isn't the last branch
-    # that goes there, don't do it yet
-    all_siblings = set(
-        prev for prev in page["direct_next_of_direct_previous"] if prev != page_path
-    )
-    if pages_to_do.intersection(all_siblings) and hierarchy_difference < 0:
-        return
-
-    if (
-        pages_to_do.intersection(page["all_direct_previous"])
-        and hierarchy_difference < 0
-    ):
-        return
-
-    base_heading_number = this_idx
-    if hierarchy_difference < 0:
-        # go back a level
-        base_heading_number = remove_lowest_in_hierarchy(base_heading_number)
-    elif hierarchy_difference > 0:
-        # increase level
-        base_heading_number = f"{this_idx}.{place_in_siblings_list}"
-
-    new_heading_number = increment_lowest_in_hierarchy(base_heading_number)
-    index_of_printed_headers[page_path] = new_heading_number
-
-    if is_form_heading:
-        with air.h3(klass="govuk-heading-m"):
-            air(f"{new_heading_number}. {title}")
-
-    else:
-        with air.h4(klass="govuk-heading-s"):
-            air(f"{new_heading_number}. {title}")
-    pages_to_do.remove(page_path)
-
-    sibling_tracker = 0
-    for next_page_path in page["next_paths"]:
-        next_page = next(
-            p for p in form_metadata["all_pages"] if p["path"] == next_page_path
-        )
-        next_form_json_page = next(
-            p
-            for p in form_metadata["full_json"]["pages"]
-            if p["path"] == next_page_path
-        )
-        print_html_for_page(
-            air=air,
-            page=next_page,
-            form_metadata=form_metadata,
-            this_idx=new_heading_number,
-            form_json_page=next_form_json_page,
-            page_index=page_index,
-            parent_hierarchy_level=level_in_hrch,
-            pages_to_do=pages_to_do,
-            is_form_heading=False,
-            place_in_siblings_list=sibling_tracker,
-            index_of_printed_headers=index_of_printed_headers,
-        )
-        sibling_tracker += 1
-
-
-def print_html_for_form(air: Airium, section_idx: int, form_metadata):
-    pages_to_do = set(
-        p["path"] for p in form_metadata["all_pages"] if p["path"] != "/summary"
-    )
-    start_page_path = form_metadata["start_page"]
-    index = form_metadata["index"]
-    index_of_printed_headers = {}
-    start_page = next(
-        p for p in form_metadata["all_pages"] if p["path"] == start_page_path
-    )
-    form_json_page = next(
-        p for p in form_metadata["full_json"]["pages"] if p["path"] == start_page_path
-    )
-
-    # title = strip_leading_numbers(form_json_page["title"])
-    # with air.h3(klass="govuk-heading-m"):
-    #     air(f"{section_idx}. {title}")
-
-    # idx = increment_lowest_in_hierarchy(f"{section_idx}.0")
-    current_hierarchy_level = 0
-    print_html_for_page(
-        air,
-        start_page,
-        form_metadata,
-        this_idx=section_idx,
-        form_json_page=form_json_page,
-        page_index=index,
-        parent_hierarchy_level=current_hierarchy_level,
-        pages_to_do=pages_to_do,
-        is_form_heading=True,
-        place_in_siblings_list=0,
-        index_of_printed_headers=index_of_printed_headers,
-    )
+            if isinstance(t, list):
+                with air.ul(klass="govuk-list govuk-list--bullet"):
+                    for bullet in t:
+                        with air.li(klass=""):
+                            air(bullet)
+            else:
+                with air.p(klass="govuk-body"):
+                    air(t)
 
 
 def print_html(sections: dict, lang) -> str:
@@ -305,10 +141,7 @@ def print_html(sections: dict, lang) -> str:
                     with air.h4(klass="govuk-heading-s"):
                         air(f"{header_info['heading_number']}. {header_info['title']}")
 
-            # form_idx = f"{idx_section}.0"
-            # for form in details["forms"]:
-            #     form_idx = increment_lowest_in_hierarchy(form_idx)
-            # print_html_for_form(air, idx_section, form)
+                print_components(air, header_info["components"], 0)
 
             idx_section += 1
 

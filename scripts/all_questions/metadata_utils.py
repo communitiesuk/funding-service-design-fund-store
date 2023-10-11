@@ -2,7 +2,9 @@ import copy
 import json
 import os
 
+from bs4 import BeautifulSoup
 from db.models.section import Section
+from scripts.read_forms import determine_if_just_html_start_page
 from scripts.read_forms import increment_lowest_in_hierarchy
 from scripts.read_forms import remove_lowest_in_hierarchy
 from scripts.read_forms import strip_leading_numbers
@@ -131,6 +133,46 @@ def generate_index(page, results: dict, idx, all_pages, start_page=False):
         generate_index(next_page, results, next_idx, all_pages)
 
 
+def build_components_from_page(
+    full_page_json, include_html_components=True, form_lists=[]
+):
+    components = []
+    for c in full_page_json["components"]:
+        text = []
+        # skip details, eg about-your-org-cyp GNpQfE
+        if c["type"].casefold() == "details":
+            continue
+
+        # Skip pages that are just html, eg about-your-org-cyp uLwBuz
+        if (
+            include_html_components
+            and ("type" in c)
+            and (c["type"].casefold() == "html" or c["type"].casefold() == "para")
+        ):
+            text = [c["content"]]
+        elif "hint" in c:
+            soup = BeautifulSoup(c["hint"], "html.parser")
+            text = [e.text for e in soup.children]
+        if "list" in c:  # and "lists" in full_page_json:
+            # include available options for lists
+            list_id = c["list"]
+            list_items = next(
+                list["items"] for list in form_lists if list["name"] == list_id
+            )
+            list_display = [item["text"] for item in list_items]
+            text.append(list_display)
+
+        component = {
+            "title": c["title"] if "title" in c else None,
+            "text": text,
+            "hide_title": c["options"]["hideTitle"]
+            if "hideTitle" in c["options"]
+            else False,
+        }
+        components.append(component)
+    return components
+
+
 def generate_print_headings_for_page(
     page,
     form_metadata,
@@ -142,6 +184,7 @@ def generate_print_headings_for_page(
     is_form_heading,
     place_in_siblings_list,
     index_of_printed_headers,
+    form_lists,
 ):
     page_path = page["path"]
     # If we've already done this page, don't do it again
@@ -177,10 +220,19 @@ def generate_print_headings_for_page(
             base_heading_number = f"{this_idx}.{place_in_siblings_list}"
 
     new_heading_number = increment_lowest_in_hierarchy(base_heading_number)
+
+    component_display = build_components_from_page(
+        full_page_json=form_json_page,
+        include_html_components=(
+            not determine_if_just_html_start_page(form_json_page["components"])
+        ),
+        form_lists=form_lists,
+    )
     index_of_printed_headers[page_path] = {
         "heading_number": new_heading_number,
         "is_form_heading": is_form_heading,
         "title": title,
+        "components": component_display,
     }
     pages_to_do.remove(page_path)
 
@@ -205,6 +257,7 @@ def generate_print_headings_for_page(
             is_form_heading=False,
             place_in_siblings_list=sibling_tracker,
             index_of_printed_headers=index_of_printed_headers,
+            form_lists=form_lists,
         )
         sibling_tracker += 1
 
@@ -235,6 +288,7 @@ def generate_print_headers_for_form(section_idx: int, form_metadata, form_idx):
         is_form_heading=True,
         place_in_siblings_list=0,
         index_of_printed_headers=index_of_printed_headers,
+        form_lists=form_metadata["full_json"]["lists"],
     )
     return index_of_printed_headers
 
