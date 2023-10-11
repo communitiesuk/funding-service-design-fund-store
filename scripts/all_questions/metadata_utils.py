@@ -260,6 +260,11 @@ def generate_section_headings(
         for child_form in section.children:
             form_name = child_form.form_name[0].form_name_json[lang]
             path_to_form = os.path.join(path_to_form_jsons, f"{form_name}.json")
+            # Some forms live in the generic folder rather than fund-round specific
+            if not os.path.exists(path_to_form):
+                path_to_form = os.path.join(
+                    path_to_form_jsons, "..", "generic", f"{form_name}.json"
+                )
             with open(path_to_form, "r") as f:
                 form_data = json.load(f)
                 form_metadata = generate_metadata(form_data)
