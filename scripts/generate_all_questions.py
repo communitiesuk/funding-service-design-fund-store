@@ -11,7 +11,7 @@ from db.queries import (  # noqa: E402
 )  # noqa: E402
 from app import create_app  # noqa: E402
 from airium import Airium  # noqa: E402
-from scripts.read_forms import (  # noqa: E402
+from scripts.all_questions.read_forms import (  # noqa: E402
     find_forms_dir,
 )  # , build_form  # noqa: E402
 from scripts.all_questions.metadata_utils import (  # noqa: E402
@@ -50,50 +50,6 @@ def print_html_toc(air: Airium, sections: dict):
             with air.li():
                 with air.a(klass="govuk-link", href=f"#{anchor}"):
                     air(details["title_text"])
-
-
-# def build_questions_for_form(air: Airium, form_name: str, path_to_forms: str):
-#     path_to_form = os.path.join(path_to_forms, f"{form_name}.json")
-#     with open(path_to_form, "r") as f:
-#         form_data = json.load(f)
-
-#     pages = {}
-#     index = 1
-#     start_page = form_data["startPage"]
-#     first_page = next(p for p in form_data["pages"] if p["path"] == start_page)
-#     is_just_html_start_page = all(
-#         [
-#             (c["type"].casefold() == "para" or c["type"].casefold() == "html")
-#             for c in first_page["components"]
-#         ]
-#     )
-#     if is_just_html_start_page:
-#         real_first_page_path = first_page["next"][0]["path"]
-#         real_first_page = next(
-#             p for p in form_data["pages"] if p["path"] == real_first_page_path
-#         )
-#         form_first_page = {
-#             "title": real_first_page["title"],
-#             "components": build_components_from_page(
-#                 real_first_page, include_html_components=False
-#             ),
-#         }
-#     else:
-#         form_first_page = {
-#             "title": first_page["title"],
-#             "components": build_components_from_page(
-#                 first_page, include_html_components=True
-#             ),
-#         }
-#     for p in form_data["pages"]:
-#         if p["path"] == "/summary" or p["path"] == start_page:
-#             continue
-#         components = build_components_from_page(p)
-
-#         page = {"title": p["title"], "components": components}
-#         pages[index] = page
-#         index += 1
-#     return form_first_page, pages
 
 
 def print_components(air: Airium, components: list, level_above):
@@ -145,41 +101,6 @@ def print_html(sections: dict, lang) -> str:
 
             idx_section += 1
 
-            continue
-            # idx_form = 1
-            # for child_form in section_children[anchor]:
-            #     # form_name = child_form.form_name[0].form_name_json[lang]
-
-            #     form_index = (
-            #         {}
-            #     )  # build_form(form_name=form_name, path_to_forms=forms_dir)
-
-            #     for page_idx, page in form_index.items():
-            #         if page_idx == 1:
-            #             with air.h3(klass="govuk-heading-m"):
-            #                 air(f"{idx_section}.{idx_form}. {page['page_title']}")
-            #         else:
-            #             with air.h4(klass="govuk-heading-s"):
-            #                 air(
-            #                     f"{idx_section}.{idx_form}.{page_idx}."
-            #                     f" {page['page_title']}"
-            #                 )
-
-            #         print_components(air, page["page_children"], 0)
-            #         # print page["page_children"]
-
-            #     # form_first_page, pages = build_questions_for_form(air, form_name, forms_dir)
-            #     # with air.h3(klass="govuk-heading-m"):
-            #     #     air(f"{idx_section}.{idx_form}. {form_first_page['title']}")
-            #     # print_components(air, form_first_page["components"], f"{idx_section}.{idx_form}.")
-            #     # for idx_page, page in pages.items():
-            #     #     with air.h4(klass="govuk-heading-s"):
-            #     #         air(f"{idx_section}.{idx_form}.{idx_page}. {page['title']}")
-            #     #     print_components(air,page["components"], f"{idx_section}.{idx_form}.{idx_page}.")
-            #     idx_form += 1
-
-            idx_section += 1
-
     html = f"{BOILERPLATE_START}{str(air)}{BOILERPLATE_END}"
     print(html)
     return html
@@ -221,7 +142,6 @@ def generate_all_questions(
             round.fund_id, round.id
         )
 
-        # section_headers = build_section_headers(sections, lang)
         path_to_form_jsons = find_forms_dir(
             forms_dir, fund_short_code, round_short_code, lang
         )
@@ -229,39 +149,6 @@ def generate_all_questions(
         section_map = generate_section_headings(
             sections=sections, path_to_form_jsons=path_to_form_jsons, lang=lang
         )
-        # {}
-
-        # for section in sections:
-        #     anchor, text = build_section_header(section, lang=lang)
-        #     form_metadatas = []
-        #     for child_form in section.children:
-        #         form_name = child_form.form_name[0].form_name_json[lang]
-        #         path_to_form = os.path.join(path_to_form_jsons, f"{form_name}.json")
-        #         with open(path_to_form, "r") as f:
-        #             form_data = json.load(f)
-        #             form_metadata = generate_metadata(form_data)
-        #             form_print_headings = generate_print_headers_for_form()
-        #             form_index = {}
-
-        #             first_page = next(
-        #                 p
-        #                 for p in form_metadata["all_pages"]
-        #                 if p["path"] == form_metadata["start_page"]
-        #             )
-        #             generate_index(
-        #                 page=first_page,
-        #                 results=form_index,
-        #                 idx=1,
-        #                 all_pages=form_metadata["all_pages"],
-        #                 start_page=True,
-        #             )
-        #             form_metadata["index"] = form_index
-        #             form_metadata["full_json"] = form_data
-        #             form_metadatas.append(form_metadata)
-        #     section_map[anchor] = {
-        #         "title_text": text,
-        #         "forms": form_metadatas,
-        #     }
 
         html_str = print_html(
             sections=section_map,

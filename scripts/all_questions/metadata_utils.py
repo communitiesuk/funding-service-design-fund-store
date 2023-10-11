@@ -4,10 +4,11 @@ import os
 
 from bs4 import BeautifulSoup
 from db.models.section import Section
-from scripts.read_forms import determine_if_just_html_start_page
-from scripts.read_forms import increment_lowest_in_hierarchy
-from scripts.read_forms import remove_lowest_in_hierarchy
-from scripts.read_forms import strip_leading_numbers
+from scripts.all_questions.read_forms import determine_display_value_for_condition
+from scripts.all_questions.read_forms import determine_if_just_html_start_page
+from scripts.all_questions.read_forms import increment_lowest_in_hierarchy
+from scripts.all_questions.read_forms import remove_lowest_in_hierarchy
+from scripts.all_questions.read_forms import strip_leading_numbers
 
 
 def get_all_child_nexts(page, child_nexts, all_pages):
@@ -134,8 +135,19 @@ def generate_index(page, results: dict, idx, all_pages, start_page=False):
 
 
 def build_components_from_page(
-    full_page_json, include_html_components=True, form_lists=[]
+    full_page_json,
+    include_html_components=True,
+    form_lists=[],
+    page_metadata={},
+    form_conditions=[],
+    index_of_printed_headers={},
 ):
+    components_with_conditions = []
+    for condition in form_conditions:
+        components_with_conditions.extend(
+            [value["field"]["name"] for value in condition["value"]["conditions"]]
+        )
+
     components = []
     for c in full_page_json["components"]:
         text = []
@@ -153,7 +165,8 @@ def build_components_from_page(
         elif "hint" in c:
             soup = BeautifulSoup(c["hint"], "html.parser")
             text = [e.text for e in soup.children]
-        if "list" in c:  # and "lists" in full_page_json:
+
+        if "list" in c:
             # include available options for lists
             list_id = c["list"]
             list_items = next(
@@ -161,6 +174,32 @@ def build_components_from_page(
             )
             list_display = [item["text"] for item in list_items]
             text.append(list_display)
+
+        # If there are multiple options for the next page, include text about where to go next
+        if c["name"] in components_with_conditions:  # len(full_page_json["next"]) > 1:
+
+            # possible alternative approach if in fact not all conditions are meant to be listed
+            # for condition in form_conditions:
+            #     if c["name"] in [value["field"]["name"] for value in condition["value"]["conditions"]]:
+
+            for next_config in full_page_json["next"]:
+                if "condition" in next_config and next_config["path"] != "/summary":
+                    condition_name = next_config["condition"]
+                    condition_config = next(
+                        fc for fc in form_conditions if fc["name"] == condition_name
+                    )
+                    destination = index_of_printed_headers[next_config["path"]][
+                        "heading_number"
+                    ]
+                    # TODO use next to get correct condition instead of 0, use field name
+                    condition_text = determine_display_value_for_condition(
+                        condition_config["value"]["conditions"][0]["value"]["value"],
+                        list_name=c["list"] if "list" in c else None,
+                        form_lists=form_lists,
+                    )
+                    text.append(
+                        f"If '{condition_text}', go to <strong>{destination}</strong>"
+                    )
 
         component = {
             "title": c["title"] if "title" in c else None,
@@ -221,18 +260,11 @@ def generate_print_headings_for_page(
 
     new_heading_number = increment_lowest_in_hierarchy(base_heading_number)
 
-    component_display = build_components_from_page(
-        full_page_json=form_json_page,
-        include_html_components=(
-            not determine_if_just_html_start_page(form_json_page["components"])
-        ),
-        form_lists=form_lists,
-    )
     index_of_printed_headers[page_path] = {
         "heading_number": new_heading_number,
         "is_form_heading": is_form_heading,
         "title": title,
-        "components": component_display,
+        # "components": component_display,
     }
     pages_to_do.remove(page_path)
 
@@ -290,6 +322,23 @@ def generate_print_headers_for_form(section_idx: int, form_metadata, form_idx):
         index_of_printed_headers=index_of_printed_headers,
         form_lists=form_metadata["full_json"]["lists"],
     )
+    for page_path in index_of_printed_headers.keys():
+        full_json_page = next(
+            p for p in form_metadata["full_json"]["pages"] if p["path"] == page_path
+        )
+        component_display = build_components_from_page(
+            full_page_json=full_json_page,
+            include_html_components=(
+                not determine_if_just_html_start_page(full_json_page["components"])
+            ),
+            form_lists=form_metadata["full_json"]["lists"],
+            page_metadata=next(
+                p for p in form_metadata["all_pages"] if p["path"] == page_path
+            ),
+            form_conditions=form_metadata["full_json"]["conditions"],
+            index_of_printed_headers=index_of_printed_headers,
+        )
+        index_of_printed_headers[page_path]["components"] = component_display
     return index_of_printed_headers
 
 

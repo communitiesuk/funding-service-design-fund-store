@@ -11,15 +11,16 @@ from scripts.all_questions.metadata_utils import build_components_from_page
 from scripts.all_questions.metadata_utils import build_section_header
 from scripts.all_questions.metadata_utils import generate_index
 from scripts.all_questions.metadata_utils import generate_metadata
+from scripts.all_questions.read_forms import increment_lowest_in_hierarchy
+from scripts.all_questions.read_forms import remove_lowest_in_hierarchy
+from scripts.all_questions.read_forms import strip_leading_numbers
 from scripts.generate_all_questions import find_forms_dir
-from scripts.read_forms import increment_lowest_in_hierarchy
-from scripts.read_forms import remove_lowest_in_hierarchy
-from scripts.read_forms import strip_leading_numbers
 
 
 metadata_path = "/Users/sarahsloan/dev/temp/metadata_org_info_cof_r3w2.json"
 
 
+@pytest.mark.skip(reason="TDD")
 def test_generate_metadata():
     path_to_form = (
         "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
@@ -32,6 +33,7 @@ def test_generate_metadata():
         json.dump(metadata, f)
 
 
+@pytest.mark.skip(reason="TDD")
 def test_generate_test_data():
     output_folder = "/Users/sarahsloan/dev/temp/"
     files_to_generate = [START_TO_MAIN_ACTIVITIES, HOW_IS_ORG_CLASSIFIED, JOINT_BID]
