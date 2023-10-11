@@ -7,9 +7,10 @@ from scripts.all_questions.generate_test_data import generate_test_data
 from scripts.all_questions.generate_test_data import HOW_IS_ORG_CLASSIFIED
 from scripts.all_questions.generate_test_data import JOINT_BID
 from scripts.all_questions.generate_test_data import START_TO_MAIN_ACTIVITIES
+from scripts.all_questions.metadata_utils import build_components_from_page
+from scripts.all_questions.metadata_utils import build_section_header
 from scripts.all_questions.metadata_utils import generate_index
 from scripts.all_questions.metadata_utils import generate_metadata
-from scripts.generate_all_questions import build_section_header
 from scripts.generate_all_questions import find_forms_dir
 from scripts.read_forms import increment_lowest_in_hierarchy
 from scripts.read_forms import remove_lowest_in_hierarchy
@@ -302,3 +303,53 @@ def test_find_forms_dir_with_lang(tmp_path):
     os.mkdir(round_dir)
     result = find_forms_dir(temp_json_dir, "f1", "r1", "en")
     assert result == round_dir
+
+
+def test_generate_component_display_name_your_app():
+    with open(
+        "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
+        "fsd_config/form_jsons/generic/name-your-application.json",
+        "r",
+    ) as f:
+        form_json = json.load(f)
+    page_json = next(
+        p for p in form_json["pages"] if p["path"] == "/name-your-application"
+    )
+    components = build_components_from_page(page_json, include_html_components=True)
+    assert len(components) == 1
+    assert components[0]["title"] == "Name your application"
+
+
+def test_generate_component_display_about_your_org():
+    with open(
+        "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
+        "fsd_config/form_jsons/cyp_r1/about-your-organisation-cyp.json",
+        "r",
+    ) as f:
+        form_json = json.load(f)
+
+    # Test intro has no text
+    page_json = next(
+        p for p in form_json["pages"] if p["path"] == "/intro-about-your-organisation"
+    )
+    components = build_components_from_page(page_json, include_html_components=False)
+    assert len(components) == 1
+    assert components[0]["title"] is None
+    assert len(components[0]["text"]) == 0
+
+    # Test if for all options in how classified
+    page_json = next(
+        p
+        for p in form_json["pages"]
+        if p["path"] == "/how-is-your-organisation-classified"
+    )
+    components = build_components_from_page(
+        page_json, include_html_components=False, form_lists=form_json["lists"]
+    )
+
+    assert len(components) == 1
+    assert components[0]["hide_title"] is True
+    assert len(components[0]["text"]) == 2
+    assert components[0]["text"][0] == "Select one option"
+    assert isinstance(components[0]["text"][1], list)
+    assert len(components[0]["text"][1]) == 6
