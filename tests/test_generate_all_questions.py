@@ -355,3 +355,21 @@ def test_generate_component_display_about_your_org():
     assert components[0]["text"][0] == "Select one option"
     assert isinstance(components[0]["text"][1], list)
     assert len(components[0]["text"][1]) == 6
+
+
+def test_bullets_in_hint():
+    with open(
+        "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
+        "fsd_config/form_jsons/dpif_r2/your-skills-and-experience-dpi.json",
+        "r",
+    ) as f:
+        form_json = json.load(f)
+
+    # Test intro has no text
+    page_json = next(
+        p for p in form_json["pages"] if p["path"] == "/similar-previous-projects"
+    )
+    components = build_components_from_page(page_json, include_html_components=False)
+    assert len(components) == 1
+    assert len(components[0]["text"]) == 2
+    assert len(components[0]["text"][1]) == 3

@@ -3,6 +3,7 @@ import json
 import os
 
 from bs4 import BeautifulSoup
+from bs4 import NavigableString
 from db.models.section import Section
 from scripts.all_questions.read_forms import determine_display_value_for_condition
 from scripts.all_questions.read_forms import determine_if_just_html_start_page
@@ -134,6 +135,48 @@ def generate_index(page, results: dict, idx, all_pages, start_page=False):
         generate_index(next_page, results, next_idx, all_pages)
 
 
+def strip_string_and_append_if_not_empty(string_to_check: str, list_to_append: list):
+    """Uses `str.strip()` to remove leading/trailing whitespace from `string_to_check`.
+    If the resulting string is not empty, appends this to `list_to_append`
+
+    Args:
+        string_to_check (str): String to strip and append
+        list_to_append (list): List to append to
+    """
+    stripped = string_to_check.strip()
+    if stripped:
+        list_to_append.append(stripped)
+
+
+def extract_from_html(soup, results: list):
+    """
+    Takes in a BeautifulSoup element, recursively iterates through it's children to generate text items
+    for rendering in the all questions page.
+
+    Any non-empty strings are stripped of leading/trailing spaces etc and appended to `results`.
+    Any <ul> elements have their child <li> elements put into a separate list and that list is appended to `results`
+
+    Args:
+        soup (_type_): HTML to extract from
+        results (list): results to append to
+    """
+    for element in soup.children:
+        # If it's just a string, append that text
+        if isinstance(element, NavigableString):
+            strip_string_and_append_if_not_empty(element.text, results)
+            continue
+
+        # If it's a list, append the list items as another list
+        if element.name == "ul":
+            bullets = []
+            for li in element.children:
+                strip_string_and_append_if_not_empty(li.text, bullets)
+            results.append(bullets)
+            continue
+
+        extract_from_html(element, results)
+
+
 def build_components_from_page(
     full_page_json,
     include_html_components=True,
@@ -164,7 +207,8 @@ def build_components_from_page(
             text = [c["content"]]
         elif "hint" in c:
             soup = BeautifulSoup(c["hint"], "html.parser")
-            text = [e.text for e in soup.children]
+            text = []
+            extract_from_html(soup, text)
 
         if "list" in c:
             # include available options for lists

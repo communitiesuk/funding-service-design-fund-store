@@ -55,7 +55,7 @@ def print_html_toc(air: Airium, sections: dict):
 def print_components(air: Airium, components: list, level_above):
     for c in components:
         if not c["hide_title"] and c["title"] is not None:
-            with air.h4(klass="govuk-heading-s"):
+            with air.p(klass="govuk-body"):
                 air(f"{c['title']}")
 
         for t in c["text"]:
@@ -107,8 +107,8 @@ def print_html(sections: dict, lang) -> str:
 
 
 @click.command()
-@click.option("--fund_short_code", default="CYP", help="Fund short code", prompt=True)
-@click.option("--round_short_code", default="R1", help="Round short code", prompt=True)
+@click.option("--fund_short_code", default="DPIF", help="Fund short code", prompt=True)
+@click.option("--round_short_code", default="R2", help="Round short code", prompt=True)
 @click.option(
     "--lang",
     default="en",
