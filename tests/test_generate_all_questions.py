@@ -8,8 +8,8 @@ from scripts.all_questions.generate_test_data import HOW_IS_ORG_CLASSIFIED
 from scripts.all_questions.generate_test_data import JOINT_BID
 from scripts.all_questions.generate_test_data import START_TO_MAIN_ACTIVITIES
 from scripts.all_questions.metadata_utils import build_components_from_page
+from scripts.all_questions.metadata_utils import build_hierarchy_levels_for_page
 from scripts.all_questions.metadata_utils import build_section_header
-from scripts.all_questions.metadata_utils import generate_index
 from scripts.all_questions.metadata_utils import generate_metadata
 from scripts.all_questions.read_forms import increment_lowest_in_hierarchy
 from scripts.all_questions.read_forms import remove_lowest_in_hierarchy
@@ -54,7 +54,9 @@ def test_generate_index_org_info_cof_r3w2():
     first_page = next(
         p for p in form_data["all_pages"] if p["path"] == form_data["start_page"]
     )
-    generate_index(first_page, results, 1, form_data["all_pages"], start_page=True)
+    build_hierarchy_levels_for_page(
+        first_page, results, 1, form_data["all_pages"], start_page=True
+    )
 
     assert len(results) == 18
     org_details_level = results["/organisation-names"]
@@ -85,7 +87,7 @@ def test_generate_index_applicant_ns():
     first_page = next(
         p for p in form_data["all_pages"] if p["path"] == form_data["start_page"]
     )
-    generate_index(first_page, results, 1, form_data["all_pages"])
+    build_hierarchy_levels_for_page(first_page, results, 1, form_data["all_pages"])
 
     assert len(results) == 4
     start_level = results["/13-applicant-information"]
@@ -103,7 +105,7 @@ def test_generate_index_risk_cyp():
     first_page = next(
         p for p in form_data["all_pages"] if p["path"] == form_data["start_page"]
     )
-    generate_index(first_page, results, 1, form_data["all_pages"])
+    build_hierarchy_levels_for_page(first_page, results, 1, form_data["all_pages"])
 
     assert len(results) == 5
     start_level = results["/intro-risk-and-deliverability"]
@@ -120,7 +122,7 @@ def test_generate_index_name_app_cyp():
     first_page = next(
         p for p in form_data["all_pages"] if p["path"] == form_data["start_page"]
     )
-    generate_index(first_page, results, 1, form_data["all_pages"])
+    build_hierarchy_levels_for_page(first_page, results, 1, form_data["all_pages"])
 
     assert len(results) == 2
     start_level = results["/name-your-application"]
@@ -136,7 +138,7 @@ def test_generate_index_branch_out_multi_pages_back_to_parent_sibling():
     first_page = next(
         p for p in form_data["all_pages"] if p["path"] == form_data["start_page"]
     )
-    generate_index(first_page, results, 1, form_data["all_pages"])
+    build_hierarchy_levels_for_page(first_page, results, 1, form_data["all_pages"])
 
     assert len(results) == 5
     start_level = results["/joint-bid"]
@@ -155,7 +157,7 @@ def test_generate_index_branch_out_all_back_to_new():
     first_page = next(
         p for p in form_data["all_pages"] if p["path"] == form_data["start_page"]
     )
-    generate_index(first_page, results, 1, form_data["all_pages"])
+    build_hierarchy_levels_for_page(first_page, results, 1, form_data["all_pages"])
 
     assert len(results) == 5
     start_level = results["/how-is-your-organisation-classified"]
@@ -174,7 +176,7 @@ def test_generate_index_simple_branch():
     first_page = next(
         p for p in form_data["all_pages"] if p["path"] == form_data["start_page"]
     )
-    generate_index(first_page, results, 1, form_data["all_pages"])
+    build_hierarchy_levels_for_page(first_page, results, 1, form_data["all_pages"])
 
     assert len(results) == 4
     org_details_level = results["/organisation-details"]
@@ -194,7 +196,9 @@ def test_generate_index_about_your_org_cyp():
     first_page = next(
         p for p in form_data["all_pages"] if p["path"] == form_data["start_page"]
     )
-    generate_index(first_page, results, 1, form_data["all_pages"], start_page=True)
+    build_hierarchy_levels_for_page(
+        first_page, results, 1, form_data["all_pages"], start_page=True
+    )
 
     assert len(results) == 16
     org_details_level = results["/organisation-details"]
@@ -322,7 +326,7 @@ def test_generate_component_display_name_your_app():
     assert components[0]["title"] == "Name your application"
 
 
-def test_generate_component_display_about_your_org():
+def test_build_components_empty_text_and_title():
     with open(
         "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
         "fsd_config/form_jsons/cyp_r1/about-your-organisation-cyp.json",
@@ -339,6 +343,15 @@ def test_generate_component_display_about_your_org():
     assert components[0]["title"] is None
     assert len(components[0]["text"]) == 0
 
+
+def test_build_components_include_options_from_radios_and_branching_text():
+    with open(
+        "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
+        "fsd_config/form_jsons/cyp_r1/about-your-organisation-cyp.json",
+        "r",
+    ) as f:
+        form_json = json.load(f)
+
     # Test if for all options in how classified
     page_json = next(
         p
@@ -346,18 +359,27 @@ def test_generate_component_display_about_your_org():
         if p["path"] == "/how-is-your-organisation-classified"
     )
     components = build_components_from_page(
-        page_json, include_html_components=False, form_lists=form_json["lists"]
+        page_json,
+        include_html_components=False,
+        form_lists=form_json["lists"],
+        form_conditions=form_json["conditions"],
+        index_of_printed_headers={
+            "/how-is-your-organisation-classified-other": {"heading_number": "1"},
+            "/charity-number": {"heading_number": "2"},
+            "/company-registration-number": {"heading_number": "3"},
+        },
     )
 
     assert len(components) == 1
     assert components[0]["hide_title"] is True
-    assert len(components[0]["text"]) == 2
+    assert len(components[0]["text"]) == 4
     assert components[0]["text"][0] == "Select one option"
     assert isinstance(components[0]["text"][1], list)
     assert len(components[0]["text"][1]) == 6
+    assert components[0]["text"][2] == "If 'Other', go to <strong>1</strong>"
 
 
-def test_bullets_in_hint():
+def test_build_components_bullets_in_hint():
     with open(
         "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
         "fsd_config/form_jsons/dpif_r2/your-skills-and-experience-dpi.json",

@@ -5,22 +5,41 @@ import os
 from bs4 import BeautifulSoup
 from bs4 import NavigableString
 from db.models.section import Section
+from scripts.all_questions.read_forms import build_section_header
 from scripts.all_questions.read_forms import determine_display_value_for_condition
-from scripts.all_questions.read_forms import determine_if_just_html_start_page
+from scripts.all_questions.read_forms import determine_if_just_html_page
 from scripts.all_questions.read_forms import increment_lowest_in_hierarchy
 from scripts.all_questions.read_forms import remove_lowest_in_hierarchy
 from scripts.all_questions.read_forms import strip_leading_numbers
 
 
-def get_all_child_nexts(page, child_nexts, all_pages):
+def get_all_child_nexts(page: dict, child_nexts: list, all_pages: dict):
+    """Recursively builds a list of everything that could come next from this page,
+    and then everything that could come next from those next pages, and so on.
+
+
+    Args:
+        page (dict): _description_
+        child_nexts (list): _description_
+        all_pages (dict): _description_
+    """
+    # TODO write tests
     child_nexts.update([n for n in page["next_paths"]])
     for next_page_path in page["next_paths"]:
         next_page = next(p for p in all_pages if p["path"] == next_page_path)
         get_all_child_nexts(next_page, child_nexts, all_pages)
 
 
-def get_all_possible_previous(page_path, results, all_pages):
+def get_all_possible_previous(page_path: str, results: list, all_pages: dict):
+    """Recursively finds all pages that could have come before this one, in any branch of questions
 
+    Args:
+        page_path (str): _description_
+        results (list): _description_
+        all_pages (dict): _description_
+    """
+
+    # TODO write tests
     direct_prev = [
         prev["path"] for prev in all_pages if page_path in prev["next_paths"]
     ]
@@ -29,7 +48,46 @@ def get_all_possible_previous(page_path, results, all_pages):
         get_all_possible_previous(prev, results, all_pages)
 
 
-def generate_metadata(full_form_data):
+def generate_metadata(full_form_data: dict) -> dict:
+    """Generates metadata for a form. Basically a dict containing the following:
+    ```
+    {
+    "start_page": "/intro-about-your-organisation",
+    "all_pages": [
+        {
+            "path": "/organisation-details",
+            "next_paths": [
+                Everything that could come directly after this page
+            ],
+            "all_direct_previous": [
+                Everything that could come directly (immediately) before this page
+            ],
+            "direct_next_of_direct_previous": [
+                Everything that could come immediately after the pages that lead directly to this one
+                (ie this pages siblings)
+            ],
+            "all_possible_next_of_siblings": [
+                Everything that could come any point after any of this pages siblings
+            ],
+            "all_possible_previous": [
+                Everthing that could come at any point before this page
+            ],
+            "all_possible_previous_direct_next": [
+                Everything that could come anywhere before the pages that come directly after this one
+            ],
+            "all_possible_after": [
+                Everything that could come anywhere after this page
+            ]
+        },
+    ]
+    ```
+
+    Args:
+        full_form_data (dict): Data from the form json file
+
+    Returns:
+        dict: The metadata, as described above
+    """
 
     cutdown = {"start_page": full_form_data["startPage"], "all_pages": []}
     for page in full_form_data["pages"]:
@@ -72,7 +130,7 @@ def generate_metadata(full_form_data):
         )
         p["all_possible_previous"] = list(all_possible_previous)
 
-        # get everything that is directly after all the possible previos to this page
+        # get everything that is directly after all the possible previous to this page
         all_possible_previous_direct_next = set()
         for prev in p["all_possible_previous"]:
             prev_page = next(
@@ -91,11 +149,33 @@ def generate_metadata(full_form_data):
     return metadata
 
 
-def generate_index(page, results: dict, idx, all_pages, start_page=False):
+def build_hierarchy_levels_for_page(
+    page: dict, results: dict, idx: int, all_pages: dict, start_page: bool = False
+):
+    """Recursively builds up a dict containing the path of each page, and it's level in the hierarchy of the page
+    Format of results:
+    ```
+        {
+            "/path-to-page-1": 1,
+            "/path-to-sub-page": 2,
+            "/path-to-page-2": 1,
+            "/path-to-another-sub-page": 2,
+        }
+    ```
+
+    Args:
+        page (dict): Page object from metadata
+        results (dict): The dict that will store the hierarchy results
+        idx (int): The hierarchy level of this page at this point in the tree
+        all_pages (dict): All the pages in the form
+        start_page (bool, optional): Whether or not this is the first page in the form. Defaults to False.
+    """
     current_level_in_results = results.get(page["path"], 9999)
+    # We want the lowest level the page appears at, so only update if we are at it's lowest point
     if idx < current_level_in_results:
         results[page["path"]] = idx
 
+    # loop through every page that comes after this page
     for next_path in [n for n in page["next_paths"]]:
         # default is same level
         next_idx = idx
@@ -113,13 +193,12 @@ def generate_index(page, results: dict, idx, all_pages, start_page=False):
             next_idx = idx - 1
 
         # if this page and all it's siblings eventually go back to this same next page, go back a level
-        elif (
-            len(page["direct_next_of_direct_previous"]) <= 1
-        ):  # and page["direct_next_of_direct_previous"][0] == page["path"]:
+        elif len(page["direct_next_of_direct_previous"]) <= 1:
             pass
         elif len(next_page["all_direct_previous"]) == 1:
             pass
         else:
+            # Determine whether this next page is the return point for this page and all it's siblings
             is_in_descendents_of_all_siblings = True
             for sibling in page["direct_next_of_direct_previous"]:
                 # don't look at this page
@@ -132,7 +211,7 @@ def generate_index(page, results: dict, idx, all_pages, start_page=False):
             if is_in_descendents_of_all_siblings:
                 next_idx = idx - 1
 
-        generate_index(next_page, results, next_idx, all_pages)
+        build_hierarchy_levels_for_page(next_page, results, next_idx, all_pages)
 
 
 def strip_string_and_append_if_not_empty(string_to_check: str, list_to_append: list):
@@ -178,13 +257,35 @@ def extract_from_html(soup, results: list):
 
 
 def build_components_from_page(
-    full_page_json,
-    include_html_components=True,
-    form_lists=[],
-    page_metadata={},
-    form_conditions=[],
-    index_of_printed_headers={},
-):
+    full_page_json: dict,
+    include_html_components: bool = True,
+    form_lists: list = [],
+    form_conditions: list = [],
+    index_of_printed_headers: dict = {},
+) -> list:
+    """Builds a list of the components to display from this page, including their title and text, and
+        directional text on which page to go to next if the form branches from here
+
+    Args:
+        full_page_json (dict): This page from the form_jsons data
+        include_html_components (bool, optional): Whether or not to include components that are just HTML.
+            Defaults to True.
+        form_lists (list, optional): The lists that appear in this form. Defaults to [].
+        form_conditions (list, optional): The conditions that appear in this form. Defaults to [].
+        index_of_printed_headers (dict, optional): The set of pages and their numbers for display, used in
+            directing people to another section when branching. Defaults to {}.
+
+    Returns:
+        list: List of components to display, each component being a dict:
+            ```
+            {
+                "title": str,
+                "text": str,
+                "hide_title": bool
+            }
+            ```
+    """
+    # Find out which components in this page determine, through conditions, where we go next
     components_with_conditions = []
     for condition in form_conditions:
         components_with_conditions.extend(
@@ -220,11 +321,7 @@ def build_components_from_page(
             text.append(list_display)
 
         # If there are multiple options for the next page, include text about where to go next
-        if c["name"] in components_with_conditions:  # len(full_page_json["next"]) > 1:
-
-            # possible alternative approach if in fact not all conditions are meant to be listed
-            # for condition in form_conditions:
-            #     if c["name"] in [value["field"]["name"] for value in condition["value"]["conditions"]]:
+        if c["name"] in components_with_conditions:
 
             for next_config in full_page_json["next"]:
                 if "condition" in next_config and next_config["path"] != "/summary":
@@ -257,18 +354,39 @@ def build_components_from_page(
 
 
 def generate_print_headings_for_page(
-    page,
-    form_metadata,
-    this_idx,
-    form_json_page,
-    page_index,
-    parent_hierarchy_level,
-    pages_to_do,
-    is_form_heading,
-    place_in_siblings_list,
-    index_of_printed_headers,
-    form_lists,
+    page: dict,
+    form_metadata: dict,
+    this_idx: str,
+    form_json_page: dict,
+    page_index: dict,
+    parent_hierarchy_level: str,
+    pages_to_do: list,
+    place_in_siblings_list: int,
+    index_of_printed_headers: dict,
+    is_form_heading: bool = False,
 ):
+    """Generates the heading text and hierarchical number for this page and it's children
+
+    Args:
+        page (dict): This page from the metadata
+        form_metadata (dict): Full metadata for this form
+        this_idx (str): The heading number for the page that came before this one
+        form_json_page (dict): Full json for this page from the form json
+        page_index (dict): Hierarchy levels by page path
+        parent_hierarchy_level (str): Hierarchy level for the page that came before this one
+        pages_to_do (list): List of pages left to add to the results
+        place_in_siblings_list (int): Where this page is in a list of siblings, so multiple sub-pages
+            are numbered correctly
+        index_of_printed_headers (dict): Results are stored here as a dict:
+            ```
+            index_of_printed_headers[page_path] = {
+                "heading_number": Number for this page eg. 1.2.3 - str,
+                "is_form_heading": bool,
+                "title": title text to display - str,
+            }
+            ```
+        is_form_heading (bool, optional): Whether or not this is the heading for the entire form. Defaults to False.
+    """
     page_path = page["path"]
     # If we've already done this page, don't do it again
     if page_path not in pages_to_do:
@@ -293,6 +411,7 @@ def generate_print_headings_for_page(
     ):
         return
 
+    # Work out the heading number for this page
     base_heading_number = this_idx
     if not is_form_heading:
         if hierarchy_difference < 0:
@@ -308,10 +427,11 @@ def generate_print_headings_for_page(
         "heading_number": new_heading_number,
         "is_form_heading": is_form_heading,
         "title": title,
-        # "components": component_display,
     }
+    # Make sure we don't do this page again
     pages_to_do.remove(page_path)
 
+    # Go through and do the same for all the pages after this one
     sibling_tracker = 0
     for next_page_path in page["next_paths"]:
         next_page = next(
@@ -333,39 +453,62 @@ def generate_print_headings_for_page(
             is_form_heading=False,
             place_in_siblings_list=sibling_tracker,
             index_of_printed_headers=index_of_printed_headers,
-            form_lists=form_lists,
         )
         sibling_tracker += 1
 
 
-def generate_print_headers_for_form(section_idx: int, form_metadata, form_idx):
+def generate_print_data_for_form(section_idx: int, form_metadata: dict, form_idx: int):
+    """Uses `generate_print_headings_for_page()` and `build_components_from_page()`
+    to gather everything that needs to be printed for this form
+
+
+    Args:
+        section_idx (int): Index of this section (above form level)
+        form_metadata (dict): Metadata for this form
+        form_idx (int): Index of this form within the section
+
+    Returns:
+        dict : Keys are page paths, values are what to print:
+        ```
+        "/intro-to-form": {
+            "heading_number": Number for this page eg. 1.2.3 - str,
+            "is_form_heading": bool,
+            "title": title text to display - str,
+            "components": [] (generated by `build_components_from_page`)
+        }
+        ```
+    """
+    # Create a list of all the required pages for printing
     pages_to_do = set(
         p["path"] for p in form_metadata["all_pages"] if p["path"] != "/summary"
     )
     start_page_path = form_metadata["start_page"]
     index = form_metadata["index"]
-    index_of_printed_headers = {}
-    start_page = next(
+    start_page_metadata = next(
         p for p in form_metadata["all_pages"] if p["path"] == start_page_path
     )
-    form_json_page = next(
+    start_page_json = next(
         p for p in form_metadata["full_json"]["pages"] if p["path"] == start_page_path
     )
 
     current_hierarchy_level = 0
+    index_of_printed_headers = {}
+    # Generate the headings for the start page - this function is then recursive so goes down the
+    # entire tree in the form
     generate_print_headings_for_page(
-        start_page,
+        start_page_metadata,
         form_metadata,
         this_idx=f"{section_idx}.{form_idx}",
-        form_json_page=form_json_page,
+        form_json_page=start_page_json,
         page_index=index,
         parent_hierarchy_level=current_hierarchy_level,
         pages_to_do=pages_to_do,
         is_form_heading=True,
         place_in_siblings_list=0,
-        index_of_printed_headers=index_of_printed_headers,
-        form_lists=form_metadata["full_json"]["lists"],
+        index_of_printed_headers=index_of_printed_headers,  # This is updated with the results
     )
+
+    # For each page, generate the list of components to print
     for page_path in index_of_printed_headers.keys():
         full_json_page = next(
             p for p in form_metadata["full_json"]["pages"] if p["path"] == page_path
@@ -373,12 +516,9 @@ def generate_print_headers_for_form(section_idx: int, form_metadata, form_idx):
         component_display = build_components_from_page(
             full_page_json=full_json_page,
             include_html_components=(
-                not determine_if_just_html_start_page(full_json_page["components"])
+                not determine_if_just_html_page(full_json_page["components"])
             ),
             form_lists=form_metadata["full_json"]["lists"],
-            page_metadata=next(
-                p for p in form_metadata["all_pages"] if p["path"] == page_path
-            ),
             form_conditions=form_metadata["full_json"]["conditions"],
             index_of_printed_headers=index_of_printed_headers,
         )
@@ -386,23 +526,33 @@ def generate_print_headers_for_form(section_idx: int, form_metadata, form_idx):
     return index_of_printed_headers
 
 
-def build_section_header(section: Section, lang="en"):
-    title = section.title_json[lang]
-    title = strip_leading_numbers(title)
-    anchor = title.casefold().replace(" ", "-")
-    return anchor, title
-
-
-def generate_section_headings(
+def generate_print_data_for_sections(
     sections: list[Section], path_to_form_jsons: str, lang: str
-):
+) -> dict:
+    """Creates a dictionary for this section containing the data to print for every form in each section
+
+    Args:
+        sections (list[Section]): List of sections to generate print data
+        path_to_form_jsons (str): Absolute path to the form jsons directory
+            (eg. /dev/form-builder/fsd_config/form-jsons/cof_r2w3/en/)
+        lang (str): Language string: `en` or `cy`
+
+    Returns:
+        dict: Containing everything to print for each form
+        ```
+            anchor-id-for-section: = {
+                "title_text": str Text to display for section title,
+                "form_print_data": {} All the data for each form in this section, as generated
+                    by `generate_print_data_for_form`,
+            }
+        ```
+    """
     section_map = {}
 
     section_idx = 1
     for section in sections:
         anchor, text = build_section_header(section, lang=lang)
-        # form_metadatas = []
-        form_print_headings = {}
+        form_print_data = {}
         form_idx = 0
         for child_form in section.children:
             form_name = child_form.form_name[0].form_name_json[lang]
@@ -422,7 +572,9 @@ def generate_section_headings(
                     for p in form_metadata["all_pages"]
                     if p["path"] == form_metadata["start_page"]
                 )
-                generate_index(
+
+                # Work out what hierarchy level each page is on
+                build_hierarchy_levels_for_page(
                     page=first_page,
                     results=form_index,
                     idx=1,
@@ -431,18 +583,19 @@ def generate_section_headings(
                 )
                 form_metadata["index"] = form_index
                 form_metadata["full_json"] = form_data
-                form_print_headings.update(
-                    generate_print_headers_for_form(
+
+                # Grab the print data for this form and add it to the results
+                form_print_data.update(
+                    generate_print_data_for_form(
                         section_idx=section_idx,
                         form_metadata=form_metadata,
                         form_idx=form_idx,
                     )
                 )
                 form_idx += 1
-            # form_metadatas.append(form_metadata)
         section_map[anchor] = {
             "title_text": text,
-            "form_print_headings": form_print_headings,
+            "form_print_data": form_print_data,
         }
         section_idx += 1
     return section_map
