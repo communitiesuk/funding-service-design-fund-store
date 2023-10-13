@@ -17,19 +17,21 @@ from scripts.all_questions.read_forms import strip_leading_numbers
 from scripts.generate_all_questions import find_forms_dir
 
 
-metadata_path = "/Users/sarahsloan/dev/temp/metadata_org_info_cof_r3w2.json"
+TEST_METADATA_FOLDER = "./tests/test_data/all_questions/metadata/"
 
 
 @pytest.mark.skip(reason="Generates test data")
 def test_generate_metadata():
-    path_to_form = (
+    filename = "organisation-information-cof-r3-w2.json"
+    path_to_form = os.path.join(
         "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
-        "fsd_config/form_jsons/cof_r3w2/en/organisation-information-cof-r3-w2.json"
+        "fsd_config/form_jsons/cof_r3w2/en/",
+        filename,
     )
     with open(path_to_form, "r") as f:
         form_data = json.load(f)
     metadata = generate_metadata(full_form_data=form_data)
-    with open(metadata_path, "w") as f:
+    with open(os.path.join(TEST_METADATA_FOLDER, f"metadata_{filename}"), "w") as f:
         json.dump(metadata, f)
 
 
@@ -39,14 +41,16 @@ def test_generate_test_data():
     files_to_generate = [START_TO_MAIN_ACTIVITIES, HOW_IS_ORG_CLASSIFIED, JOINT_BID]
     generate_test_data(
         target_test_files=files_to_generate,
-        in_path=metadata_path,
+        in_path=os.path.join(TEST_METADATA_FOLDER, "some_file_name.json"),
         out_folder=output_folder,
     )
     "/Users/sarahsloan/dev/temp/metadata_applicant_ns.json"
 
 
 def test_generate_index_org_info_cof_r3w2():
-    with open("/Users/sarahsloan/dev/temp/metadata_org_info_cof_r3w2.json", "r") as f:
+    with open(
+        os.path.join(TEST_METADATA_FOLDER, "metadata_org_info_cof_r3w2.json"), "r"
+    ) as f:
         form_data = json.load(f)
 
     results = {}
@@ -79,7 +83,9 @@ def test_generate_index_org_info_cof_r3w2():
 
 
 def test_generate_index_applicant_ns():
-    with open("/Users/sarahsloan/dev/temp/metadata_applicant_ns.json", "r") as f:
+    with open(
+        os.path.join(TEST_METADATA_FOLDER, "metadata_applicant_ns.json"), "r"
+    ) as f:
         form_data = json.load(f)
 
     results = {}
@@ -97,7 +103,7 @@ def test_generate_index_applicant_ns():
 
 
 def test_generate_index_risk_cyp():
-    with open("/Users/sarahsloan/dev/temp/metadata_risk_cyp.json", "r") as f:
+    with open(os.path.join(TEST_METADATA_FOLDER, "metadata_risk_cyp.json"), "r") as f:
         form_data = json.load(f)
 
     results = {}
@@ -114,7 +120,9 @@ def test_generate_index_risk_cyp():
 
 
 def test_generate_index_name_app_cyp():
-    with open("/Users/sarahsloan/dev/temp/metadata_name_app_cyp.json", "r") as f:
+    with open(
+        os.path.join(TEST_METADATA_FOLDER, "metadata_name_app_cyp.json"), "r"
+    ) as f:
         form_data = json.load(f)
 
     results = {}
@@ -130,7 +138,9 @@ def test_generate_index_name_app_cyp():
 
 
 def test_generate_index_branch_out_multi_pages_back_to_parent_sibling():
-    with open("/Users/sarahsloan/dev/temp/joint_bid_out_and_back.json", "r") as f:
+    with open(
+        os.path.join(TEST_METADATA_FOLDER, "joint_bid_out_and_back.json"), "r"
+    ) as f:
         form_data = json.load(f)
 
     results = {}
@@ -149,7 +159,9 @@ def test_generate_index_branch_out_multi_pages_back_to_parent_sibling():
 
 
 def test_generate_index_branch_out_all_back_to_new():
-    with open("/Users/sarahsloan/dev/temp/how_is_org_classified.json", "r") as f:
+    with open(
+        os.path.join(TEST_METADATA_FOLDER, "how_is_org_classified.json"), "r"
+    ) as f:
         form_data = json.load(f)
 
     results = {}
@@ -168,7 +180,9 @@ def test_generate_index_branch_out_all_back_to_new():
 
 
 def test_generate_index_simple_branch():
-    with open("/Users/sarahsloan/dev/temp/start_to_main_activites.json", "r") as f:
+    with open(
+        os.path.join(TEST_METADATA_FOLDER, "start_to_main_activites.json"), "r"
+    ) as f:
         form_data = json.load(f)
 
     results = {}
@@ -188,7 +202,9 @@ def test_generate_index_simple_branch():
 
 
 def test_generate_index_about_your_org_cyp():
-    with open("/Users/sarahsloan/dev/temp/metadata_about_your_org_cyp.json", "r") as f:
+    with open(
+        os.path.join(TEST_METADATA_FOLDER, "metadata_about_your_org_cyp.json"), "r"
+    ) as f:
         form_data = json.load(f)
 
     results = {}
@@ -319,7 +335,7 @@ def test_generate_component_display_name_your_app():
     ) as f:
         form_json = json.load(f)
     page_json = next(
-        p for p in form_json["pages"] if p["path"] == "/name-your-application"
+        p for p in form_json["pages"] if p["path"] == "/11-name-your-application"
     )
     components = build_components_from_page(page_json, include_html_components=True)
     assert len(components) == 1
