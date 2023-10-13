@@ -1,3 +1,5 @@
+import json
+import os
 import sys
 
 import click
@@ -101,6 +103,8 @@ def print_html(sections: dict) -> str:
         idx_section = 1
 
         for anchor, details in sections.items():
+            if anchor == "assessment_display_info":
+                continue
             air.hr(
                 klass=(
                     "govuk-section-break govuk-section-break--l"
@@ -130,7 +134,7 @@ def print_html(sections: dict) -> str:
                         air(f"{header_info['heading_number']}. {header_info['title']}")
 
                 # Print components within this form
-                print_components(air, header_info["components"], 0)
+                print_components(air, header_info["components"])
 
             idx_section += 1
 
@@ -162,12 +166,26 @@ def print_html(sections: dict) -> str:
     help="Local, absolute path, to the form JSONs to use to generate question lists",
     prompt=True,
 )
+@click.option(
+    "--include_assessment_display_info",
+    default=True,
+    help="Whether to output the assessment display field info",
+    prompt=True,
+)
+@click.option(
+    "--assessment_display_output_path",
+    default="/Users/sarahsloan/dev/temp",
+    help="Where to store assessment field display info",
+    prompt=True,
+)
 def generate_all_questions(
-    fund_short_code=None,
-    round_short_code=None,
-    lang=None,
-    output_location=None,
-    forms_dir=None,
+    fund_short_code: str = None,
+    round_short_code: str = None,
+    lang: str = None,
+    output_location: str = None,
+    forms_dir: str = None,
+    include_assessment_display_info: bool = False,
+    assessment_display_output_path: str = None,
 ):
     app = create_app()
     with app.app_context():
@@ -181,12 +199,27 @@ def generate_all_questions(
         )
 
         section_map = generate_print_data_for_sections(
-            sections=sections, path_to_form_jsons=path_to_form_jsons, lang=lang
+            sections=sections,
+            path_to_form_jsons=path_to_form_jsons,
+            lang=lang,
+            include_assessment_field_details=include_assessment_display_info,
         )
+        if include_assessment_display_info:
+            to_write = {}
+            for anchor, section in section_map.items():
+                for form_name, fields in section["assessment_display_info"].items():
+                    to_write[form_name] = fields
+            with open(
+                os.path.join(
+                    assessment_display_output_path,
+                    f"{fund_short_code.casefold()}_{round_short_code.casefold()}_field_info.json",
+                ),
+                "w",
+            ) as f:
+                json.dump(to_write, f)
 
         html_str = print_html(
             sections=section_map,
-            lang=lang,
         )
         filename = f"{fund_short_code.casefold()}_{round_short_code.casefold()}_all_questions.html"
         with open(f"{output_location}{filename}", "w") as f:

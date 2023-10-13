@@ -526,8 +526,67 @@ def generate_print_data_for_form(section_idx: int, form_metadata: dict, form_idx
     return index_of_printed_headers
 
 
+form_json_to_assessment_display_types = {
+    "numberfield": "integer",
+    "textfield": "text",
+    "yesnofield": "text",
+    "freetextfield": "free_text",
+    "checkboxesfield": "list",
+    "multiinputfield": "table",
+    "clientsidefileuploadfield": "s3bucketPath",
+    "radiosfield": "text",
+    "emailaddressfield": "text",
+    "telephonenumberfield": "text",
+    "ukaddressfield": "address",
+}
+
+
+def generate_assessment_display_info_for_fields(
+    form_json: dict, form_name: str
+) -> list:
+    """Generates a list of the fields and their display types for use in assessment config
+
+    Args:
+        form_json (dict): Form json for this form
+        form_name (str): Name of the form
+
+    Returns:
+        list: List of dictionaries, keys are form names, values are lists of the fields in that form
+    """
+    # TODO write tests
+    results = []
+    for page in form_json["pages"]:
+        for component in page["components"]:
+            question = component.get("title", None)
+            if component["type"].lower() == "multiinputfield":
+                question = [page["title"]]
+                child_fields = {}
+                for field in component["children"]:
+                    child_fields[field["name"]] = {
+                        "column_title": field["title"],
+                        "type": field["type"],
+                    }
+                question.append(child_fields)
+
+            results.append(
+                {
+                    "field_id": component["name"],
+                    "form_name": form_name,
+                    "field_type": component["type"],
+                    "presentation_type": form_json_to_assessment_display_types.get(
+                        component["type"].lower(), None
+                    ),
+                    "question": question,
+                }
+            )
+    return results
+
+
 def generate_print_data_for_sections(
-    sections: list[Section], path_to_form_jsons: str, lang: str
+    sections: list[Section],
+    path_to_form_jsons: str,
+    lang: str,
+    include_assessment_field_details: bool = False,
 ) -> dict:
     """Creates a dictionary for this section containing the data to print for every form in each section
 
@@ -536,6 +595,7 @@ def generate_print_data_for_sections(
         path_to_form_jsons (str): Absolute path to the form jsons directory
             (eg. /dev/form-builder/fsd_config/form-jsons/cof_r2w3/en/)
         lang (str): Language string: `en` or `cy`
+        include_assessment_field_details (bool): Whether to include field details for display in assessment
 
     Returns:
         dict: Containing everything to print for each form
@@ -544,10 +604,13 @@ def generate_print_data_for_sections(
                 "title_text": str Text to display for section title,
                 "form_print_data": {} All the data for each form in this section, as generated
                     by `generate_print_data_for_form`,
+                "assessment_display_info": {} Field details for display in assessment
+
             }
         ```
     """
     section_map = {}
+    assessment_display_info = {}
 
     section_idx = 1
     for section in sections:
@@ -592,10 +655,20 @@ def generate_print_data_for_sections(
                         form_idx=form_idx,
                     )
                 )
+
+                if include_assessment_field_details:
+                    assessment_field_details = (
+                        generate_assessment_display_info_for_fields(
+                            form_json=form_data, form_name=form_name
+                        )
+                    )
+                    assessment_display_info[form_name] = assessment_field_details
+
                 form_idx += 1
         section_map[anchor] = {
             "title_text": text,
             "form_print_data": form_print_data,
+            "assessment_display_info": assessment_display_info,
         }
         section_idx += 1
     return section_map
