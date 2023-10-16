@@ -18,14 +18,15 @@ from scripts.generate_all_questions import find_forms_dir
 
 
 TEST_METADATA_FOLDER = "./tests/test_data/all_questions/metadata/"
+TEST_FORMS_FOLDER = "./tests/test_data/all_questions/forms/"
 
 
 @pytest.mark.skip(reason="Generates test data")
 def test_generate_metadata():
+    """Used to save generated metadata to a file, so taht file can be used for static test data"""
     filename = "organisation-information-cof-r3-w2.json"
     path_to_form = os.path.join(
-        "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
-        "fsd_config/form_jsons/cof_r3w2/en/",
+        "/path/to/digital-form-builder/fsd_config/form_jsons/cof_r3w2/en/",
         filename,
     )
     with open(path_to_form, "r") as f:
@@ -37,14 +38,14 @@ def test_generate_metadata():
 
 @pytest.mark.skip(reason="Generates test data")
 def test_generate_test_data():
-    output_folder = "/Users/sarahsloan/dev/temp/"
+    """Used to extract a small part of metadata for easier testing."""
+    output_folder = "/some/temp/folder"
     files_to_generate = [START_TO_MAIN_ACTIVITIES, HOW_IS_ORG_CLASSIFIED, JOINT_BID]
     generate_test_data(
         target_test_files=files_to_generate,
         in_path=os.path.join(TEST_METADATA_FOLDER, "some_file_name.json"),
         out_folder=output_folder,
     )
-    "/Users/sarahsloan/dev/temp/metadata_applicant_ns.json"
 
 
 def test_generate_index_org_info_cof_r3w2():
@@ -329,8 +330,7 @@ def test_find_forms_dir_with_lang(tmp_path):
 
 def test_generate_component_display_name_your_app():
     with open(
-        "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
-        "fsd_config/form_jsons/generic/name-your-application.json",
+        os.path.join(TEST_FORMS_FOLDER, "name-your-application.json"),
         "r",
     ) as f:
         form_json = json.load(f)
@@ -344,8 +344,7 @@ def test_generate_component_display_name_your_app():
 
 def test_build_components_empty_text_and_title():
     with open(
-        "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
-        "fsd_config/form_jsons/cyp_r1/about-your-organisation-cyp.json",
+        os.path.join(TEST_FORMS_FOLDER, "about-your-organisation-cyp.json"),
         "r",
     ) as f:
         form_json = json.load(f)
@@ -362,8 +361,7 @@ def test_build_components_empty_text_and_title():
 
 def test_build_components_include_options_from_radios_and_branching_text():
     with open(
-        "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
-        "fsd_config/form_jsons/cyp_r1/about-your-organisation-cyp.json",
+        os.path.join(TEST_FORMS_FOLDER, "about-your-organisation-cyp.json"),
         "r",
     ) as f:
         form_json = json.load(f)
@@ -397,8 +395,7 @@ def test_build_components_include_options_from_radios_and_branching_text():
 
 def test_build_components_bullets_in_hint():
     with open(
-        "/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/"
-        "fsd_config/form_jsons/dpif_r2/your-skills-and-experience-dpi.json",
+        os.path.join(TEST_FORMS_FOLDER, "your-skills-and-experience-dpi.json"),
         "r",
     ) as f:
         form_json = json.load(f)
