@@ -262,6 +262,7 @@ def build_components_from_page(
     form_lists: list = [],
     form_conditions: list = [],
     index_of_printed_headers: dict = {},
+    lang: str = "en",
 ) -> list:
     """Builds a list of the components to display from this page, including their title and text, and
         directional text on which page to go to next if the form branches from here
@@ -274,6 +275,7 @@ def build_components_from_page(
         form_conditions (list, optional): The conditions that appear in this form. Defaults to [].
         index_of_printed_headers (dict, optional): The set of pages and their numbers for display, used in
             directing people to another section when branching. Defaults to {}.
+        lang (str): Language for display. Defaults to 'en'.
 
     Returns:
         list: List of components to display, each component being a dict:
@@ -340,6 +342,11 @@ def build_components_from_page(
                     )
                     text.append(
                         f"If '{condition_text}', go to <strong>{destination}</strong>"
+                        if lang == "en"
+                        else (
+                            f"Os '{condition_text}', ewch i"
+                            f" <strong>{destination}</strong>"
+                        )
                     )
 
         component = {
@@ -364,6 +371,7 @@ def generate_print_headings_for_page(
     place_in_siblings_list: int,
     index_of_printed_headers: dict,
     is_form_heading: bool = False,
+    lang: str = "en",
 ):
     """Generates the heading text and hierarchical number for this page and it's children
 
@@ -453,11 +461,14 @@ def generate_print_headings_for_page(
             is_form_heading=False,
             place_in_siblings_list=sibling_tracker,
             index_of_printed_headers=index_of_printed_headers,
+            lang=lang,
         )
         sibling_tracker += 1
 
 
-def generate_print_data_for_form(section_idx: int, form_metadata: dict, form_idx: int):
+def generate_print_data_for_form(
+    section_idx: int, form_metadata: dict, form_idx: int, lang: str = "en"
+):
     """Uses `generate_print_headings_for_page()` and `build_components_from_page()`
     to gather everything that needs to be printed for this form
 
@@ -506,6 +517,7 @@ def generate_print_data_for_form(section_idx: int, form_metadata: dict, form_idx
         is_form_heading=True,
         place_in_siblings_list=0,
         index_of_printed_headers=index_of_printed_headers,  # This is updated with the results
+        lang=lang,
     )
 
     # For each page, generate the list of components to print
@@ -521,6 +533,7 @@ def generate_print_data_for_form(section_idx: int, form_metadata: dict, form_idx
             form_lists=form_metadata["full_json"]["lists"],
             form_conditions=form_metadata["full_json"]["conditions"],
             index_of_printed_headers=index_of_printed_headers,
+            lang=lang,
         )
         index_of_printed_headers[page_path]["components"] = component_display
     return index_of_printed_headers
@@ -653,6 +666,7 @@ def generate_print_data_for_sections(
                         section_idx=section_idx,
                         form_metadata=form_metadata,
                         form_idx=form_idx,
+                        lang=lang,
                     )
                 )
 

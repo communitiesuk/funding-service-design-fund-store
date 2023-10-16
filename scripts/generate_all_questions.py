@@ -34,7 +34,8 @@ BOILERPLATE_START = """
 {% block content %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <span class="govuk-caption-l">{% trans %}{{fund_title}}{% endtrans %} {{round_title}}</span>
+        <span class="govuk-caption-l">{% trans %}{{fund_title}}{% endtrans %}
+        {% trans %}{{round_title}}{% endtrans %}</span>
         <h1 class="govuk-heading-xl">{{pageHeading}}</h1>
 """
 
@@ -145,11 +146,13 @@ def print_html(sections: dict) -> str:
 
 
 @click.command()
-@click.option("--fund_short_code", default="DPIF", help="Fund short code", prompt=True)
-@click.option("--round_short_code", default="R2", help="Round short code", prompt=True)
+@click.option("--fund_short_code", default="cof", help="Fund short code", prompt=True)
+@click.option(
+    "--round_short_code", default="R2w3", help="Round short code", prompt=True
+)
 @click.option(
     "--lang",
-    default="en",
+    default="cy",
     help="Language - used when a round supports english and welsh",
     prompt=True,
     type=click.Choice(["en", "cy"]),
@@ -190,6 +193,10 @@ def generate_all_questions(
     app = create_app()
     with app.app_context():
         round = get_round_by_short_name(fund_short_code, round_short_code)
+        if not round:
+            raise NameError(
+                f"Round {round_short_code} does not exist in fund {fund_short_code}"
+            )
         sections: list[Section] = get_application_sections_for_round(
             round.fund_id, round.id
         )
@@ -212,7 +219,7 @@ def generate_all_questions(
             with open(
                 os.path.join(
                     assessment_display_output_path,
-                    f"{fund_short_code.casefold()}_{round_short_code.casefold()}_field_info.json",
+                    f"{fund_short_code.casefold()}_{round_short_code.casefold()}_field_info_{lang}.json",
                 ),
                 "w",
             ) as f:
@@ -221,7 +228,7 @@ def generate_all_questions(
         html_str = print_html(
             sections=section_map,
         )
-        filename = f"{fund_short_code.casefold()}_{round_short_code.casefold()}_all_questions.html"
+        filename = f"{fund_short_code.casefold()}_{round_short_code.casefold()}_all_questions_{lang}.html"
         with open(f"{output_location}{filename}", "w") as f:
             f.write(html_str)
 
