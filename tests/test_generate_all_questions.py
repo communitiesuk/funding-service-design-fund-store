@@ -11,6 +11,7 @@ from scripts.all_questions.metadata_utils import build_components_from_page
 from scripts.all_questions.metadata_utils import build_hierarchy_levels_for_page
 from scripts.all_questions.metadata_utils import build_section_header
 from scripts.all_questions.metadata_utils import generate_metadata
+from scripts.all_questions.metadata_utils import update_wording_for_multi_input_fields
 from scripts.all_questions.read_forms import increment_lowest_in_hierarchy
 from scripts.all_questions.read_forms import remove_lowest_in_hierarchy
 from scripts.all_questions.read_forms import strip_leading_numbers
@@ -354,9 +355,7 @@ def test_build_components_empty_text_and_title():
         p for p in form_json["pages"] if p["path"] == "/intro-about-your-organisation"
     )
     components = build_components_from_page(page_json, include_html_components=False)
-    assert len(components) == 1
-    assert components[0]["title"] is None
-    assert len(components[0]["text"]) == 0
+    assert len(components) == 0
 
 
 def test_build_components_include_options_from_radios_and_branching_text():
@@ -400,7 +399,6 @@ def test_build_components_bullets_in_hint():
     ) as f:
         form_json = json.load(f)
 
-    # Test intro has no text
     page_json = next(
         p for p in form_json["pages"] if p["path"] == "/similar-previous-projects"
     )
@@ -408,3 +406,39 @@ def test_build_components_bullets_in_hint():
     assert len(components) == 1
     assert len(components[0]["text"]) == 2
     assert len(components[0]["text"][1]) == 3
+
+
+def test_build_components_multi_input():
+    with open(
+        os.path.join(TEST_FORMS_FOLDER, "risk-and-deliverability-cyp.json"), "r"
+    ) as f:
+        form_json = json.load(f)
+    page_json = next(
+        p for p in form_json["pages"] if p["path"] == "/risks-to-the-project"
+    )
+    components = build_components_from_page(
+        page_json,
+        include_html_components=True,
+        form_lists=form_json["lists"],
+    )
+
+    # TODO - print header with bullet lists, remove 'multiinput needed' text
+    assert len(components) == 2
+    assert len(components[1]["text"]) == 6
+
+
+@pytest.mark.parametrize(
+    "input_text,exp_result_length",
+    [
+        (["You can add more stuff on the next step"], 0),
+        (["You can add more stuff on the next step", "something else"], 1),
+        (["You can add more stuff on the next step", ["a list"], "something else"], 2),
+        (["asdfasdfasdf"], 1),
+        (["You can add more stuff on the next step. And do something else"], 0),
+        (["You can add more on the next step"], 1),
+        (["You can add DIFFERENT the next step"], 1),
+    ],
+)
+def test_update_wording_for_multi_input_fields(input_text, exp_result_length):
+    result = update_wording_for_multi_input_fields(input_text)
+    assert len(result) == exp_result_length

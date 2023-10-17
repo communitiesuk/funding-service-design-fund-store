@@ -53,7 +53,6 @@ def print_html_toc(air: Airium, sections: dict):
         air (Airium): Instance to write html to
         sections (dict): Sections for this TOC
     """
-    # TODO test translations
     with air.h2(klass="govuk-heading-m "):
         air("{% trans %}Table of contents{% endtrans %}")
     with air.ol(klass="govuk-list govuk-list--number"):
@@ -146,13 +145,11 @@ def print_html(sections: dict) -> str:
 
 
 @click.command()
-@click.option("--fund_short_code", default="cof", help="Fund short code", prompt=True)
-@click.option(
-    "--round_short_code", default="R2w3", help="Round short code", prompt=True
-)
+@click.option("--fund_short_code", default="cyp", help="Fund short code", prompt=True)
+@click.option("--round_short_code", default="R1", help="Round short code", prompt=True)
 @click.option(
     "--lang",
-    default="cy",
+    default="en",
     help="Language - used when a round supports english and welsh",
     prompt=True,
     type=click.Choice(["en", "cy"]),

@@ -1,6 +1,8 @@
 import copy
+import fnmatch
 import json
 import os
+from typing import Tuple
 
 from bs4 import BeautifulSoup
 from bs4 import NavigableString
@@ -256,6 +258,87 @@ def extract_from_html(soup, results: list):
         extract_from_html(element, results)
 
 
+def update_wording_for_multi_input_fields(text: list) -> list:
+    text_to_filter = [item for item in text if not isinstance(item, list)]
+    result = fnmatch.filter(text_to_filter, "You can add more * on the next step*")
+    if len(result) > 0:
+        text.remove(*result)
+    return text
+
+
+def determine_title_and_text_for_component(
+    component: dict,
+    include_html_components: bool = True,
+    form_lists: list = [],
+    is_child: bool = False,
+) -> Tuple[str, list]:
+    """Determines the title and text to display for an individual component.
+
+    Args:
+        component (dict): The component to get the text for
+        include_html_components (bool, optional): Whether to include html-only components. Defaults to True.
+        form_lists (list, optional): All lists in this form - used to determine display values for list items.
+            Defaults to [].
+        is_child (bool, optionsl): Whether this is a child field in a multi-input field. Defaults to False.
+
+
+    Returns:
+        Tuple[str, list]: First item is the title, second is the text to display
+    """
+    title: str = component["title"] if "title" in component else None
+    text = []
+    # skip details, eg about-your-org-cyp GNpQfE
+    if component["type"].casefold() == "details":
+        return None, []
+
+    # For MultiInputFields, don't add a title and treat each child as a separate component
+    if component["type"].casefold() == "multiinputfield":
+        title = f"You can add multiple {component['title'].lower()}"
+        for child in component["children"]:
+            child_title, child_text = determine_title_and_text_for_component(
+                child, include_html_components, form_lists, is_child=True
+            )
+            if child["type"].casefold() == "multilinetextfield":
+                first_column_title = component["options"]["columnTitles"][0].casefold()
+                text.append(
+                    f"{child_title} (Max {child['options']['maxWords']} words per"
+                    f" {first_column_title})"
+                )
+            else:
+                text.append(child_title)
+            text.extend(child_text)
+
+    # Skip pages that are just html, eg about-your-org-cyp uLwBuz
+    elif (
+        include_html_components
+        and ("type" in component)
+        and (
+            component["type"].casefold() == "html"
+            or component["type"].casefold() == "para"
+        )
+    ) or ("hint" in component):
+        # If there is hint or content text, extract it from the html in the hint field
+        soup = BeautifulSoup(
+            component["hint"] if "hint" in component else component["content"],
+            "html.parser",
+        )
+        text = []
+        extract_from_html(soup, text)
+        update_wording_for_multi_input_fields(text)
+        if component["type"].casefold() == "multilinetextfield" and not is_child:
+            text.append(f"(Max {component['options']['maxWords']} words)")
+
+    if "list" in component:
+        # include available options for lists
+        list_id = component["list"]
+        list_items = next(
+            list["items"] for list in form_lists if list["name"] == list_id
+        )
+        list_display = [item["text"] for item in list_items]
+        text.append(list_display)
+    return title, text
+
+
 def build_components_from_page(
     full_page_json: dict,
     include_html_components: bool = True,
@@ -296,31 +379,11 @@ def build_components_from_page(
 
     components = []
     for c in full_page_json["components"]:
-        text = []
-        # skip details, eg about-your-org-cyp GNpQfE
-        if c["type"].casefold() == "details":
+        title, text = determine_title_and_text_for_component(
+            c, include_html_components=include_html_components, form_lists=form_lists
+        )
+        if not title and not text:
             continue
-
-        # Skip pages that are just html, eg about-your-org-cyp uLwBuz
-        if (
-            include_html_components
-            and ("type" in c)
-            and (c["type"].casefold() == "html" or c["type"].casefold() == "para")
-        ):
-            text = [c["content"]]
-        elif "hint" in c:
-            soup = BeautifulSoup(c["hint"], "html.parser")
-            text = []
-            extract_from_html(soup, text)
-
-        if "list" in c:
-            # include available options for lists
-            list_id = c["list"]
-            list_items = next(
-                list["items"] for list in form_lists if list["name"] == list_id
-            )
-            list_display = [item["text"] for item in list_items]
-            text.append(list_display)
 
         # If there are multiple options for the next page, include text about where to go next
         if c["name"] in components_with_conditions:
@@ -334,9 +397,13 @@ def build_components_from_page(
                     destination = index_of_printed_headers[next_config["path"]][
                         "heading_number"
                     ]
-                    # TODO use next to get correct condition instead of 0, use field name
+                    condition_value = next(
+                        cc
+                        for cc in condition_config["value"]["conditions"]
+                        if cc["field"]["name"] == c["name"]
+                    )["value"]["value"]
                     condition_text = determine_display_value_for_condition(
-                        condition_config["value"]["conditions"][0]["value"]["value"],
+                        condition_value,
                         list_name=c["list"] if "list" in c else None,
                         form_lists=form_lists,
                     )
@@ -350,7 +417,7 @@ def build_components_from_page(
                     )
 
         component = {
-            "title": c["title"] if "title" in c else None,
+            "title": title,
             "text": text,
             "hide_title": c["options"]["hideTitle"]
             if "hideTitle" in c["options"]
