@@ -11,17 +11,19 @@ DPI_ROUND_2_ID = "0059aad4-5eb5-11ee-8c99-0242ac120002"
 APPLICATION_BASE_PATH = ".".join([str(DPI_R2_BASE_PATH), str(1)])
 ASSESSMENT_BASE_PATH = ".".join([str(DPI_R2_BASE_PATH), str(2)])
 DPI_R2_OPENS_DATE = datetime(
-    2023, 10, 17, 10, 0, 0, tzinfo=timezone.utc
+    2023, 10, 17, 9, 30, 0, tzinfo=timezone.utc
 )  # 2023-10-17 10:00:00
 DPI_R2_DEADLINE_DATE = datetime(
-    2023, 12, 1, 11, 59, 0, tzinfo=timezone.utc
+    2023, 12, 1, 17, 0, 0, tzinfo=timezone.utc
 )  # 2023-12-1 11:59:00
 DPI_R2_ASSESSMENT_DEADLINE_DATE = datetime(
     2024, 1, 31, 12, 0, 0, tzinfo=timezone.utc
 )  # 2023-01-31 12:00:00
 
-DPI_PROSPECTS_LINK = ""  # noqa
-DPI_PRIVACY_NOTICE = ""  # TODO(adamdavies1) to be added
+DPI_PROSPECTS_LINK = "https://www.localdigital.gov.uk/digital-planning/funding/digital-planning-programme-funding-2023"  # noqa
+DPI_PRIVACY_NOTICE = (
+    "https://www.gov.uk/guidance/digital-planning-improvement-fund-privacy-notice"
+)
 DPI_APPLICATION_GUIDANCE = (
     "<h2 class='govuk-heading govuk-heading-s'>Before you start</h2><p"
     f" class='govuk-body'><a href='{DPI_PROSPECTS_LINK}'>Read the fund's prospectus</a>"
@@ -32,7 +34,7 @@ DPI_APPLICATION_GUIDANCE = (
 
 r2_application_sections = [
     {
-        "section_name": {"en": "Before you start", "cy": ""},
+        "section_name": {"en": "1. Before you start", "cy": ""},
         "tree_path": f"{APPLICATION_BASE_PATH}.1",
     },
     {
