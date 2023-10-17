@@ -34,8 +34,8 @@ BOILERPLATE_START = """
 {% block content %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <span class="govuk-caption-l">{% trans %}{{fund_title}}{% endtrans %}
-        {% trans %}{{round_title}}{% endtrans %}</span>
+        <span class="govuk-caption-l">{% trans %}{{fund_title}}{% endtrans %} {% trans %}{{round_title}}{% endtrans %}
+        </span>
         <h1 class="govuk-heading-xl">{{pageHeading}}</h1>
 """
 
@@ -156,13 +156,16 @@ def print_html(sections: dict) -> str:
 )
 @click.option(
     "--output_location",
-    default="/Users/sarahsloan/dev/CommunitiesUkWorkspace/funding-service-design-frontend/app/templates/",
-    help="Folder to write output html to",
+    default="../funding-service-design-frontend/app/templates/all_questions/",
+    help=(
+        "Folder to write output html to (language code will be appended as an"
+        " intermediate path)"
+    ),
     prompt=True,
 )
 @click.option(
     "--forms_dir",
-    default="/Users/sarahsloan/dev/CommunitiesUkWorkspace/digital-form-builder/fsd_config/form_jsons/",
+    default="../digital-form-builder/fsd_config/form_jsons/",
     help="Local, absolute path, to the form JSONs to use to generate question lists",
     prompt=True,
 )
@@ -174,7 +177,7 @@ def print_html(sections: dict) -> str:
 )
 @click.option(
     "--assessment_display_output_path",
-    default="/Users/sarahsloan/dev/temp",
+    default=".",
     help="Where to store assessment field display info",
     prompt=True,
 )
@@ -226,7 +229,8 @@ def generate_all_questions(
             sections=section_map,
         )
         filename = f"{fund_short_code.casefold()}_{round_short_code.casefold()}_all_questions_{lang}.html"
-        with open(f"{output_location}{filename}", "w") as f:
+        out_path = os.path.join(output_location, lang, filename)
+        with open(out_path, "w") as f:
             f.write(html_str)
 
 
