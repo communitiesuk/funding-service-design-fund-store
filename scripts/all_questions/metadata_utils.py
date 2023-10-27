@@ -14,7 +14,7 @@ from scripts.all_questions.read_forms import increment_lowest_in_hierarchy
 from scripts.all_questions.read_forms import remove_lowest_in_hierarchy
 from scripts.all_questions.read_forms import strip_leading_numbers
 
-FIELD_TYPES_WITH_MAX_WORDS=["freetextfield", "multilinetextfield"]
+FIELD_TYPES_WITH_MAX_WORDS = ["freetextfield", "multilinetextfield"]
 
 
 def get_all_child_nexts(page: dict, child_nexts: list, all_pages: dict):
