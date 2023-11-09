@@ -54,7 +54,7 @@ cachetools==5.3.0
     # via
     #   -r requirements.txt
     #   flipper-client
-certifi==2022.5.18.1
+certifi==2023.7.22
     # via
     #   -r requirements.txt
     #   requests
@@ -347,7 +347,7 @@ redis==4.5.4
     #   -r requirements.txt
     #   flask-redis
     #   flipper-client
-requests==2.27.1
+requests==2.31.0
     # via
     #   -r requirements.txt
     #   connexion
@@ -419,6 +419,7 @@ toml==0.10.2
     # via pre-commit
 tomli==2.0.1
     # via
+    #   -r requirements.txt
     #   black
     #   build
     #   mypy
@@ -444,7 +445,7 @@ werkzeug==2.2.3
     #   connexion
     #   flask
     #   pytest-flask
-wheel==0.37.1
+wheel==0.38.1
     # via pip-tools
 
 # The following packages are considered to be unsafe in a requirements file:
