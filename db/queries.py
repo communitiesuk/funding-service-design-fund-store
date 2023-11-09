@@ -197,6 +197,9 @@ def insert_fund_data(fund_config):
                 short_name=bindparam("short_name"),
                 description_json=bindparam("description_json"),
                 welsh_available=bindparam("welsh_available"),
+                owner_organisation_name=bindparam("owner_organisation_name"),
+                owner_organisation_shortname=bindparam("owner_organisation_shortname"),
+                owner_organisation_logo_uri=bindparam("owner_organisation_logo_uri"),
             )
         )
         .on_conflict_do_update(
@@ -207,6 +210,11 @@ def insert_fund_data(fund_config):
                 "short_name": bindparam("short_name"),
                 "description_json": bindparam("description_json"),
                 "welsh_available": bindparam("welsh_available"),
+                "owner_organisation_name": bindparam("owner_organisation_name"),
+                "owner_organisation_shortname": bindparam(
+                    "owner_organisation_shortname"
+                ),
+                "owner_organisation_logo_uri": bindparam("owner_organisation_logo_uri"),
             },
         )
         .returning(Fund.id)
@@ -219,6 +227,9 @@ def insert_fund_data(fund_config):
         "short_name": fund_config["short_name"],
         "description_json": fund_config["description_json"],
         "welsh_available": fund_config["welsh_available"],
+        "owner_organisation_name": fund_config["owner_organisation_name"],
+        "owner_organisation_shortname": fund_config["owner_organisation_shortname"],
+        "owner_organisation_logo_uri": fund_config["owner_organisation_logo_uri"],
     }
 
     result = db.session.execute(stmt, update_params)
@@ -255,6 +266,18 @@ def insert_round_data(round_config):
             round_record.project_name_field_id = item["project_name_field_id"]
             round_record.feedback_link = item["feedback_link"]
             round_record.application_guidance = item["application_guidance"]
+            round_record.guidance_url = item["guidance_url"]
+            round_record.all_uploaded_documents_section_available = item[
+                "all_uploaded_documents_section_available"
+            ]
+            round_record.application_fields_download_available = item[
+                "application_fields_download_available"
+            ]
+            round_record.display_logo_on_pdf_exports = item[
+                "display_logo_on_pdf_exports"
+            ]
+            round_record.feedback_survey_config = item["feedback_survey_config"]
+            round_record.mark_as_complete_enabled = item["mark_as_complete_enabled"]
 
             updated_rounds[item["id"]] = round_record
 
@@ -279,6 +302,16 @@ def insert_round_data(round_config):
                 project_name_field_id=item["project_name_field_id"],
                 feedback_link=item["feedback_link"],
                 application_guidance=item["application_guidance"],
+                guidance_url=item["guidance_url"],
+                all_uploaded_documents_section_available=item[
+                    "all_uploaded_documents_section_available"
+                ],
+                application_fields_download_available=item[
+                    "application_fields_download_available"
+                ],
+                display_logo_on_pdf_exports=item["display_logo_on_pdf_exports"],
+                feedback_survey_config=item["feedback_survey_config"],
+                mark_as_complete_enabled=item["mark_as_complete_enabled"],
             )
             db.session.add(new_round)
 
@@ -315,6 +348,7 @@ def insert_base_sections(APPLICATION_BASE_PATH, ASSESSMENT_BASE_PATH, round_id):
             section_record.round_id = round_id
             section_record.title_json = section["section_name"]
             section_record.weighting = section.get("weighting", None)
+            section_record.requires_feedback = section.get("requires_feedback") or False
 
             updated_sections[section["tree_path"]] = section_record
         else:
@@ -324,6 +358,7 @@ def insert_base_sections(APPLICATION_BASE_PATH, ASSESSMENT_BASE_PATH, round_id):
                 title_json=section["section_name"],
                 weighting=section.get("weighting", None),
                 path=Ltree(section["tree_path"]),
+                requires_feedback=section.get("requires_feedback") or False,
             )
             db.session.add(new_section)
 
@@ -334,7 +369,7 @@ def insert_base_sections(APPLICATION_BASE_PATH, ASSESSMENT_BASE_PATH, round_id):
     return updated_sections
 
 
-def insert_application_sections(round_id, sorted_application_sections: dict):
+def insert_or_update_application_sections(round_id, sorted_application_sections: dict):
     print(f"Inserting forms config: '{sorted_application_sections}'.")
     updated_sections = {}
     for section in sorted_application_sections:
@@ -349,8 +384,10 @@ def insert_application_sections(round_id, sorted_application_sections: dict):
             section_record.round_id = round_id
             section_record.title_json = section["section_name"]
             section_record.weighting = (section.get("weighting", None),)
+            section_record.requires_feedback = section.get("requires_feedback") or False
 
             updated_sections[section_record.id] = section_record
+            print(f"Prepared section UPDATE '{section_record}'.")
         else:
             # Insert new section record
             new_section = Section(
@@ -358,25 +395,29 @@ def insert_application_sections(round_id, sorted_application_sections: dict):
                 title_json=section["section_name"],
                 weighting=section.get("weighting", None),
                 path=Ltree(section["tree_path"]),
+                requires_feedback=section.get("requires_feedback") or False,
             )
             db.session.add(new_section)
             db.session.commit()
             section_id = new_section.id
 
             updated_sections[new_section.id] = new_section
+            print(f"Prepared section INSERT '{new_section}'.")
 
         if section.get("form_name_json"):
             form_record = FormName.query.filter_by(section_id=section_id).first()
             if form_record is not None:
                 form_record.form_name_json = section["form_name_json"]
+                print(f"Updated form name information to {section['form_name_json']}.")
             else:
                 new_form_record = FormName(
                     form_name_json=section["form_name_json"], section_id=section_id
                 )
                 db.session.add(new_form_record)
-
+                print(f"Inserted form name information: '{new_form_record}'.")
     db.session.commit()
-    print(f"inserted sections (ids): '{updated_sections}'.")
+    print("Section UPDATES and INSERTS committed.")
+
     return updated_sections
 
 

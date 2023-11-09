@@ -2,17 +2,24 @@ name: Deploy fsd-fund-store to Gov PaaS
 
 on:
   workflow_dispatch:
+    inputs:
+      deploy_to_dev:
+        required: false
+        default: false
+        type: boolean
+        description: Deploy to CloudFoundry dev?
   push:
     paths-ignore:
       - '**/README.md'
 
 jobs:
   test_and_deploy:
-    uses: communitiesuk/funding-design-service-workflows/.github/workflows/deploy.yml@main
+    uses: communitiesuk/funding-service-design-workflows/.github/workflows/deploy.yml@main
     with:
       app_name: ${{ github.event.repository.name }}
       api: true
       postgres_unit_testing: true
+      deploy_to_dev: false
       run_performance_tests: true
       run_e2e_tests: true
     secrets:
@@ -22,12 +29,3 @@ jobs:
       CF_USER: ${{secrets.CF_USERNAME}}
       CF_PASSWORD: ${{secrets.CF_PASSWORD}}
       E2E_PAT: ${{secrets.E2E_PAT}}
-  paketo_build:
-    needs: test_and_deploy
-    permissions:
-      packages: write
-    uses: communitiesuk/funding-design-service-workflows/.github/workflows/package.yml@main
-    with:
-      version_to_build: $(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-      owner: ${{ github.repository_owner }}
-      application: funding-design-service-fund-store

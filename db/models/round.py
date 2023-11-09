@@ -6,13 +6,16 @@ from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import JSON
+from sqlalchemy import UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.types import Boolean
 
 
 BaseModel: DefaultMeta = db.Model
 
 
 class Round(BaseModel):
+    __table_args__ = (UniqueConstraint("fund_id", "short_name"),)
     id = Column(
         "id",
         UUID(as_uuid=True),
@@ -30,7 +33,7 @@ class Round(BaseModel):
     title_json = Column(
         "title_json", JSON(none_as_null=True), nullable=False, unique=False
     )
-    short_name = Column("short_name", db.String(), nullable=False, unique=True)
+    short_name = Column("short_name", db.String(), nullable=False, unique=False)
     opens = Column("opens", DateTime())
     deadline = Column("deadline", DateTime())
     assessment_deadline = Column("assessment_deadline", DateTime())
@@ -50,4 +53,32 @@ class Round(BaseModel):
     )
     application_guidance = Column(
         "application_guidance", db.String(), nullable=True, unique=False
+    )
+    guidance_url = Column("guidance_url", db.String(), nullable=True, unique=False)
+    all_uploaded_documents_section_available = Column(
+        "all_uploaded_documents_section_available",
+        Boolean,
+        default=False,
+        nullable=False,
+    )
+    application_fields_download_available = Column(
+        "application_fields_download_available",
+        db.Boolean,
+        default=False,
+        nullable=False,
+    )
+    display_logo_on_pdf_exports = Column(
+        "display_logo_on_pdf_exports",
+        db.Boolean,
+        default=False,
+        nullable=False,
+    )
+    mark_as_complete_enabled = Column(
+        "mark_as_complete_enabled",
+        db.Boolean,
+        default=False,
+        nullable=False,
+    )
+    feedback_survey_config = Column(
+        "feedback_survey_config", JSON(none_as_null=True), nullable=True, unique=False
     )

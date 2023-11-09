@@ -119,6 +119,9 @@ def seed_dynamic_data(request, app, clear_test_data, _db):
             "short_name": f"FND{fund_count}",  # fund["short_name"],
             "description_json": {"en": "testing description"},
             "welsh_available": True,
+            "owner_organisation_name": "testing org name",
+            "owner_organisation_shortname": "TON",
+            "owner_organisation_logo_uri": "...",
         }
         insert_fund_data(fund_config)
         rounds = []
@@ -147,6 +150,17 @@ def seed_dynamic_data(request, app, clear_test_data, _db):
                 "project_name_field_id": "abc123",
                 "feedback_link": "www.feedback.link",
                 "application_guidance": "help text",
+                "guidance_url": "guidance link",
+                "all_uploaded_documents_section_available": False,
+                "application_fields_download_available": False,
+                "display_logo_on_pdf_exports": False,
+                "mark_as_complete_enabled": False,
+                "feedback_survey_config": {
+                    "has_feedback_survey": False,
+                    "has_section_feedback": False,
+                    "is_feedback_survey_optional": True,
+                    "is_section_feedback_optional": True,
+                },
             }
             rounds.append(round_config)
 
