@@ -365,9 +365,7 @@ ruamel-yaml==0.17.21
     #   -r requirements.txt
     #   prance
 ruamel-yaml-clib==0.2.8
-    # via
-    #   -r requirements.txt
-    #   ruamel-yaml
+    # via ruamel-yaml
 s3transfer==0.6.0
     # via
     #   -r requirements.txt
@@ -449,7 +447,7 @@ werkzeug==2.2.3
     #   connexion
     #   flask
     #   pytest-flask
-wheel==0.37.1
+wheel==0.38.1
     # via pip-tools
 
 # The following packages are considered to be unsafe in a requirements file:
