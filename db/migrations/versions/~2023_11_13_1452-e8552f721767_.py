@@ -1,4 +1,4 @@
-"""empty message
+"""Add 'eligibility_config' column to round table, with default value
 
 Revision ID: e8552f721767
 Revises: 0feae1606cfa
