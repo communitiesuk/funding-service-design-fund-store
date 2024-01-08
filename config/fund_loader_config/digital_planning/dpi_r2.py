@@ -137,6 +137,8 @@ round_config = [
         "opens": DPI_R2_OPENS_DATE,
         "assessment_start": None,
         "deadline": DPI_R2_DEADLINE_DATE,
+        "application_reminder_sent": True,
+        "reminder_date": None,
         "assessment_deadline": DPI_R2_ASSESSMENT_DEADLINE_DATE,
         "prospectus": DPI_PROSPECTS_LINK,
         "privacy_notice": DPI_PRIVACY_NOTICE,

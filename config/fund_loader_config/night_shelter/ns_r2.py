@@ -192,6 +192,8 @@ round_config = [
         "opens": NS_R2_OPENS_DATE,
         "assessment_start": None,
         "deadline": NS_R2_DEADLINE_DATE,
+        "application_reminder_sent": True,
+        "reminder_date": None,
         "assessment_deadline": NS_R2_ASSESSMENT_DEADLINE_DATE,
         "prospectus": NIGHT_SHELTER_PROSPECTS_LINK,
         "privacy_notice": "https://www.gov.uk/guidance/night-shelter-transformation-fund-2022-2025-privacy-notice",

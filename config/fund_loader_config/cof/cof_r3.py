@@ -48,6 +48,9 @@ COF_R3W2_ASSESSMENT_DEADLINE_DATE = datetime(
 COF_R3W3_OPENS_DATE = datetime(
     2023, 12, 6, 11, 00, 0, tzinfo=timezone.utc
 )  # 2023-12-06 11:00:00
+COF_R3W3_SEND_REMINDER_DATE = datetime(
+    2024, 1, 29, 11, 59, 0, tzinfo=timezone.utc
+)  # 2024-01-29 11:59:00
 COF_R3W3_DEADLINE_DATE = datetime(
     2024, 1, 31, 11, 59, 0, tzinfo=timezone.utc
 )  # 2024-01-31 11:59:00
@@ -607,7 +610,7 @@ cof_r3w3_sections = [
     {
         "section_name": {
             "en": "3.4 Community benefits",
-            "cy": "3.4 Buddion i'r gymuned",
+            "cy": "3.4 Buddion cymunedol",
         },
         "form_name_json": {
             "en": "community-benefits-cof",
@@ -667,7 +670,7 @@ cof_r3w3_sections = [
     {
         "section_name": {
             "en": "4.5 Skills and resources",
-            "cy": "4.5 Sgiliau ac Adnoddau",
+            "cy": "4.5 Sgiliau ac adnoddau",
         },
         "form_name_json": {
             "en": "skills-and-resources-cof",
@@ -689,7 +692,7 @@ cof_r3w3_sections = [
     {
         "section_name": {
             "en": "4.7 Inclusiveness and integration",
-            "cy": "4.7 Cynhwysiant ac Integreiddio",
+            "cy": "4.7 Cynhwysiant ac integreiddio",
         },
         "form_name_json": {
             "en": "inclusiveness-and-integration-cof",
@@ -731,6 +734,8 @@ round_config = [
         "opens": COF_R3W1_OPENS_DATE,
         "assessment_start": None,
         "deadline": COF_R3W1_DEADLINE_DATE,
+        "application_reminder_sent": True,
+        "reminder_date": None,
         "assessment_deadline": COF_R3W1_ASSESSMENT_DEADLINE_DATE,
         "prospectus": "https://www.gov.uk/government/publications/community-ownership-fund-prospectus",
         "privacy_notice": (
@@ -781,6 +786,8 @@ round_config_w2 = [
         "opens": COF_R3W2_OPENS_DATE,
         "assessment_start": None,
         "deadline": COF_R3W2_DEADLINE_DATE,
+        "application_reminder_sent": True,
+        "reminder_date": None,
         "assessment_deadline": COF_R3W2_ASSESSMENT_DEADLINE_DATE,
         "prospectus": "https://www.gov.uk/government/publications/community-ownership-fund-prospectus",
         "privacy_notice": (
@@ -831,6 +838,8 @@ round_config_w3 = [
         "opens": COF_R3W3_OPENS_DATE,
         "assessment_start": None,
         "deadline": COF_R3W3_DEADLINE_DATE,
+        "application_reminder_sent": False,
+        "reminder_date": COF_R3W3_SEND_REMINDER_DATE,
         "assessment_deadline": COF_R3W3_ASSESSMENT_DEADLINE_DATE,
         "prospectus": "https://www.gov.uk/government/publications/community-ownership-fund-prospectus",
         "privacy_notice": (

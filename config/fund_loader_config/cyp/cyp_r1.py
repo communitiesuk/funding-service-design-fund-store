@@ -160,6 +160,8 @@ round_config = [
         "opens": CYP_R1_OPENS_DATE,
         "assessment_start": None,
         "deadline": CYP_R1_DEADLINE_DATE,
+        "application_reminder_sent": True,
+        "reminder_date": None,
         "assessment_deadline": CYP_R1_ASSESSMENT_DEADLINE_DATE,
         "prospectus": CYP_PROSPECTS_LINK,
         "privacy_notice": "https://www.gov.uk/guidance/the-children-and-young-peoples-resettlement-fund-privacy-notice",
