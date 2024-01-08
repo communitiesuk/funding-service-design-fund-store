@@ -190,6 +190,7 @@ round_config = [
         "title_json": {"en": "Round 2", "cy": ""},
         "short_name": "R2",
         "opens": NS_R2_OPENS_DATE,
+        "assessment_start": None,
         "deadline": NS_R2_DEADLINE_DATE,
         "assessment_deadline": NS_R2_ASSESSMENT_DEADLINE_DATE,
         "prospectus": NIGHT_SHELTER_PROSPECTS_LINK,

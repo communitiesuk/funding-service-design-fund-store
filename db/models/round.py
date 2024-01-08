@@ -36,6 +36,7 @@ class Round(BaseModel):
     short_name = Column("short_name", db.String(), nullable=False, unique=False)
     opens = Column("opens", DateTime())
     deadline = Column("deadline", DateTime())
+    assessment_start = Column("assessment_start", DateTime())
     assessment_deadline = Column("assessment_deadline", DateTime())
     prospectus = Column("prospectus", db.String(), nullable=False, unique=False)
     privacy_notice = Column("privacy_notice", db.String(), nullable=False, unique=False)

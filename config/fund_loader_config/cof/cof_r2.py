@@ -31,6 +31,7 @@ rounds_config = [
         },  # TODO: Provide welsh translation
         "short_name": "R2W2",
         "opens": COF_R2_OPENS_DATE,
+        "assessment_start": None,
         "deadline": COF_R2_DEADLINE_DATE,
         "fund_id": "47aef2f5-3fcb-4d45-acb5-f0152b5f03c4",
         "assessment_deadline": COF_R2_ASSESSMENT_DEADLINE_DATE,
@@ -82,6 +83,7 @@ rounds_config = [
         },  # TODO: Provide welsh translation
         "short_name": "R2W3",
         "opens": "2022-10-04 12:00:00",
+        "assessment_start": None,
         "deadline": "2023-04-14 11:59:00",
         "fund_id": "47aef2f5-3fcb-4d45-acb5-f0152b5f03c4",
         "assessment_deadline": "2023-05-17 12:00:00",

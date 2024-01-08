@@ -158,6 +158,7 @@ round_config = [
         "title_json": {"en": "Round 1", "cy": ""},
         "short_name": "R1",
         "opens": CYP_R1_OPENS_DATE,
+        "assessment_start": None,
         "deadline": CYP_R1_DEADLINE_DATE,
         "assessment_deadline": CYP_R1_ASSESSMENT_DEADLINE_DATE,
         "prospectus": CYP_PROSPECTS_LINK,

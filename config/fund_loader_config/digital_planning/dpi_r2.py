@@ -135,6 +135,7 @@ round_config = [
         "title_json": {"en": "Round 2", "cy": ""},
         "short_name": "R2",
         "opens": DPI_R2_OPENS_DATE,
+        "assessment_start": None,
         "deadline": DPI_R2_DEADLINE_DATE,
         "assessment_deadline": DPI_R2_ASSESSMENT_DEADLINE_DATE,
         "prospectus": DPI_PROSPECTS_LINK,
