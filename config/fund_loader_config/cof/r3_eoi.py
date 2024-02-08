@@ -70,7 +70,7 @@ COF_R3_EOI_SCHEMA = {
             "result": Eoi_Decision.PASS_WITH_CAVEATS,
             "caveat": (
                 "Understand the rules on acquiring assets from town, parish or"
-                " community councils: We cannot fund you to acquire a publicly owned"
+                " community councils: We cannot fund you to acquire a publicly owned"
                 " asset if this involves transferring responsibility for delivering"
                 " statutory services (services paid for by tax payers) from the public"
                 " authority to your organisation. You should only apply to acquire an"
@@ -116,8 +116,8 @@ COF_R3_EOI_SCHEMA = {
                 " funding by the time you apply, but we will ask you to set out your"
                 " total costs, funding already secured, and plans to raise any"
                 " additional funding.You must use COF funding within 12 months, so you"
-                " must be able to show that you’ve made good progress to secure the"
-                " remaining match funding. This is so that we’re confident you can draw"
+                " must be able to show that you've made good progress to secure the"
+                " remaining match funding. This is so that we're confident you can draw"
                 " down this funding within this timeframe."
             ),
         },
@@ -171,7 +171,7 @@ COF_R3_EOI_SCHEMA = {
             "result": Eoi_Decision.PASS_WITH_CAVEATS,
             "caveat": (
                 "Understand the rules on housing: We will not provide funding if your"
-                " project’s main purpose is to purchase or develop housing assets,"
+                " project's main purpose is to purchase or develop housing assets,"
                 " including social housing. However, you can include housing elements"
                 " in your project where these are only a small part of supporting the"
                 " overall financial sustainability of the asset in community ownership."
