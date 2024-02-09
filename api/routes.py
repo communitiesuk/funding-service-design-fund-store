@@ -105,7 +105,7 @@ def get_round(fund_id, round_id):
 def get_eoi_deicision_schema_for_round(fund_id, round_id):
     round = get_round_from_db(fund_id=fund_id, round_id=round_id)
     if round:
-        return round.eoi_decision_schema
+        return round.eoi_decision_schema or {}
     abort(404)
 
 
