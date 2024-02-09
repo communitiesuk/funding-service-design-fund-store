@@ -1,9 +1,9 @@
 import json
 
 import pytest
-from config.fund_loader_config.cof.r3_eoi import COF_PLANNING_PERMISSION_CAVEAT
-from config.fund_loader_config.cof.r3_eoi import COF_R3_EOI_SCHEMA
-from config.fund_loader_config.cof.r3_eoi import COF_SECURE_MATCH_FUNDING_CAVEAT
+from config.fund_loader_config.cof.eoi_r1_schema import COF_PLANNING_PERMISSION_CAVEAT
+from config.fund_loader_config.cof.eoi_r1_schema import COF_R3_EOI_SCHEMA
+from config.fund_loader_config.cof.eoi_r1_schema import COF_SECURE_MATCH_FUNDING_CAVEAT
 from fsd_utils import Eoi_Decision
 from fsd_utils import evaluate_eoi_response
 

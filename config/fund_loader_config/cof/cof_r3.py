@@ -754,6 +754,7 @@ round_config = [
             "is_section_feedback_optional": True,
         },
         "eligibility_config": {"has_eligibility": False},
+        "eoi_decision_schema": None,
     }
 ]
 
@@ -806,6 +807,7 @@ round_config_w2 = [
             "is_section_feedback_optional": False,
         },
         "eligibility_config": {"has_eligibility": False},
+        "eoi_decision_schema": None,
     },
 ]
 
@@ -859,5 +861,6 @@ round_config_w3 = [
             "is_section_feedback_optional": False,
         },
         "eligibility_config": {"has_eligibility": False},
+        "eoi_decision_schema": None,
     }
 ]
