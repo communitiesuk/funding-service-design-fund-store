@@ -10,13 +10,15 @@ COF_SECURE_MATCH_FUNDING_CAVEAT = (
     " match funding. This is so that we're confident you can draw down this funding"
     " within this timeframe."
 )
-COF_PLANNING_PERMISSION_CAVEAT_TTILE_IF_NEEDED = "Get planning permission, if needed: "
-COF_PLANNING_PERMISSION_CAVEAT_TTILE = "Get planning permission: "
-COF_PLANNING_PERMISSION_CAVEAT_TEXT = (
-    "When you apply, you must be able to show that"
-    " you have secured or have made good progress in securing planning permission, if"
-    " needed (and building warrants, if required). This is so that we're confident that"
-    " COF funding will be used within the 12 month timeframe."
+COF_PLANNING_PERMISSION_IF_NEEDED_CAVEAT = (
+    "Get planning permission, if needed: When you apply, you must be able to show that you have secured or have made"
+    " good progress in securing planning permission, if needed (and building warrants, if required). This is so that"
+    " we're confident that COF funding will be used within the 12 month timeframe."
+)
+COF_PLANNING_PERMISSION_CAVEAT = (
+    "Get planning permission: When you apply, you must be able to show that you have secured or have made good progress"
+    " in securing planning permission (and building warrants, if required). This is so that we're confident that COF"
+    " funding will be used within the 12 month timeframe."
 )
 
 COF_R3_EOI_SCHEMA = {
@@ -185,19 +187,19 @@ COF_R3_EOI_SCHEMA = {
         {
             "answerValue": "Not sure",
             "result": Eoi_Decision.PASS_WITH_CAVEATS,
-            "caveat": COF_PLANNING_PERMISSION_CAVEAT_TTILE_IF_NEEDED + COF_PLANNING_PERMISSION_CAVEAT_TEXT,
+            "caveat": COF_PLANNING_PERMISSION_IF_NEEDED_CAVEAT,
         }
     ],
     "jICagT": [
         {
             "answerValue": "Not yet started",
             "result": Eoi_Decision.PASS_WITH_CAVEATS,
-            "caveat": COF_PLANNING_PERMISSION_CAVEAT_TTILE + COF_PLANNING_PERMISSION_CAVEAT_TEXT,
+            "caveat": COF_PLANNING_PERMISSION_CAVEAT,
         },
         {
             "answerValue": "Early stage",
             "result": Eoi_Decision.PASS_WITH_CAVEATS,
-            "caveat": COF_PLANNING_PERMISSION_CAVEAT_TTILE + COF_PLANNING_PERMISSION_CAVEAT_TEXT,
+            "caveat": COF_PLANNING_PERMISSION_CAVEAT,
         },
     ],
     "fZAMFv": [
