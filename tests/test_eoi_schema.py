@@ -40,7 +40,7 @@ def test_eoi_schema_throws_no_errors_with_all_forms():
         ("foQgiy", False, Eoi_Decision.FAIL, []),
         (
             "XuAyrs",
-            "Yes, a parish or community council",
+            "Yes, a town, parish or community council",
             Eoi_Decision.PASS_WITH_CAVEATS,
             [COF_R3_EOI_SCHEMA_EN["XuAyrs"][0]["caveat"]],
         ),
