@@ -1,7 +1,8 @@
 from datetime import datetime
 from datetime import timezone
 
-from config.fund_loader_config.cof.eoi_r1_schema import COF_R3_EOI_SCHEMA_EN, COF_R3_EOI_SCHEMA_CY
+from config.fund_loader_config.cof.eoi_r1_schema import COF_R3_EOI_SCHEMA_CY
+from config.fund_loader_config.cof.eoi_r1_schema import COF_R3_EOI_SCHEMA_EN
 from config.fund_loader_config.cof.shared import EOI_APPLICATION_GUIDANCE
 from config.fund_loader_config.cof.shared import fund_config
 from config.fund_loader_config.common_fund_config.fund_base_tree_paths import (

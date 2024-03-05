@@ -298,16 +298,16 @@ COF_R3_EOI_SCHEMA_CY = {
             "answerValue": "Ydy, math arall o awdurdod cyhoeddus",
             "result": Eoi_Decision.PASS_WITH_CAVEATS,
             "caveat": (
-               "Dylech ddeall y rheolau ynglŷn â chaffael asedau'r sector cyhoeddus: Dim ond ar ôl trosglwyddo ased "
-               "sydd dan berchnogaeth gyhoeddus i chi y gellir defnyddio cyllid o'r Gronfa Perchnogaeth Gymunedol ar "
-               "gyfer costau adnewyddu ac ailwampio. Ni allwn ariannu derbyniad cyfalaf, oni bai bod y costau yr aed "
-               "iddynt wrth drosglwyddo'r ased i chi yn nominal (bach iawn ac yn llawer is na'r gwerth gwirioneddol). "
-               "Yn eich cais, dylech ddangos nad ydych yn gofyn i'r Gronfa Perchnogaeth Gymunedol ariannu derbyniad "
-               "cyfalaf i awdurdod cyhoeddus (er enghraifft drwy rannu llythyr yn cadarnhau bod yr awdurdod yn fodlon "
-               "ar/eisoes wedi cytuno i les hirdymor ac nad oes derbyniad cyfalaf yn gysylltiedig). Ni allwn ychwaith "
-               "eich ariannu i gaffael ased dan berchnogaeth gyhoeddus os yw'n golygu trosglwyddo cyfrifoldeb am "
-               "ddarparu gwasanaethau statudol (gwasanaethau y mae trethdalwyr yn talu amdanynt) o'r awdurdod "
-               "cyhoeddus i'ch sefydliad."
+                "Dylech ddeall y rheolau ynglŷn â chaffael asedau'r sector cyhoeddus: Dim ond ar ôl trosglwyddo ased "
+                "sydd dan berchnogaeth gyhoeddus i chi y gellir defnyddio cyllid o'r Gronfa Perchnogaeth Gymunedol ar "
+                "gyfer costau adnewyddu ac ailwampio. Ni allwn ariannu derbyniad cyfalaf, oni bai bod y costau yr aed "
+                "iddynt wrth drosglwyddo'r ased i chi yn nominal (bach iawn ac yn llawer is na'r gwerth gwirioneddol). "
+                "Yn eich cais, dylech ddangos nad ydych yn gofyn i'r Gronfa Perchnogaeth Gymunedol ariannu derbyniad "
+                "cyfalaf i awdurdod cyhoeddus (er enghraifft drwy rannu llythyr yn cadarnhau bod yr awdurdod yn fodlon "
+                "ar/eisoes wedi cytuno i les hirdymor ac nad oes derbyniad cyfalaf yn gysylltiedig). Ni allwn ychwaith "
+                "eich ariannu i gaffael ased dan berchnogaeth gyhoeddus os yw'n golygu trosglwyddo cyfrifoldeb am "
+                "ddarparu gwasanaethau statudol (gwasanaethau y mae trethdalwyr yn talu amdanynt) o'r awdurdod "
+                "cyhoeddus i'ch sefydliad."
             ),
         },
     ],
@@ -382,10 +382,10 @@ COF_R3_EOI_SCHEMA_CY = {
             "answerValue": True,
             "result": Eoi_Decision.PASS_WITH_CAVEATS,
             "caveat": (
-               "Dylech ddeall y rheolau ynglyn â thai: Ni fyddwn yn darparu cyllid os mai prif ddiben eich prosiect "
-               "yw prynu neu ddatblygu asedau tai, gan gynnwys tai cymdeithasol. Fodd bynnag, gallwch gynnwys "
-               "elfennau tai yn eich prosiect os mai dim ond rhan fach o gefnogi cynaliadwyedd ariannol gyffredinol "
-               "yr ased dan berchnogaeth gymunedol yw'r rhain."
+                "Dylech ddeall y rheolau ynglyn â thai: Ni fyddwn yn darparu cyllid os mai prif ddiben eich prosiect "
+                "yw prynu neu ddatblygu asedau tai, gan gynnwys tai cymdeithasol. Fodd bynnag, gallwch gynnwys "
+                "elfennau tai yn eich prosiect os mai dim ond rhan fach o gefnogi cynaliadwyedd ariannol gyffredinol "
+                "yr ased dan berchnogaeth gymunedol yw'r rhain."
             ),
         }
     ],
