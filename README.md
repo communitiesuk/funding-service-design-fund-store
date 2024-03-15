@@ -72,10 +72,21 @@ Further details on the fund/round loader scripts, and how to load data for a spe
 This script allows you to open/close rounds using their dates to test different functionality as needed
 
 ```bash
-    docker exec -ti $(docker ps -qf "name=fund-store") python -m scripts.amend_round_dates --round_id c603d114-5364-4474-a0c4-c41cbf4d3bbd --deadline_date "2023-03-30 12:00:00"
+docker exec -ti $(docker ps -qf "name=fund-store") python -m scripts.amend_round_dates -q update-round-dates --round_id c603d114-5364-4474-a0c4-c41cbf4d3bbd --application_deadline "2023-03-30 12:00:00"
 
-
-    docker exec -ti $(docker ps -qf "name=fund-store") python -m scripts.amend_round_dates --round_id c603d114-5364-4474-a0c4-c41cbf4d3bbd --opens_date "2022-10-04 12:00:00" --deadline_date "2022-12-14 11:59:00" --assessment_deadline_date "2023-03-30 12:00:00"
+docker exec -ti $(docker ps -qf "name=fund-store") python -m scripts.amend_round_dates -q update-round-dates -r COF_R3W3 -o "2022-10-04 12:00:00" -d "2022-12-14 11:59:00" -ad "2023-03-30 12:00:00" -as NONE
+```
+For an interactive prompt where you can supply (or leave unchanged) all dates:
+```bash
+docker exec -ti $(docker ps -qf "name=fund-store") python -m scripts.amend_round_dates update-round-dates
+```
+To reset the dates for a round to those in the fund loader config:
+```bash
+docker exec -ti $(docker ps -qf "name=fund-store") python -m scripts.amend_round_dates -q reset-round-dates -r COF_R4W1
+```
+And with an interactive prompt:
+```bash
+docker exec -ti $(docker ps -qf "name=fund-store") python -m scripts.amend_round_dates reset-round-dates
 ```
 
 # Testing
