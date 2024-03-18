@@ -161,7 +161,7 @@ def update_round_dates(
 
         if assessment_start.casefold() == NONE:
             round_to_update.assessment_start = None
-        if assessment_start.casefold() == PAST:
+        elif assessment_start.casefold() == PAST:
             round_to_update.assessment_start = date_in_past
         elif assessment_start.casefold() == FUTURE:
             round_to_update.assessment_start = date_in_future
