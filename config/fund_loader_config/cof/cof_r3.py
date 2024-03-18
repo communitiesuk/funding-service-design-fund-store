@@ -27,33 +27,22 @@ ASSESSMENT_BASE_PATH_COF_R3_W2 = ".".join([str(COF_R3_W2_BASE_PATH), str(2)])
 APPLICATION_BASE_PATH_COF_R3_W3 = ".".join([str(COF_R3_W3_BASE_PATH), str(1)])
 ASSESSMENT_BASE_PATH_COF_R3_W3 = ".".join([str(COF_R3_W3_BASE_PATH), str(2)])
 
-COF_R3W1_OPENS_DATE = datetime(
-    2023, 5, 31, 11, 0, 0, tzinfo=timezone.utc
-)  # 2023-05-31 11:00:00
-COF_R3W1_DEADLINE_DATE = datetime(
-    2023, 7, 12, 11, 59, 0, tzinfo=timezone.utc
-)  # 2023-07-12 11:59:00
-COF_R3W1_ASSESSMENT_DEADLINE_DATE = datetime(
-    2023, 8, 9, 12, 0, 0, tzinfo=timezone.utc
-)  # 2023-08-09 12:00:00
-COF_R3W2_OPENS_DATE = datetime(
-    2023, 8, 30, 11, 0, 0, tzinfo=timezone.utc
-)  # 2023-08-30 11:00:00
-COF_R3W2_DEADLINE_DATE = datetime(
-    2023, 10, 11, 11, 59, 0, tzinfo=timezone.utc
-)  # 2023-10-11 11:59:00
-COF_R3W2_ASSESSMENT_DEADLINE_DATE = datetime(
-    2023, 11, 20, 12, 0, 0, tzinfo=timezone.utc
-)  # 2023-11-20 12:00:00
-COF_R3W3_OPENS_DATE = datetime(
-    2023, 12, 6, 11, 00, 0, tzinfo=timezone.utc
-)  # 2023-12-06 11:00:00
-COF_R3W3_DEADLINE_DATE = datetime(
-    2024, 1, 31, 11, 59, 0, tzinfo=timezone.utc
-)  # 2024-01-31 11:59:00
-COF_R3W3_ASSESSMENT_DEADLINE_DATE = datetime(
-    2024, 2, 23, 12, 0, 0, tzinfo=timezone.utc
-)  # 2024-02-23 12:00:00
+COF_R3W1_OPENS_DATE = datetime(2023, 5, 31, 11, 0, 0, tzinfo=timezone.utc)  # 2023-05-31 11:00:00
+COF_R3W1_DEADLINE_DATE = datetime(2023, 7, 12, 11, 59, 0, tzinfo=timezone.utc)  # 2023-07-12 11:59:00
+COF_R3W1_ASSESSMENT_DEADLINE_DATE = datetime(2023, 8, 9, 12, 0, 0, tzinfo=timezone.utc)  # 2023-08-09 12:00:00
+COF_R3W2_OPENS_DATE = datetime(2023, 8, 30, 11, 0, 0, tzinfo=timezone.utc)  # 2023-08-30 11:00:00
+COF_R3W2_DEADLINE_DATE = datetime(2023, 10, 11, 11, 59, 0, tzinfo=timezone.utc)  # 2023-10-11 11:59:00
+COF_R3W2_ASSESSMENT_DEADLINE_DATE = datetime(2023, 11, 20, 12, 0, 0, tzinfo=timezone.utc)  # 2023-11-20 12:00:00
+COF_R3W3_OPENS_DATE = datetime(2023, 12, 6, 11, 00, 0, tzinfo=timezone.utc)  # 2023-12-06 11:00:00
+COF_R3W3_SEND_REMINDER_DATE = datetime(2024, 1, 29, 11, 59, 0, tzinfo=timezone.utc)  # 2024-01-29 11:59:00
+COF_R3W3_DEADLINE_DATE = datetime(2024, 1, 31, 11, 59, 0, tzinfo=timezone.utc)  # 2024-01-31 11:59:00
+COF_R3W3_ASSESSMENT_DEADLINE_DATE = datetime(2024, 2, 23, 12, 0, 0, tzinfo=timezone.utc)  # 2024-02-23 12:00:00
+
+COF_EOI_OPENS_DATE = datetime(2024, 3, 6, 11, 00, 0, tzinfo=timezone.utc)  # 2023-12-06 11:00:00
+COF_EOI_DEADLINE_DATE = datetime(2124, 3, 6, 11, 59, 0, tzinfo=timezone.utc)  # 2124-03-06 11:59:00
+COF_EOI_ASSESSMENT_DEADLINE_DATE = datetime(2124, 3, 6, 12, 0, 0, tzinfo=timezone.utc)  # 2124-03-06 12:00:00
+COF_EOI_SEND_REMINDER_DATE = datetime(2024, 3, 1, 11, 59, 0, tzinfo=timezone.utc)  # 2024-03-1 11:59:00
+
 cof_r3_sections = [
     {
         "section_name": {
@@ -607,7 +596,7 @@ cof_r3w3_sections = [
     {
         "section_name": {
             "en": "3.4 Community benefits",
-            "cy": "3.4 Buddion i'r gymuned",
+            "cy": "3.4 Buddion cymunedol",
         },
         "form_name_json": {
             "en": "community-benefits-cof",
@@ -667,7 +656,7 @@ cof_r3w3_sections = [
     {
         "section_name": {
             "en": "4.5 Skills and resources",
-            "cy": "4.5 Sgiliau ac Adnoddau",
+            "cy": "4.5 Sgiliau ac adnoddau",
         },
         "form_name_json": {
             "en": "skills-and-resources-cof",
@@ -689,7 +678,7 @@ cof_r3w3_sections = [
     {
         "section_name": {
             "en": "4.7 Inclusiveness and integration",
-            "cy": "4.7 Cynhwysiant ac Integreiddio",
+            "cy": "4.7 Cynhwysiant ac integreiddio",
         },
         "form_name_json": {
             "en": "inclusiveness-and-integration-cof",
@@ -729,7 +718,10 @@ round_config = [
         "title_json": {"en": "Round 3 Window 1", "cy": "Round 3 Window 1"},
         "short_name": "R3W1",
         "opens": COF_R3W1_OPENS_DATE,
+        "assessment_start": None,
         "deadline": COF_R3W1_DEADLINE_DATE,
+        "application_reminder_sent": True,
+        "reminder_date": None,
         "assessment_deadline": COF_R3W1_ASSESSMENT_DEADLINE_DATE,
         "prospectus": "https://www.gov.uk/government/publications/community-ownership-fund-prospectus",
         "privacy_notice": (
@@ -768,6 +760,7 @@ round_config = [
             "is_section_feedback_optional": True,
         },
         "eligibility_config": {"has_eligibility": False},
+        "eoi_decision_schema": None,
     }
 ]
 
@@ -778,7 +771,10 @@ round_config_w2 = [
         "title_json": {"en": "Round 3 Window 2", "cy": "Round 3 Window 2"},
         "short_name": "R3W2",
         "opens": COF_R3W2_OPENS_DATE,
+        "assessment_start": None,
         "deadline": COF_R3W2_DEADLINE_DATE,
+        "application_reminder_sent": True,
+        "reminder_date": None,
         "assessment_deadline": COF_R3W2_ASSESSMENT_DEADLINE_DATE,
         "prospectus": "https://www.gov.uk/government/publications/community-ownership-fund-prospectus",
         "privacy_notice": (
@@ -817,6 +813,7 @@ round_config_w2 = [
             "is_section_feedback_optional": False,
         },
         "eligibility_config": {"has_eligibility": False},
+        "eoi_decision_schema": None,
     },
 ]
 
@@ -827,7 +824,10 @@ round_config_w3 = [
         "title_json": {"en": "Round 3 Window 3", "cy": "Round 3 Window 3"},
         "short_name": "R3W3",
         "opens": COF_R3W3_OPENS_DATE,
+        "assessment_start": None,
         "deadline": COF_R3W3_DEADLINE_DATE,
+        "application_reminder_sent": False,
+        "reminder_date": COF_R3W3_SEND_REMINDER_DATE,
         "assessment_deadline": COF_R3W3_ASSESSMENT_DEADLINE_DATE,
         "prospectus": "https://www.gov.uk/government/publications/community-ownership-fund-prospectus",
         "privacy_notice": (
@@ -842,7 +842,8 @@ round_config_w3 = [
         "instructions": (
             "You must have received an invitation to apply. If we did not invite you,"
             " first <a"
-            ' href="https://www.gov.uk/government/publications/community-ownership-fund-prospectus">'
+            ' href="https://www.gov.uk/guidance/community-ownership-fund-round-3-how-'
+            'to-express-your-interest-in-applying">'
             " express your interest in the fund</a>."
         ),
         "feedback_link": (
@@ -866,5 +867,6 @@ round_config_w3 = [
             "is_section_feedback_optional": False,
         },
         "eligibility_config": {"has_eligibility": False},
+        "eoi_decision_schema": None,
     }
 ]

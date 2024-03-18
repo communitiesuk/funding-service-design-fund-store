@@ -110,12 +110,8 @@ def seed_dynamic_data(request, app, clear_test_data, _db):
         # short_suffix = fund_id[0:4]
         fund_config = {
             "id": fund["id"],
-            "name_json": {
-                "en": f"Unit Test Fund {fund_count}"
-            },  # fund['short_name']}",
-            "title_json": {
-                "en": f"Unit test fund title {fund_count}"
-            },  # {fund['short_name']}",
+            "name_json": {"en": f"Unit Test Fund {fund_count}"},  # fund['short_name']}",
+            "title_json": {"en": f"Unit test fund title {fund_count}"},  # {fund['short_name']}",
             "short_name": f"FND{fund_count}",  # fund["short_name"],
             "description_json": {"en": "testing description"},
             "welsh_available": True,
@@ -131,12 +127,13 @@ def seed_dynamic_data(request, app, clear_test_data, _db):
             # round_short_suffix = round_id[0:4]
             round_config = {
                 "id": round["id"],
-                "title_json": {
-                    "en": f"Unit Test Round {round_count}"
-                },  # {round['short_name']}",
+                "title_json": {"en": f"Unit Test Round {round_count}"},  # {round['short_name']}",
                 "short_name": f"RND{round_count}",  # round["short_name"],
                 "opens": "2023-01-01 12:00:00",
+                "assessment_start": None,
                 "deadline": "2023-12-31 12:00:00",
+                "application_reminder_sent": True,
+                "reminder_date": None,
                 "fund_id": fund["id"],
                 "assessment_deadline": "2024-02-28 12:00:00",
                 "prospectus": "http://google.com",
@@ -162,13 +159,12 @@ def seed_dynamic_data(request, app, clear_test_data, _db):
                     "is_section_feedback_optional": True,
                 },
                 "eligibility_config": {"has_eligibility": False},
+                "eoi_decision_schema": None,
             }
             rounds.append(round_config)
 
         insert_round_data(rounds)
-        inserted_data["funds"].append(
-            {"rounds": rounds, "id": fund_id, "short_name": fund["short_name"]}
-        )
+        inserted_data["funds"].append({"rounds": rounds, "id": fund_id, "short_name": fund["short_name"]})
 
         for fund in seed_config["funds"]:
             for round in fund["rounds"]:
@@ -203,8 +199,10 @@ def mock_get_fund_round(mocker):
         "id": uuid4(),
         "assessment_deadline": datetime.now(),
         "deadline": datetime.now(),
+        "reminder_date": None,
         "fund_id": "",
         "opens": datetime.now(),
+        "assessment_start": None,
         "prospectus": "",
         "privacy_notice": "",
         "instructions": "",
@@ -214,18 +212,14 @@ def mock_get_fund_round(mocker):
         "support_days": "",
         "support_times": "",
     }
-    mock_round: Round = Round(
-        title_json={"en": "Round 1"}, short_name="RND1", **round_config
-    )
+    mock_round: Round = Round(title_json={"en": "Round 1"}, short_name="RND1", **round_config)
     mocker.patch("api.routes.get_all_funds", return_value=[mock_fund])
     mocker.patch("api.routes.get_fund_by_id", return_value=mock_fund)
     mocker.patch("api.routes.get_fund_by_short_name", return_value=mock_fund)
     mocker.patch("api.routes.get_round_by_id", return_value=mock_round)
     mocker.patch("api.routes.get_round_by_short_name", return_value=mock_round)
     mocker.patch("api.routes.get_rounds_for_fund_by_id", return_value=[mock_round])
-    mocker.patch(
-        "api.routes.get_rounds_for_fund_by_short_name", return_value=[mock_round]
-    )
+    mocker.patch("api.routes.get_rounds_for_fund_by_short_name", return_value=[mock_round])
 
 
 @pytest.fixture(scope="function")
@@ -239,27 +233,15 @@ def mock_get_sections(mocker):
                 id=1,
                 title_json={"en": "Middle"},
                 path="0.1",
-                children=[
-                    Section(
-                        id=2, title_json={"en": "Bottom"}, path="0.1.1", children=[]
-                    )
-                ],
+                children=[Section(id=2, title_json={"en": "Bottom"}, path="0.1.1", children=[])],
             ),
             Section(
                 id=3,
                 title_json={"en": "Middle2"},
                 path="0.2",
-                children=[
-                    Section(
-                        id=4, title_json={"en": "Bottom2"}, path="0.2.1", children=[]
-                    )
-                ],
+                children=[Section(id=4, title_json={"en": "Bottom2"}, path="0.2.1", children=[])],
             ),
         ],
     )
-    mocker.patch(
-        "api.routes.get_application_sections_for_round", return_value=[mock_sections]
-    )
-    mocker.patch(
-        "api.routes.get_assessment_sections_for_round", return_value=[mock_sections]
-    )
+    mocker.patch("api.routes.get_application_sections_for_round", return_value=[mock_sections])
+    mocker.patch("api.routes.get_assessment_sections_for_round", return_value=[mock_sections])

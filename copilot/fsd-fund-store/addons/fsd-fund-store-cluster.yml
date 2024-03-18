@@ -108,6 +108,8 @@ Resources:
       DBClusterParameterGroupName: !Ref fsdfundstoreclusterDBClusterParameterGroup
       DBSubnetGroupName: !Ref fsdfundstoreclusterDBSubnetGroup
       Port: 5432
+      StorageEncrypted: true
+      BackupRetentionPeriod: 8
       VpcSecurityGroupIds:
         - !Ref fsdfundstoreclusterDBClusterSecurityGroup
       ServerlessV2ScalingConfiguration:
@@ -152,3 +154,5 @@ Outputs:
   fsdfundstoreclusterSecurityGroup:
     Description: "The security group to attach to the workload."
     Value: !Ref fsdfundstoreclusterSecurityGroup
+    Export:
+      Name: fsdfundstoreclusterSecurityGroup

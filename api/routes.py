@@ -1,3 +1,5 @@
+from db import db
+from db.models import Round
 from db.queries import get_all_funds
 from db.queries import get_application_sections_for_round
 from db.queries import get_assessment_sections_for_round
@@ -13,6 +15,7 @@ from db.schemas.section import SECTION_SCHEMA_MAP
 from distutils.util import strtobool
 from flask import abort
 from flask import current_app
+from flask import jsonify
 from flask import request
 from fsd_utils.locale_selector.get_lang import get_lang
 
@@ -21,9 +24,7 @@ def filter_fund_by_lang(fund_data, lang_key: str = "en"):
     def filter_fund(data):
         data["name"] = data["name_json"].get(lang_key) or data["name_json"]["en"]
         data["title"] = data["title_json"].get(lang_key) or data["title_json"]["en"]
-        data["description"] = (
-            data["description_json"].get(lang_key) or data["description_json"]["en"]
-        )
+        data["description"] = data["description_json"].get(lang_key) or data["description_json"]["en"]
         return data
 
     if isinstance(fund_data, dict):
@@ -57,9 +58,7 @@ def get_funds():
 
     if funds:
         serialiser = FundSchema()
-        return filter_fund_by_lang(
-            fund_data=serialiser.dump(funds, many=True), lang_key=language
-        )
+        return filter_fund_by_lang(fund_data=serialiser.dump(funds, many=True), lang_key=language)
 
     current_app.logger.warn("No funds were found, please check this.")
     return []
@@ -82,8 +81,7 @@ def get_fund(fund_id):
     abort(404)
 
 
-def get_round(fund_id, round_id):
-    language = request.args.get("language", "en").replace("?", "")
+def get_round_from_db(fund_id, round_id) -> Round:
     short_name_arg = request.args.get("use_short_name")
     use_short_name = short_name_arg and strtobool(short_name_arg)
 
@@ -91,13 +89,29 @@ def get_round(fund_id, round_id):
         round = get_round_by_short_name(fund_id, round_id)
     else:
         round = get_round_by_id(fund_id, round_id)
+    return round
+
+
+def get_round(fund_id, round_id):
+    round = get_round_from_db(fund_id, round_id)
+    language = request.args.get("language", "en").replace("?", "")
     if round:
         serialiser = RoundSchema()
-        return filter_round_by_lang(
-            round_data=serialiser.dump(round), lang_key=language
-        )
+        return filter_round_by_lang(round_data=serialiser.dump(round), lang_key=language)
 
     abort(404)
+
+
+def get_eoi_deicision_schema_for_round(fund_id, round_id):
+    language = request.args.get("language", "en").replace("?", "").lower()
+    round = get_round_from_db(fund_id=fund_id, round_id=round_id)
+    if not round:
+        abort(404)
+
+    if not round.eoi_decision_schema:
+        return {}
+
+    return round.eoi_decision_schema.get(language) or {}
 
 
 def get_rounds_for_fund(fund_id):
@@ -142,11 +156,13 @@ def get_sections_for_round_assessment(fund_id, round_id):
 
 def get_available_flag_allocations(fund_id, round_id):
     # TODO: Currently teams are hardcoded, move it to database implementation
+    from config.fund_loader_config.cof.cof_r4 import COF_ROUND_4_WINDOW_1_ID
     from config.fund_loader_config.cof.cof_r3 import COF_ROUND_3_WINDOW_1_ID
     from config.fund_loader_config.cof.cof_r3 import COF_ROUND_3_WINDOW_2_ID
     from config.fund_loader_config.cof.cof_r3 import COF_FUND_ID
     from config.fund_loader_config.cof.cof_r2 import COF_ROUND_2_WINDOW_2_ID
     from config.fund_loader_config.cof.cof_r2 import COF_ROUND_2_WINDOW_3_ID
+    from config.fund_loader_config.cof.cof_r3 import COF_ROUND_3_WINDOW_3_ID
     from config.fund_loader_config.night_shelter.ns_r2 import NIGHT_SHELTER_ROUND_2_ID
     from config.fund_loader_config.night_shelter.ns_r2 import NIGHT_SHELTER_FUND_ID
     from config.fund_loader_config.cyp.cyp_r1 import CYP_FUND_ID, CYP_ROUND_1_ID
@@ -190,6 +206,10 @@ def get_available_flag_allocations(fund_id, round_id):
         return cof_teams
     elif fund_id == COF_FUND_ID and round_id == COF_ROUND_3_WINDOW_2_ID:
         return cof_teams
+    elif fund_id == COF_FUND_ID and round_id == COF_ROUND_3_WINDOW_3_ID:
+        return cof_teams
+    elif fund_id == COF_FUND_ID and round_id == COF_ROUND_4_WINDOW_1_ID:
+        return cof_teams
     elif fund_id == NIGHT_SHELTER_FUND_ID and round_id == NIGHT_SHELTER_ROUND_2_ID:
         return nstf_teams
     elif fund_id == CYP_FUND_ID and round_id == CYP_ROUND_1_ID:
@@ -198,3 +218,35 @@ def get_available_flag_allocations(fund_id, round_id):
         return dpif_teams
     else:
         abort(404)
+
+
+def update_application_reminder_sent_status(round_id):
+    try:
+        status = request.args.get("status")
+        round_instance = Round.query.filter_by(id=round_id).first()
+        reminder_status = round_instance.application_reminder_sent
+        if not round_instance:
+            return jsonify({"message": "Round ID not found"}), 404
+
+        if status.lower() == "true" and reminder_status is False:
+            round_instance.application_reminder_sent = True
+            db.session.commit()
+            current_app.logger.info(
+                {f"application_reminder_sent status has been updated to True for round {round_id}"}
+            ), 200
+            return (
+                jsonify({"message": f"application_reminder_sent status has been updated to True for round {round_id}"}),
+                200,
+            )
+        else:
+            return (
+                jsonify({"message": "application_reminder_sent Status should be True"}),
+                400,
+            )
+
+    except Exception as e:
+        current_app.logger.error(f"The application_reminder_sent status could not be updated {e}"), 400
+        return (
+            jsonify({"message": f"The application_reminder_sent status could not be updated for round_id {round_id}"}),
+            400,
+        )
