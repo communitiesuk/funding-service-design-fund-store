@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from datetime import datetime
+from datetime import timedelta
 
 import click
 from config.fund_loader_config.cof.cof_r2 import rounds_config as cof_r2_configs
@@ -39,8 +40,10 @@ ALL_ROUNDS_CONFIG = {
     ROUND_IDS["CYP_R1"]: cyp_config[0],
     ROUND_IDS["DPIF_R2"]: dpif_config[0],
 }
-NONE = "NONE"
-UNCHANGED = "UNCHANGED"
+NONE = "none"
+UNCHANGED = "unchanged"
+PAST = "past"
+FUTURE = "future"
 
 DEFAULTS = {
     "round_short_name": None,
@@ -88,7 +91,6 @@ def cli(ctx, q):
     default=UNCHANGED,
     prompt=True,
     cls=DynamicPromptOption,
-    help="Application start date in format %Y-%m-%d %H:%M:%S. UNCHANGED will not update.",
 )
 @click.option(
     "-d",
@@ -96,7 +98,6 @@ def cli(ctx, q):
     default=UNCHANGED,
     prompt=True,
     cls=DynamicPromptOption,
-    help="Application deadline date in format %Y-%m-%d %H:%M:%S. UNCHANGED will not update.",
 )
 @click.option(
     "-as",
@@ -104,7 +105,6 @@ def cli(ctx, q):
     default=UNCHANGED,
     prompt=True,
     cls=DynamicPromptOption,
-    help="Assessment start date in format %Y-%m-%d %H:%M:%S. UNCHANGED will not update. NONE will set value to NONE",
 )
 @click.option(
     "-ad",
@@ -112,7 +112,6 @@ def cli(ctx, q):
     default=UNCHANGED,
     prompt=True,
     cls=DynamicPromptOption,
-    help="Assessment deadline date in format %Y-%m-%d %H:%M:%S. UNCHANGED will not update.",
 )
 def update_round_dates(
     round_short_name=None,
@@ -122,29 +121,62 @@ def update_round_dates(
     assessment_start=None,
     assessment_deadline=None,
 ):
-    """Updates round dates for the supplied round ID."""
+    """Updates round dates for the supplied round ID. For any property, the following values are possible:
+        - UNCHANGED: Leave existing value in place
+        - PAST: Set to a date 5 days in the past
+        - FUTURE: Set to a date 5 days in the future
+        - Specific date in the format YYYY-mm-dd HH:MM:SS
+
+    For assessment_start, the following value is also available:
+        - NONE: Set the assessment_start to null"""
     if not round_id:
         round_id = ROUND_IDS[round_short_name]
 
     round_to_update = Round.query.get(round_id)
+    date_in_past = (datetime.now() + timedelta(days=-5)).strftime("%Y-%m-%d %H:%M:%S")
+    date_in_future = (datetime.now() + timedelta(days=5)).strftime("%Y-%m-%d %H:%M:%S")
     commit = False
-    if application_opens and (not application_opens.casefold() == UNCHANGED.casefold()):
-        round_to_update.opens = datetime.strptime(application_opens, "%Y-%m-%d %H:%M:%S")
+    if application_opens and not application_opens.casefold() == UNCHANGED:
         commit = True
-    if application_deadline and (not application_deadline.casefold() == UNCHANGED.casefold()):
-        round_to_update.deadline = datetime.strptime(application_deadline, "%Y-%m-%d %H:%M:%S")
-        commit = True
-    if assessment_start:
-        if assessment_start.casefold() == NONE.casefold():
-            round_to_update.assessment_start = None
-            commit = True
-        elif not assessment_start.casefold() == UNCHANGED.casefold():
-            round_to_update.assessment_start = datetime.strptime(assessment_start, "%Y-%m-%d %H:%M:%S")
-            commit = True
 
-    if assessment_deadline and (not assessment_deadline.casefold() == UNCHANGED.casefold()):
-        round_to_update.assessment_deadline = datetime.strptime(assessment_deadline, "%Y-%m-%d %H:%M:%S")
+        if application_opens.casefold() == PAST:
+            round_to_update.opens = date_in_past
+        elif application_opens.casefold() == FUTURE:
+            round_to_update.opens = date_in_future
+        else:
+            round_to_update.opens = datetime.strptime(application_opens, "%Y-%m-%d %H:%M:%S")
+
+    if application_deadline and not application_deadline.casefold() == UNCHANGED:
         commit = True
+
+        if application_deadline.casefold() == PAST:
+            round_to_update.deadline = date_in_past
+        elif application_deadline.casefold() == FUTURE:
+            round_to_update.deadline = date_in_future
+        else:
+            round_to_update.deadline = datetime.strptime(application_deadline, "%Y-%m-%d %H:%M:%S")
+
+    if assessment_start and not assessment_start.casefold() == UNCHANGED:
+        commit = True
+
+        if assessment_start.casefold() == NONE:
+            round_to_update.assessment_start = None
+        if assessment_start.casefold() == PAST:
+            round_to_update.assessment_start = date_in_past
+        elif assessment_start.casefold() == FUTURE:
+            round_to_update.assessment_start = date_in_future
+        else:
+            round_to_update.assessment_start = datetime.strptime(assessment_start, "%Y-%m-%d %H:%M:%S")
+
+    if assessment_deadline and not assessment_deadline.casefold() == UNCHANGED:
+        commit = True
+
+        if assessment_deadline.casefold() == PAST:
+            round_to_update.assessment_deadline = date_in_past
+        elif assessment_deadline.casefold() == FUTURE:
+            round_to_update.assessment_deadline = date_in_future
+        else:
+            round_to_update.deadline = datetime.strptime(assessment_deadline, "%Y-%m-%d %H:%M:%S")
 
     if commit:
         db.session.commit()
