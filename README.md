@@ -69,12 +69,14 @@ If running with the docker compose setup:
 Further details on the fund/round loader scripts, and how to load data for a specific fund or round can be found [here](https://dluhcdigital.atlassian.net/wiki/spaces/FS/pages/40337455/Adding+or+updating+fund+and+round+data)
 
 ## Amending round dates
-This script allows you to open/close rounds using their dates to test different functionality as needed
+This script allows you to open/close rounds using their dates to test different functionality as needed. You can also use the keywords 'PAST', 'FUTURE' and 'UNCHANGED' to save typing dates.
 
 ```bash
 docker exec -ti $(docker ps -qf "name=fund-store") python -m scripts.amend_round_dates -q update-round-dates --round_id c603d114-5364-4474-a0c4-c41cbf4d3bbd --application_deadline "2023-03-30 12:00:00"
 
 docker exec -ti $(docker ps -qf "name=fund-store") python -m scripts.amend_round_dates -q update-round-dates -r COF_R3W3 -o "2022-10-04 12:00:00" -d "2022-12-14 11:59:00" -ad "2023-03-30 12:00:00" -as NONE
+
+docker exec -ti $(docker ps -qf "name=fund-store") python -m scripts.amend_round_dates -q update-round-dates -r COF_R3W3 -o PAST -d FUTURE
 ```
 For an interactive prompt where you can supply (or leave unchanged) all dates:
 ```bash
