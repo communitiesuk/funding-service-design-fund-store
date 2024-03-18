@@ -31,16 +31,32 @@ fund_config = {
     "owner_organisation_logo_uri": DLUHC_LOGO_PNG,
 }
 
-COF_APPLICATION_GUIDANCE = (  # TODO: Provide welsh translation
-    "<h2 class='govuk-heading govuk-heading-s'>What we'll ask you for</h2><p"
-    " class='govuk-body'>You can preview the <a href='{all_questions_url}'>full list of"
-    " application questions</a>.</p><p class='govuk-body'>We'll also ask you to upload"
-    " a business plan to support the answers you've given us in the management case"
-    " section.</p>"
-)
+COF_APPLICATION_GUIDANCE = {
+    "en": (
+        "<h2 class='govuk-heading govuk-heading-s'>What we'll ask you for</h2><p"
+        " class='govuk-body'>You can preview the <a href='{all_questions_url}'>full list of"
+        " application questions</a>.</p><p class='govuk-body'>We'll also ask you to upload"
+        " a business plan to support the answers you've given us in the management case"
+        " section.</p>"
+    ),
+    "cy": (  # TODO: Provide welsh translation
+        "<h2 class='govuk-heading govuk-heading-s'>What we'll ask you for</h2><p"
+        " class='govuk-body'>You can preview the <a href='{all_questions_url}'>full list of"
+        " application questions</a>.</p><p class='govuk-body'>We'll also ask you to upload"
+        " a business plan to support the answers you've given us in the management case"
+        " section.</p>"
+    ),
+}
 
-EOI_APPLICATION_GUIDANCE = (  # TODO: Provide welsh translation
-    "<h2 class='govuk-heading govuk-heading-s'>What we'll ask you for</h2><p"
-    " class='govuk-body'>You can preview the <a class='govuk-link' href='{all_questions_url}'>full list of"
-    " application questions</a>.</p>"
-)
+EOI_APPLICATION_GUIDANCE = {
+    "en": (
+        "<h2 class='govuk-heading govuk-heading-s'>What we'll ask you for</h2><p"
+        " class='govuk-body'>You can preview the <a class='govuk-link' href='{all_questions_url}'>full list of"
+        " application questions</a>.</p>"
+    ),
+    "cy": (  # TODO: Provide welsh translation
+        "<h2 class='govuk-heading govuk-heading-s'>What we'll ask you for</h2><p"
+        " class='govuk-body'>You can preview the <a class='govuk-link' href='{all_questions_url}'>full list of"
+        " application questions</a>.</p>"
+    ),
+}
