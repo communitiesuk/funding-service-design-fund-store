@@ -133,8 +133,8 @@ round_config_eoi = [
                 " are interested in applying for the Community Ownership Fund (COF)."
             ),
             "cy": (
-                "You must complete this Expression of Interest (EOI) form if you"
-                " are interested in applying for the Community Ownership Fund (COF)."
+                "Mae'n rhaid i chi gwblhau'r ffurflen Datganiad o Ddiddordeb hon os"
+                " oes diddordeb gennych mewn gwneud cais i'r Gronfa Perchnogaeth Gymunedol."
             ),
         },
         "feedback_link": (
