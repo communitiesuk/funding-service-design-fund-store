@@ -27,6 +27,7 @@ def upgrade():
         batch_op.add_column(sa.Column("instructions_json", sa.JSON(none_as_null=True), nullable=True))
         batch_op.add_column(sa.Column("application_guidance_json", sa.JSON(none_as_null=True), nullable=True))
 
+    # Migrate existing data to newly created columns
     query = sa.text("SELECT id, instructions, application_guidance FROM round")
     round_entries = op.get_bind().execute(query)
     connection = op.get_bind()
@@ -40,10 +41,11 @@ def upgrade():
         params = {
             "entry_id": entry_id,
             "instructions_json": json.dumps({"en": instructions}) if instructions else None,
-            "application_guidance_json": json.dumps({"en": application_guidance}),
+            "application_guidance_json": json.dumps({"en": application_guidance}) if application_guidance else None,
         }
         connection.execute(update_query, params)
 
+    # Drop the columns
     with op.batch_alter_table("round", schema=None) as batch_op:
         batch_op.drop_column("instructions")
         batch_op.drop_column("application_guidance")
@@ -56,12 +58,13 @@ def downgrade():
         batch_op.add_column(sa.Column("instructions", sa.VARCHAR(), autoincrement=False, nullable=True))
         batch_op.add_column(sa.Column("application_guidance", sa.VARCHAR(), autoincrement=False, nullable=True))
 
-    connection = op.get_bind()
+    # Migrate existing data to newly created columns
     query = sa.text("SELECT id, instructions_json, application_guidance_json  FROM round")
     round_entries = op.get_bind().execute(query)
+    connection = op.get_bind()
     for entry_id, instructions_json, application_guidance_json in round_entries:
         instructions = instructions_json["en"] if instructions_json else ""
-        application_guidance = application_guidance_json["en"]
+        application_guidance = application_guidance_json["en"] if application_guidance_json else None
         update_query = sa.text(
             "UPDATE round SET instructions = :instructions, application_guidance = :application_guidance WHERE id ="
             " :entry_id"
@@ -70,6 +73,7 @@ def downgrade():
         params = {"entry_id": entry_id, "instructions": instructions, "application_guidance": application_guidance}
         connection.execute(update_query, params)
 
+    # Drop the columns
     with op.batch_alter_table("round", schema=None) as batch_op:
         batch_op.alter_column("instructions", nullable=False)
         batch_op.drop_column("application_guidance_json")
