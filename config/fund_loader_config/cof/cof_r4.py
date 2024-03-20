@@ -262,11 +262,10 @@ round_config_w1 = [
                 " express your interest in the fund</a>."
             ),
             "cy": (
-                "You must have received an invitation to apply. If we did not invite you,"
-                " first <a"
+                "Mae'n rhaid i chi fod wedi derbyn gwahoddiad i ymgeisio. Os na wnaethom eich gwahodd, <a"
                 ' href="https://www.gov.uk/guidance/community-ownership-fund-round-3-how-'
                 'to-express-your-interest-in-applying">'
-                " express your interest in the fund</a>."
+                " mynegwch eich diddordeb yn y gronfa yn gyntaf</a>."
             ),
         },
         "feedback_link": (
