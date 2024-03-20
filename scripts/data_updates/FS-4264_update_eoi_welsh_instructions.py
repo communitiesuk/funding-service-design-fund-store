@@ -8,18 +8,17 @@ from db.models.round import Round
 
 def update_rounds_with_links(round_config):
     current_app.logger.warning(f"\tRound: {round_config[0]['short_name']} ({round_config[0]['id']})")
-    if round_config[0].get("instructions_json"):
-        current_app.logger.warning("\t\tUpdating instructions & application_guidance")
-        stmt = (
-            update(Round)
-            .where(Round.id == round_config[0]["id"])
-            .values(
-                instructions_json=round_config[0]["instructions_json"],
-                application_guidance_json=round_config[0]["application_guidance_json"],
-            )
+    current_app.logger.warning("\t\tUpdating instructions & application_guidance")
+    stmt = (
+        update(Round)
+        .where(Round.id == round_config[0]["id"])
+        .values(
+            instructions_json=round_config[0]["instructions_json"],
+            application_guidance_json=round_config[0]["application_guidance_json"],
         )
+    )
 
-        db.session.execute(stmt)
+    db.session.execute(stmt)
     db.session.commit()
 
 
