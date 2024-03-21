@@ -31,6 +31,15 @@ def upgrade():
             """
         )
     )
+    connection.execute(
+        sa.text(
+            """
+            UPDATE round
+            SET is_expression_of_interest = true
+            WHERE id in ('6a47c649-7bac-4583-baed-9c4e7a35c8b3')
+            """
+        )
+    )
     # ### end Alembic commands ###
 
 
