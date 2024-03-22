@@ -10,7 +10,7 @@ flask-json
 #-----------------------------------
 #   Connexion APIs
 #-----------------------------------
-connexion
+connexion[flask]>=3.0.6
 swagger-ui-bundle
 openapi-spec-validator
 prance

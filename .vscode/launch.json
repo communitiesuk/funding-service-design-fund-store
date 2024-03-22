@@ -5,6 +5,26 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: Connexion",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "connexion",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "FLASK_APP": "app.py",
+                "FLASK_ENV": "development",
+                "FLASK_DEBUG": "1"
+            },
+            "args": [
+                "run",
+                "app:create_app",
+                "--port",
+                "5000"
+            ],
+            "jinja": true
+        },
+
+        {
             "name": "Docker-Runner fund-store",
             "type": "python",
             "request": "attach",
