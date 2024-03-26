@@ -217,7 +217,7 @@ six==1.16.0
     #   thrift
 soupsieve==2.5
     # via beautifulsoup4
-sqlalchemy[mypy]==2.0.12
+sqlalchemy[mypy]==2.0.29
     # via
     #   -r requirements.in
     #   alembic
@@ -240,7 +240,7 @@ tomli==2.0.1
     # via
     #   mypy
     #   pytest
-typing-extensions==4.5.0
+typing-extensions==4.10.0
     # via
     #   alembic
     #   mypy
