@@ -168,7 +168,7 @@ pytest-html==4.1.1
     # via -r requirements.in
 pytest-metadata==2.0.4
     # via pytest-html
-pytest-mock==3.10.0
+pytest-mock==3.14.0
     # via -r requirements.in
 python-consul==1.1.0
     # via flipper-client
