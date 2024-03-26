@@ -309,7 +309,7 @@ pytest-metadata==2.0.4
     # via
     #   -r requirements.txt
     #   pytest-html
-pytest-mock==3.10.0
+pytest-mock==3.14.0
     # via
     #   -r requirements-dev.in
     #   -r requirements.txt
