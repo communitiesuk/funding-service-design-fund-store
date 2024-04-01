@@ -258,7 +258,7 @@ pluggy==1.0.0
     #   pytest
 prance==23.6.21.0
     # via -r requirements.txt
-pre-commit==2.20.0
+pre-commit==3.7.0
     # via -r requirements-dev.in
 psycopg2-binary==2.9.9
     # via -r requirements.txt
@@ -407,8 +407,6 @@ thrift==0.16.0
     # via
     #   -r requirements.txt
     #   flipper-client
-toml==0.10.2
-    # via pre-commit
 tomli==2.0.1
     # via
     #   -r requirements.txt
