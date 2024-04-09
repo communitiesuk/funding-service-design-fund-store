@@ -730,7 +730,8 @@ round_config = [
             "privacy-notice/community-ownership-fund-privacy-notice"
         ),
         "contact_us_banner_json": {
-            "en": textwrap.dedent("""
+            "en": textwrap.dedent(
+                """
                  <h2 class="govuk-heading-m">Get application support</h2>
                  <p class="govuk-body">
                     <a class="govuk-link" href="https://mycommunity.org.uk/community-ownership-fund">Visit the My Community website</a>
@@ -746,8 +747,10 @@ round_config = [
                     Contact the Department of Levelling Up, Housing and Communities funding team if you need
                     help with accessing or submitting an application form.
                 </p>
-            """),
-            "cy": textwrap.dedent("""
+            """
+            ),
+            "cy": textwrap.dedent(
+                """
                  <h2 class="govuk-heading-m">Get application support</h2>
                  <p class="govuk-body">
                     <a class="govuk-link" href="https://mycommunity.org.uk/community-ownership-fund">Visit the My Community website</a>
@@ -763,7 +766,8 @@ round_config = [
                     Contact the Department of Levelling Up, Housing and Communities funding team if you need
                     help with accessing or submitting an application form.
                 </p>
-            """),
+            """
+            ),
         },
         "contact_email": "fsd.support@levellingup.gov.uk",
         "contact_phone": None,
@@ -828,7 +832,8 @@ round_config_w2 = [
             "privacy-notice/community-ownership-fund-privacy-notice"
         ),
         "contact_us_banner_json": {
-            "en": textwrap.dedent("""
+            "en": textwrap.dedent(
+                """
                  <h2 class="govuk-heading-m">Get application support</h2>
                  <p class="govuk-body">
                     <a class="govuk-link" href="https://mycommunity.org.uk/community-ownership-fund">Visit the My Community website</a>
@@ -844,8 +849,10 @@ round_config_w2 = [
                     Contact the Department of Levelling Up, Housing and Communities funding team if you need
                     help with accessing or submitting an application form.
                 </p>
-            """),
-            "cy": textwrap.dedent("""
+            """
+            ),
+            "cy": textwrap.dedent(
+                """
                  <h2 class="govuk-heading-m">Get application support</h2>
                  <p class="govuk-body">
                     <a class="govuk-link" href="https://mycommunity.org.uk/community-ownership-fund">Visit the My Community website</a>
@@ -861,7 +868,8 @@ round_config_w2 = [
                     Contact the Department of Levelling Up, Housing and Communities funding team if you need
                     help with accessing or submitting an application form.
                 </p>
-            """),
+            """
+            ),
         },
         "contact_email": "fsd.support@levellingup.gov.uk",
         "contact_phone": None,
@@ -926,7 +934,8 @@ round_config_w3 = [
             "privacy-notice/community-ownership-fund-privacy-notice"
         ),
         "contact_us_banner_json": {
-            "en": textwrap.dedent("""
+            "en": textwrap.dedent(
+                """
                  <h2 class="govuk-heading-m">Get application support</h2>
                  <p class="govuk-body">
                     <a class="govuk-link" href="https://mycommunity.org.uk/community-ownership-fund">Visit the My Community website</a>
@@ -942,8 +951,10 @@ round_config_w3 = [
                     Contact the Department of Levelling Up, Housing and Communities funding team if you need
                     help with accessing or submitting an application form.
                 </p>
-            """),
-            "cy": textwrap.dedent("""
+            """
+            ),
+            "cy": textwrap.dedent(
+                """
                  <h2 class="govuk-heading-m">Get application support</h2>
                  <p class="govuk-body">
                     <a class="govuk-link" href="https://mycommunity.org.uk/community-ownership-fund">Visit the My Community website</a>
@@ -959,7 +970,8 @@ round_config_w3 = [
                     Contact the Department of Levelling Up, Housing and Communities funding team if you need
                     help with accessing or submitting an application form.
                 </p>
-            """),
+            """
+            ),
         },
         "contact_email": "fsd.support@levellingup.gov.uk",
         "contact_phone": None,
