@@ -1,3 +1,4 @@
+# flake8: noqa
 import textwrap
 from datetime import datetime
 from datetime import timezone
