@@ -1,4 +1,4 @@
-"""empty message
+"""FS-4071: Add contact us banner column to round model.
 
 Revision ID: e439c3fdea6d
 Revises: 7b877df0bd36
