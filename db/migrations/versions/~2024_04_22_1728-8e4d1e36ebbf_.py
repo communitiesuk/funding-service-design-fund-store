@@ -1,5 +1,5 @@
 """FS-4071: Add Boolean to determine whether we show email
-or a link to the contact us page, differs per fund. 
+or a link to the contact us page, differs per fund.
 
 Revision ID: 8e4d1e36ebbf
 Revises: e439c3fdea6d
