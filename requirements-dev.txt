@@ -380,7 +380,6 @@ six==1.16.0
     #   prance
     #   python-consul
     #   python-dateutil
-    #   sqlalchemy-json
     #   thrift
     #   virtualenv
 soupsieve==2.5
@@ -395,7 +394,7 @@ sqlalchemy[mypy]==2.0.12
     #   marshmallow-sqlalchemy
     #   sqlalchemy-json
     #   sqlalchemy-utils
-sqlalchemy-json==0.5.0
+sqlalchemy-json==0.7.0
     # via -r requirements.txt
 sqlalchemy-utils==0.41.1
     # via

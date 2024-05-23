@@ -213,7 +213,6 @@ six==1.16.0
     #   prance
     #   python-consul
     #   python-dateutil
-    #   sqlalchemy-json
     #   thrift
 soupsieve==2.5
     # via beautifulsoup4
@@ -226,7 +225,7 @@ sqlalchemy[mypy]==2.0.12
     #   sqlalchemy
     #   sqlalchemy-json
     #   sqlalchemy-utils
-sqlalchemy-json==0.5.0
+sqlalchemy-json==0.7.0
     # via -r requirements.in
 sqlalchemy-utils==0.41.1
     # via
