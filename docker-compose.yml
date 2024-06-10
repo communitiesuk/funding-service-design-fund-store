@@ -1,0 +1,16 @@
+services:
+  fsd-fund-store:
+    build:
+      context: ./src
+      target: fund-store-dev
+    volumes:
+      - .:/workspace:cached
+    command: sleep infinity
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@database:5432/fund_store
+  database:
+    image: postgres
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_PASSWORD=password

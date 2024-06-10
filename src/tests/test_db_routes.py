@@ -92,7 +92,11 @@ def test_get_events_for_round(flask_test_client):
             "id": "1",
             "round_id": "9",
             "type": EventType.APPLICATION_DEADLINE_REMINDER,
-            "activation_date": datetime(2000, 10, 1),
+            "activation_date": datetime(
+                2000,
+                10,
+                1,
+            ),
             "processed": None,
         },
         {
