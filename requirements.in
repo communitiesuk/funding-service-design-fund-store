@@ -1,16 +1,8 @@
-#-----------------------------------
-#   FSD Utils
-#-----------------------------------
-funding-service-design-utils>=2.0.40,<2.1.0
-#-----------------------------------
-#   Flask Version
-#-----------------------------------
-flask
-flask-json
+
 #-----------------------------------
 #   Connexion APIs
 #-----------------------------------
-connexion
+connexion==2.14.2
 swagger-ui-bundle
 openapi-spec-validator
 prance
@@ -25,8 +17,4 @@ sqlalchemy_json
 psycopg2-binary
 marshmallow-sqlalchemy
 
-pytest-mock
-pytest-html>=3.2.0
-
 airium
-bs4

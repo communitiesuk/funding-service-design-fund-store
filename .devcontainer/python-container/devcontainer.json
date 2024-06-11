@@ -6,7 +6,7 @@
     ],
     "service": "fsd-fund-store",
     "shutdownAction": "none",
-    "workspaceFolder": "/workspace",
+    "workspaceFolder": "/fund-store",
     "customizations": {
         "vscode": {
             "extensions": [

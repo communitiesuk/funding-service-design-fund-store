@@ -1,12 +1,33 @@
-FROM python:3.10-bullseye
+###############################################################################
+#
+#       Fund Store Dev Image
+#
+###############################################################################
+
+FROM ghcr.io/srh-sloan/fsd-base-dev:latest as fund-store-dev
+
+RUN apt-get update && apt-get install -y postgresql-client
 
 WORKDIR /app
-COPY requirements-dev.txt requirements-dev.txt
-RUN pip --no-cache-dir install --ignore-installed distlib -r requirements-dev.txt
-RUN pip install gunicorn
-RUN apt update && apt install -y postgresql-client
+
 COPY . .
 
-EXPOSE 8080
+RUN python3 -m pip install --upgrade pip && pip install -r requirements.txt
 
-CMD ["gunicorn", "-w", "1", "-b", "0.0.0.0:8080", "app:create_app()"]
+###############################################################################
+#
+#       Fund Store Runtime Image
+#
+###############################################################################
+
+FROM ghcr.io/srh-sloan/fsd-base:latest as fund-store
+
+WORKDIR /app
+
+# TODO filter out test files etc.
+COPY . .
+
+RUN python3 -m pip install --upgrade pip && pip install -r requirements.txt
+
+EXPOSE 8080
+CMD ["flask", "run", "--port", "8080", "--host", "0.0.0.0"]
