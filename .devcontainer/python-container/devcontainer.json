@@ -1,8 +1,7 @@
 {
     "name": "Python Container",
     "dockerComposeFile": [
-      "../../docker-compose.yml",
-      "../../compose.override.yml"
+      "../../docker-compose.yml"
     ],
     "service": "fsd-fund-store",
     "shutdownAction": "none",

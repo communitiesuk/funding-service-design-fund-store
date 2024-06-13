@@ -8,11 +8,9 @@ services:
     command: sleep infinity
     environment:
       - DATABASE_URL=postgresql://postgres:password@fund-store-db:5432/fund_store
-    # depends_on:
-    #   - fund-store-db
+    depends_on:
+      - fund-store-db
   fund-store-db:
     image: postgres
-    # ports:
-    #   - 5433:5432
     environment:
       - POSTGRES_PASSWORD=password
