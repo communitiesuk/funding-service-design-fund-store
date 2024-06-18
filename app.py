@@ -20,7 +20,7 @@ def create_app() -> Flask:
     connexion_app = connexion.FlaskApp(
         "Fund Store",
         specification_dir="/openapi/",
-        options=connexion_options,
+        swagger_ui_options=connexion_options,
     )
     connexion_app.add_api(
         get_bundled_specs("/openapi/api.yml"),
