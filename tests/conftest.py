@@ -4,6 +4,7 @@ Contains test configuration.
 
 from datetime import datetime
 from uuid import uuid4
+from connexion import App
 
 import pytest
 from flask import Flask
@@ -177,18 +178,16 @@ def seed_dynamic_data(request, app, clear_test_data, _db):
 
     yield inserted_data
 
-
 @pytest.fixture(scope="session")
-def app() -> Flask:
+def app() -> App:
     app = create_app()
-    yield app
+    yield app.app
 
 
 @pytest.fixture(scope="function")
 def flask_test_client():
-    with create_app().app_context() as app_context:
-        with app_context.app.test_client() as test_client:
-            yield test_client
+    with create_app().test_client() as test_client:
+        yield test_client
 
 
 @pytest.fixture(scope="function")

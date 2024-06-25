@@ -1,6 +1,10 @@
+import json
+
 import connexion
 import psycopg2
 from flask import Flask
+from flask import jsonify
+from flask import request
 from fsd_utils import init_sentry
 from fsd_utils.healthchecks.checkers import DbChecker
 from fsd_utils.healthchecks.checkers import FlaskRunningChecker
@@ -12,24 +16,21 @@ from db.models import Fund  # noqa
 from db.models import Round  # noqa
 from db.models import Section  # noqa
 from openapi.utils import get_bundled_specs
+from connexion import FlaskApp
 
+def create_app() -> FlaskApp:
 
-def create_app() -> Flask:
     init_sentry()
-    connexion_options = {"swagger_url": "/"}
     connexion_app = connexion.FlaskApp(
         "Fund Store",
-        specification_dir="/openapi/",
-        swagger_ui_options=connexion_options,
     )
+
     connexion_app.add_api(
         get_bundled_specs("/openapi/api.yml"),
         validate_responses=True,
     )
-
     flask_app = connexion_app.app
     flask_app.config.from_object("config.Config")
-
     from db import db
     from db import migrate
 
@@ -47,7 +48,20 @@ def create_app() -> Flask:
     health.add_check(FlaskRunningChecker())
     health.add_check(DbChecker(db))
 
-    return flask_app
+    # @flask_app.after_request
+    # def after_request(response):
+    #     if response.mimetype == 'application/json':
+    #         return response
+    #     try:
+    #         response_data = response.get_json()
+    #     except Exception:
+    #         response_data = response.get_data(as_text=True)
+    #         response_data = {"message": response_data}
+    #     response = jsonify(response_data)
+    #     response.headers['Content-type'] = 'application/json'
+    #     return response
+
+    return connexion_app
 
 
 app = create_app()

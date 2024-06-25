@@ -1,4 +1,4 @@
-from fsd_utils import Eoi_Decision
+from fsd_utils import Decision as Eoi_Decision
 
 COF_SECURE_MATCH_FUNDING_CAVEAT_EN = (
     "Make progress in securing match funding: COF will contribute up to 80% of the"

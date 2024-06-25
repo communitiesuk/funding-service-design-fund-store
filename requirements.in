@@ -11,7 +11,7 @@ Flask-JSON==0.4.0
 #-----------------------------------
 #   Connexion APIs
 #-----------------------------------
-connexion[flask]
+connexion[flask,swagger-ui,uvcorn]
 swagger-ui-bundle==1.1.0
 openapi-spec-validator
 prance

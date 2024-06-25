@@ -1,8 +1,8 @@
 import json
 
 import pytest
-from fsd_utils import Eoi_Decision
-from fsd_utils import evaluate_eoi_response
+from fsd_utils import Decision as Eoi_Decision
+from fsd_utils import evaluate_response as evaluate_eoi_response
 
 from config.fund_loader_config.cof.eoi_r1_schema import (
     COF_PLANNING_PERMISSION_CAVEAT_EN,
