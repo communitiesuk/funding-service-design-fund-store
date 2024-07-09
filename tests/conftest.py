@@ -6,7 +6,7 @@ from datetime import datetime
 from uuid import uuid4
 
 import pytest
-from connexion import App
+from flask import Flask
 from sqlalchemy_utils import Ltree
 
 from app import create_app
@@ -179,7 +179,7 @@ def seed_dynamic_data(request, app, clear_test_data, _db):
 
 
 @pytest.fixture(scope="session")
-def app() -> App:
+def app() -> Flask:
     app = create_app()
     yield app.app
 
