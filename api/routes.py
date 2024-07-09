@@ -1,5 +1,4 @@
 from distutils.util import strtobool
-import setuptools
 
 from flask import abort
 from flask import current_app

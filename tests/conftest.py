@@ -4,10 +4,9 @@ Contains test configuration.
 
 from datetime import datetime
 from uuid import uuid4
-from connexion import App
 
 import pytest
-from flask import Flask
+from connexion import App
 from sqlalchemy_utils import Ltree
 
 from app import create_app
@@ -177,6 +176,7 @@ def seed_dynamic_data(request, app, clear_test_data, _db):
                 insert_sections(round["sections"])
 
     yield inserted_data
+
 
 @pytest.fixture(scope="session")
 def app() -> App:

@@ -32,7 +32,7 @@ def test_get_round_by_short_name(flask_test_client, mock_get_fund_round):
 def test_get_eoi_decision_schema(flask_test_client, mock_get_fund_round):
     response = flask_test_client.get("/funds/FND1/rounds/RND1/eoi_decision_schema?use_short_name=True")
     assert response.status_code == 200
-    result =response.json()
+    result = response.json()
     assert result == {}
 
 

@@ -1,10 +1,6 @@
-import json
-
 import connexion
 import psycopg2
-from flask import Flask
-from flask import jsonify
-from flask import request
+from connexion import FlaskApp
 from fsd_utils import init_sentry
 from fsd_utils.healthchecks.checkers import DbChecker
 from fsd_utils.healthchecks.checkers import FlaskRunningChecker
@@ -16,12 +12,12 @@ from db.models import Fund  # noqa
 from db.models import Round  # noqa
 from db.models import Section  # noqa
 from openapi.utils import get_bundled_specs
-from connexion import FlaskApp
+
 
 def create_app() -> FlaskApp:
 
     init_sentry()
-    connexion_app = connexion.FlaskApp(
+    connexion_app = connexion.App(
         "Fund Store",
     )
 
@@ -47,21 +43,8 @@ def create_app() -> FlaskApp:
     health = Healthcheck(flask_app)
     health.add_check(FlaskRunningChecker())
     health.add_check(DbChecker(db))
-
-    # @flask_app.after_request
-    # def after_request(response):
-    #     if response.mimetype == 'application/json':
-    #         return response
-    #     try:
-    #         response_data = response.get_json()
-    #     except Exception:
-    #         response_data = response.get_data(as_text=True)
-    #         response_data = {"message": response_data}
-    #     response = jsonify(response_data)
-    #     response.headers['Content-type'] = 'application/json'
-    #     return response
-
     return connexion_app
 
 
 app = create_app()
+application = app.app
