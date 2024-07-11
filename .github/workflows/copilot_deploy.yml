@@ -62,7 +62,7 @@ jobs:
     concurrency: build-fund-store-pack
     permissions:
       packages: write
-    uses: communitiesuk/funding-service-design-workflows/.github/workflows/package.yml@main
+    uses: communitiesuk/funding-service-design-workflows/.github/workflows/package.yml@fs-4462-build-with-base-reqs
     with:
       version_to_build: sha-${{ github.sha }}
       owner: ${{ github.repository_owner }}
