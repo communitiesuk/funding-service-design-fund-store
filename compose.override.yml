@@ -1,0 +1,7 @@
+# If you want to expose the database to access from your local machine, uncomment this and choose a port that won't conflict.
+# Then update .decvontainer/python/devcontainer.json so that 'dockerComposeFile' includes a reference to this override file
+
+# services:
+#   fund-store-db:
+#     ports:
+#       - 5433:5432

@@ -1,12 +1,18 @@
-FROM python:3.10-bullseye
+###############################################################################
+#
+#       Fund Store Dev Image
+#
+###############################################################################
+
+FROM ghcr.io/communitiesuk/fsd-base-dev/db:fs-4462-base-images as fund-store-dev
+
 
 WORKDIR /app
-COPY requirements-dev.txt requirements-dev.txt
-RUN pip --no-cache-dir install --ignore-installed distlib -r requirements-dev.txt
+
+COPY . .
+RUN apt-get update && apt-get install -y postgresql-client
+
+RUN python3 -m pip install --upgrade pip && pip install --ignore-installed distlib  -r requirements.txt
+RUN python3 -m pip install -r requirements-dev.txt
 RUN pip install gunicorn
 RUN pip install uvicorn
-RUN apt-get update && apt-get install -y postgresql-client
-COPY . .
-
-EXPOSE 8080
-CMD ["gunicorn", "--worker-class", "uvicorn.workers.UvicornWorker", "wsgi:app", "-b", "0.0.0.0:8080"]
