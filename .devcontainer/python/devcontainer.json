@@ -15,7 +15,8 @@
                 "ms-python.black-formatter",
                 "ms-python.isort",
                 "monosans.djlint",
-                "eamodio.gitlens"
+                "eamodio.gitlens",
+                "tamasfe.even-better-toml"
             ]
         }
     }
