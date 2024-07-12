@@ -70,7 +70,7 @@ jobs:
 
   dev_deploy:
     needs: [ pre_deploy_tests, paketo_build, setup ]
-    if: ${{ contains(fromJSON(needs.setup.outputs.jobs_to_run), 'dev') && 1==0}}
+    if: ${{ contains(fromJSON(needs.setup.outputs.jobs_to_run), 'dev')}}
     uses: communitiesuk/funding-service-design-workflows/.github/workflows/standard-deploy.yml@main
     secrets:
       AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
