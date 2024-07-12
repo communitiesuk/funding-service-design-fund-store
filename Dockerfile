@@ -16,3 +16,5 @@ RUN python3 -m pip install --upgrade pip && pip install --ignore-installed distl
 RUN python3 -m pip install -r requirements-dev.txt
 RUN pip install gunicorn
 RUN pip install uvicorn
+
+RUN export FLASK_ENV=development

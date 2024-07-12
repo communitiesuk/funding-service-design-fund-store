@@ -5,8 +5,8 @@ A file containing all tests related to the fund endpoint.
 from flask import Flask
 
 
-def test_healthchecks_endpoint(client: Flask):
-    response = client.get("/healthcheck")
+def test_healthchecks_endpoint(flask_test_client: Flask):
+    response = flask_test_client.get("/healthcheck")
 
     expected_dict = {
         "checks": [{"check_flask_running": "OK"}, {"check_db": "OK"}],
@@ -14,4 +14,4 @@ def test_healthchecks_endpoint(client: Flask):
     }
 
     assert 200 == response.status_code, "Unexpected status code"
-    assert expected_dict == response.json, "Unexpected json body"
+    assert expected_dict == response.json(), "Unexpected json body"

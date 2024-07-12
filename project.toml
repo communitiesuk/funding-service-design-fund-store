@@ -1,6 +1,7 @@
-[ _ ]
+[_]
 schema-version = "0.2"
 
 [[ io.buildpacks.build.env ]]
   name = "BP_PIP_REQUIREMENT"
-  value = "./funding-service-design-base/python-flask-dev/requirements.txt requirements.txt"
+  value = "./funding-service-design-base/python-flask/requirements.txt ./funding-service-design-base/python-flask/requirements-db.txt requirements.txt"
+# Use this section to define which requirements files from fsd-base to install during AWS paketo builds
