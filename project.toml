@@ -1,0 +1,6 @@
+[ _ ]
+schema-version = "0.2"
+
+[[ io.buildpacks.build.env ]]
+  name = "BP_PIP_REQUIREMENT"
+  value = "./funding-service-design-base/python-flask-dev/requirements.txt requirements.txt"
