@@ -52,7 +52,7 @@ jobs:
       environment: ${{ inputs.environment }}
 
   pre_deploy_tests:
-    uses: communitiesuk/funding-service-design-workflows/.github/workflows/pre-deploy.yml@main
+    uses: communitiesuk/funding-service-design-workflows/.github/workflows/pre-deploy.yml@fs-4462-build-with-base-reqs
     with:
       # Note - no db-name, so defaults to postgres_db
       postgres_unit_testing: true
