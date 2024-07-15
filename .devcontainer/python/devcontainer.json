@@ -16,7 +16,8 @@
                 "ms-python.isort",
                 "monosans.djlint",
                 "eamodio.gitlens",
-                "tamasfe.even-better-toml"
+                "tamasfe.even-better-toml",
+                "github.vscode-github-actions"
             ]
         }
     }
