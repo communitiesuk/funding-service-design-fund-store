@@ -45,7 +45,7 @@ bs4==0.0.2
     # via -r requirements.in
 cachetools==5.3.3
     # via flipper-client
-certifi==2024.6.2
+certifi==2024.7.4
     # via
     #   httpcore
     #   httpx
