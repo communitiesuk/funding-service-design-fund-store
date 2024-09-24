@@ -1,5 +1,7 @@
 import connexion
 import psycopg2
+from flask import jsonify
+
 from connexion import FlaskApp
 from fsd_utils import init_sentry
 from fsd_utils.healthchecks.checkers import DbChecker
@@ -43,6 +45,12 @@ def create_app() -> FlaskApp:
     health = Healthcheck(flask_app)
     health.add_check(FlaskRunningChecker())
     health.add_check(DbChecker(db))
+
+    @flask_app.errorhandler(404)
+    def not_found(error):
+        flask_app.logger.warning(f"requested URL was not found on the server")
+        return f"{str(error)}", 404
+
     return connexion_app
 
 
