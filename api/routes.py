@@ -1,3 +1,4 @@
+import uuid
 from distutils.util import strtobool
 
 from flask import abort
@@ -24,6 +25,14 @@ from db.schemas.event import EventSchema
 from db.schemas.fund import FundSchema
 from db.schemas.round import RoundSchema
 from db.schemas.section import SECTION_SCHEMA_MAP
+
+
+def is_valid_uuid(value):
+    try:
+        obj = uuid.UUID(value, version=4)
+        return str(obj) == value
+    except Exception:
+        return False
 
 
 def filter_fund_by_lang(fund_data, lang_key: str = "en"):
@@ -92,7 +101,7 @@ def get_fund(fund_id):
     if use_short_name:
         fund = get_fund_by_short_name(fund_id)
     else:
-        fund = get_fund_by_id(fund_id)
+        fund = get_fund_by_id(fund_id) if is_valid_uuid(fund_id) else None
 
     if fund:
         serialiser = FundSchema()

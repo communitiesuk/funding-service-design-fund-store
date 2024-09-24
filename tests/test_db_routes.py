@@ -7,15 +7,22 @@ from fsd_test_utils.test_config.useful_config import UsefulConfig
 from db.models.event import EventType
 
 
-def test_get_fund_by_id(flask_test_client, mock_get_fund_round):
+def test_get_fund_by_id(flask_test_client, mock_get_fund_round, mocker):
+    mocker.patch("api.routes.is_valid_uuid", return_value=True)
     response = flask_test_client.get("/funds/123")
-
     assert response.status_code == 200
     result = response.json()
     assert result["name"] == "Fund Name 1"
 
 
-def test_get_fund_by_short_name(flask_test_client, mock_get_fund_round):
+def test_get_fund_by_invalid_id(flask_test_client, mocker):
+    mocker.patch("api.routes.get_fund_by_id", return_value=None)
+    response = flask_test_client.get("/funds/None")
+    assert response.status_code == 404
+
+
+def test_get_fund_by_short_name(flask_test_client, mock_get_fund_round, mocker):
+    mocker.patch("api.routes.is_valid_uuid", return_value=True)
     response = flask_test_client.get("/funds/ABC?use_short_name=True")
     assert response.status_code == 200
     result = response.json()
