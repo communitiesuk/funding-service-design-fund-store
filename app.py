@@ -1,8 +1,7 @@
 import connexion
 import psycopg2
-from flask import jsonify
-
 from connexion import FlaskApp
+from flask import jsonify
 from fsd_utils import init_sentry
 from fsd_utils.healthchecks.checkers import DbChecker
 from fsd_utils.healthchecks.checkers import FlaskRunningChecker
