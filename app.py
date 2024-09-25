@@ -49,7 +49,7 @@ def create_app() -> FlaskApp:
     @flask_app.errorhandler(404)
     def not_found(error):
         flask_app.logger.warning(f"requested URL was not found on the server")
-        return f"{str(error)}", 404
+        return "Requested URL was not found on the server", 404
 
     return connexion_app
 
