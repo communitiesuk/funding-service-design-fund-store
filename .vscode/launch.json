@@ -102,7 +102,7 @@
             "name": "Load FAB Round",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/scripts/fund_round_loaders/load_round.py",
+            "program": "${workspaceFolder}/scripts/fund_round_loaders/load_fund_round_from_fab.py",
             "console": "integratedTerminal",
             "host": "localhost",
             "port": 9091,
