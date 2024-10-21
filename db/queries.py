@@ -235,7 +235,7 @@ def insert_sections(sections):
     db.session.commit()
 
 
-def insert_fund_data(fund_config):
+def insert_fund_data(fund_config, commit: bool = True):
     stmt = (
         (
             postgres_insert(Fund).values(
@@ -285,92 +285,102 @@ def insert_fund_data(fund_config):
     inserted_fund_ids = [row.id for row in result]
 
     print(f"Prepared fund for insert: '{inserted_fund_ids}'.")
+    if commit:
+        db.session.commit()
+        print("DB changes committed")
     return inserted_fund_ids
 
 
-def insert_round_data(round_config):
+def upsert_round_data(round_configs, commit: bool = True):
     # Create dictionary to store updated records
     updated_rounds = {}
-    # Check if record exist
-    round_record = Round.query.filter_by(id=round_config["id"]).first()
 
-    if round_record is not None:
-        # Update existing round record
-        round_record.title_json = round_config["title_json"]
-        round_record.short_name = round_config["short_name"]
-        round_record.opens = round_config["opens"]
-        round_record.assessment_start = round_config["assessment_start"]
-        round_record.deadline = round_config["deadline"]
-        round_record.application_reminder_sent = round_config["application_reminder_sent"]
-        round_record.reminder_date = round_config["reminder_date"]
-        round_record.fund_id = round_config["fund_id"]
-        round_record.assessment_deadline = round_config["assessment_deadline"]
-        round_record.prospectus = round_config["prospectus"]
-        round_record.privacy_notice = round_config["privacy_notice"]
-        round_record.reference_contact_page_over_email = round_config["reference_contact_page_over_email"]
-        round_record.contact_us_banner_json = round_config["contact_us_banner_json"]
-        round_record.contact_email = round_config["contact_email"]
-        round_record.contact_phone = round_config["contact_phone"]
-        round_record.contact_textphone = round_config["contact_textphone"]
-        round_record.support_times = round_config["support_times"]
-        round_record.support_days = round_config["support_days"]
-        round_record.instructions_json = round_config["instructions_json"]
-        round_record.project_name_field_id = round_config["project_name_field_id"]
-        round_record.feedback_link = round_config["feedback_link"]
-        round_record.application_guidance_json = round_config["application_guidance_json"]
-        round_record.guidance_url = round_config["guidance_url"]
-        round_record.all_uploaded_documents_section_available = round_config["all_uploaded_documents_section_available"]
-        round_record.application_fields_download_available = round_config["application_fields_download_available"]
-        round_record.display_logo_on_pdf_exports = round_config["display_logo_on_pdf_exports"]
-        round_record.feedback_survey_config = round_config["feedback_survey_config"]
-        round_record.mark_as_complete_enabled = round_config["mark_as_complete_enabled"]
-        round_record.is_expression_of_interest = round_config["is_expression_of_interest"]
-        round_record.eligibility_config = round_config["eligibility_config"]
-        round_record.eoi_decision_schema = round_config["eoi_decision_schema"]
+    for round_config in round_configs:
+        # Check if record exist
+        round_record = Round.query.filter_by(id=round_config["id"]).first()
 
-        updated_rounds[round_config["id"]] = round_record
+        if round_record is not None:
+            # Update existing round record
+            round_record.title_json = round_config["title_json"]
+            round_record.short_name = round_config["short_name"]
+            round_record.opens = round_config["opens"]
+            round_record.assessment_start = round_config["assessment_start"]
+            round_record.deadline = round_config["deadline"]
+            round_record.application_reminder_sent = round_config["application_reminder_sent"]
+            round_record.reminder_date = round_config["reminder_date"]
+            round_record.fund_id = round_config["fund_id"]
+            round_record.assessment_deadline = round_config["assessment_deadline"]
+            round_record.prospectus = round_config["prospectus"]
+            round_record.privacy_notice = round_config["privacy_notice"]
+            round_record.reference_contact_page_over_email = round_config["reference_contact_page_over_email"]
+            round_record.contact_us_banner_json = round_config["contact_us_banner_json"]
+            round_record.contact_email = round_config["contact_email"]
+            round_record.contact_phone = round_config["contact_phone"]
+            round_record.contact_textphone = round_config["contact_textphone"]
+            round_record.support_times = round_config["support_times"]
+            round_record.support_days = round_config["support_days"]
+            round_record.instructions_json = round_config["instructions_json"]
+            round_record.project_name_field_id = round_config["project_name_field_id"]
+            round_record.feedback_link = round_config["feedback_link"]
+            round_record.application_guidance_json = round_config["application_guidance_json"]
+            round_record.guidance_url = round_config["guidance_url"]
+            round_record.all_uploaded_documents_section_available = round_config[
+                "all_uploaded_documents_section_available"
+            ]
+            round_record.application_fields_download_available = round_config["application_fields_download_available"]
+            round_record.display_logo_on_pdf_exports = round_config["display_logo_on_pdf_exports"]
+            round_record.feedback_survey_config = round_config["feedback_survey_config"]
+            round_record.mark_as_complete_enabled = round_config["mark_as_complete_enabled"]
+            round_record.is_expression_of_interest = round_config["is_expression_of_interest"]
+            round_record.eligibility_config = round_config["eligibility_config"]
+            round_record.eoi_decision_schema = round_config["eoi_decision_schema"]
 
-    else:
-        # Insert new round record
-        new_round = Round(
-            id=round_config["id"],
-            title_json=round_config["title_json"],
-            short_name=round_config["short_name"],
-            opens=round_config["opens"],
-            assessment_start=round_config["assessment_start"],
-            deadline=round_config["deadline"],
-            application_reminder_sent=round_config["application_reminder_sent"],
-            reminder_date=round_config["reminder_date"],
-            fund_id=round_config["fund_id"],
-            assessment_deadline=round_config["assessment_deadline"],
-            prospectus=round_config["prospectus"],
-            privacy_notice=round_config["privacy_notice"],
-            reference_contact_page_over_email=round_config["reference_contact_page_over_email"],
-            contact_us_banner_json=round_config["contact_us_banner_json"],
-            contact_email=round_config["contact_email"],
-            contact_phone=round_config["contact_phone"],
-            contact_textphone=round_config["contact_textphone"],
-            support_times=round_config["support_times"],
-            support_days=round_config["support_days"],
-            instructions_json=round_config["instructions_json"],
-            project_name_field_id=round_config["project_name_field_id"],
-            feedback_link=round_config["feedback_link"],
-            application_guidance_json=round_config["application_guidance_json"],
-            guidance_url=round_config["guidance_url"],
-            all_uploaded_documents_section_available=round_config["all_uploaded_documents_section_available"],
-            application_fields_download_available=round_config["application_fields_download_available"],
-            display_logo_on_pdf_exports=round_config["display_logo_on_pdf_exports"],
-            feedback_survey_config=round_config["feedback_survey_config"],
-            mark_as_complete_enabled=round_config["mark_as_complete_enabled"],
-            is_expression_of_interest=round_config["is_expression_of_interest"],
-            eligibility_config=round_config["eligibility_config"],
-            eoi_decision_schema=round_config["eoi_decision_schema"],
-        )
-        db.session.add(new_round)
+            updated_rounds[round_config["id"]] = round_record
 
-        updated_rounds[round_config["id"]] = new_round
+        else:
+            # Insert new round record
+            new_round = Round(
+                id=round_config["id"],
+                title_json=round_config["title_json"],
+                short_name=round_config["short_name"],
+                opens=round_config["opens"],
+                assessment_start=round_config["assessment_start"],
+                deadline=round_config["deadline"],
+                application_reminder_sent=round_config["application_reminder_sent"],
+                reminder_date=round_config["reminder_date"],
+                fund_id=round_config["fund_id"],
+                assessment_deadline=round_config["assessment_deadline"],
+                prospectus=round_config["prospectus"],
+                privacy_notice=round_config["privacy_notice"],
+                reference_contact_page_over_email=round_config["reference_contact_page_over_email"],
+                contact_us_banner_json=round_config["contact_us_banner_json"],
+                contact_email=round_config["contact_email"],
+                contact_phone=round_config["contact_phone"],
+                contact_textphone=round_config["contact_textphone"],
+                support_times=round_config["support_times"],
+                support_days=round_config["support_days"],
+                instructions_json=round_config["instructions_json"],
+                project_name_field_id=round_config["project_name_field_id"],
+                feedback_link=round_config["feedback_link"],
+                application_guidance_json=round_config["application_guidance_json"],
+                guidance_url=round_config["guidance_url"],
+                all_uploaded_documents_section_available=round_config["all_uploaded_documents_section_available"],
+                application_fields_download_available=round_config["application_fields_download_available"],
+                display_logo_on_pdf_exports=round_config["display_logo_on_pdf_exports"],
+                feedback_survey_config=round_config["feedback_survey_config"],
+                mark_as_complete_enabled=round_config["mark_as_complete_enabled"],
+                is_expression_of_interest=round_config["is_expression_of_interest"],
+                eligibility_config=round_config["eligibility_config"],
+                eoi_decision_schema=round_config["eoi_decision_schema"],
+            )
+            db.session.add(new_round)
 
-    print(f"Prepared round for insert: '{updated_rounds}'.")
+            updated_rounds[round_config["id"]] = new_round
+
+    print(f"Prepared rounds for insert: '{updated_rounds}'.")
+    if commit:
+        db.session.commit()
+        print("DB changes committed")
     return updated_rounds
 
 
