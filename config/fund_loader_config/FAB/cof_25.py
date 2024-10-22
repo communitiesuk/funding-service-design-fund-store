@@ -46,7 +46,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "3.3 Local support", "cy": ""},
             "tree_path": "1036.1.3.3",
-            "form_name_json": {"en": "local-support", "cy": ""},
+            "form_name_json": {"en": "local-support-25", "cy": ""},
         },
         {
             "section_name": {"en": "3.4 Community benefits", "cy": ""},
