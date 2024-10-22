@@ -91,7 +91,7 @@ def update_round_dates_in_db(round_id, application_opens, application_deadline, 
 
     if assessment_start and not str(assessment_start).casefold() == UNCHANGED:
         commit = True
-        
+
         if isinstance(assessment_start, datetime):
             round_to_update.assessment_start = assessment_start
         elif assessment_start.casefold() == NONE:
@@ -105,7 +105,7 @@ def update_round_dates_in_db(round_id, application_opens, application_deadline, 
 
     if assessment_deadline and not str(assessment_deadline).casefold() == UNCHANGED:
         commit = True
-        
+
         if isinstance(assessment_deadline, datetime):
             round_to_update.assessment_deadline = assessment_deadline
         elif assessment_deadline.casefold() == PAST:
