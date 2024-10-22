@@ -145,7 +145,7 @@ LOADER_CONFIG = {
         "support_times": "9am to 5pm",
         "support_days": "Monday to Friday",
         "instructions_json": {
-            "en": "You must have received an invitation to apply. If we did not invite you, first <a href=\'https://www.gov.uk/guidance/community-ownership-fund-round-4-how-to-express-your-interest-in-applying\'>express your interest in the fund</a>.",
+            "en": "You must have received an invitation to apply. If we did not invite you, first <a href='https://www.gov.uk/guidance/community-ownership-fund-round-4-how-to-express-your-interest-in-applying'>express your interest in the fund</a>.",
             "cy": "",
         },
         "feedback_link": "https://www.gov.uk/government/organisations/ministry-of-housing-communities-local-government",
