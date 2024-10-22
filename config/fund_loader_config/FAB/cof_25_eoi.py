@@ -8,27 +8,27 @@ LOADER_CONFIG={
         {
             "section_name": {"en": "1.1 Organisation details", "cy": ""},
             "tree_path": "1037.1.1.1",
-            "form_name_json": {"en": "organisation-details", "cy": ""},
+            "form_name_json": {"en": "organisation-details-25", "cy": ""},
         },
         {
             "section_name": {"en": "1.2 About your asset", "cy": ""},
             "tree_path": "1037.1.1.2",
-            "form_name_json": {"en": "about-your-asset", "cy": ""},
+            "form_name_json": {"en": "about-your-asset-25", "cy": ""},
         },
         {
             "section_name": {"en": "1.3 Your funding request", "cy": ""},
             "tree_path": "1037.1.1.3",
-            "form_name_json": {"en": "your-funding-request", "cy": ""},
+            "form_name_json": {"en": "your-funding-request-25", "cy": ""},
         },
         {
             "section_name": {"en": "1.4 Development support provider (not scored)", "cy": ""},
             "tree_path": "1037.1.1.4",
-            "form_name_json": {"en": "development-support-provider", "cy": ""},
+            "form_name_json": {"en": "development-support-provider-25", "cy": ""},
         },
         {
             "section_name": {"en": "1.5 Declaration", "cy": ""},
             "tree_path": "1037.1.1.5",
-            "form_name_json": {"en": "declaration", "cy": ""},
+            "form_name_json": {"en": "declaration-25", "cy": ""},
         },
     ],
     "fund_config": {
