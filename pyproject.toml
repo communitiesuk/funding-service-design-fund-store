@@ -7,6 +7,7 @@ license = "MIT License"
 
 [tool.black]
 line-length = 120
+exclude = ['config/fund_loader_config/FAB/*']
 
 [tool.flake8]
 max-line-length = 120
