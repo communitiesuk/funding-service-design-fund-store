@@ -47,8 +47,10 @@ LOADER_CONFIG = {
                 "cy": "1.4 Darparwr cymorth datblygu (heb ei sgorio)",
             },
             "tree_path": "1037.1.1.4",
-            "form_name_json": {"en": "development-support-provider-25",
-            "cy": "darparwr-cymorth-datblygu-25",},
+            "form_name_json": {
+                "en": "development-support-provider-25",
+                "cy": "darparwr-cymorth-datblygu-25",
+            },
         },
         {
             "section_name": {
