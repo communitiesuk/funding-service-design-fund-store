@@ -16,7 +16,7 @@ LOADER_CONFIG={
             "tree_path": "1037.1.1.1",
             "form_name_json": {
                 "en": "organisation-details-25",
-                "cy": "manylion-y-sefydliad",
+                "cy": "manylion-y-sefydliad-25",
             },
         },
         {
@@ -27,7 +27,7 @@ LOADER_CONFIG={
             "tree_path": "1037.1.1.2",
             "form_name_json": {
                 "en": "about-your-asset-25",
-                "cy": "ynglyn-ach-ased",
+                "cy": "ynglyn-ach-ased-25",
             },
         },
         {
@@ -38,7 +38,7 @@ LOADER_CONFIG={
             "tree_path": "1037.1.1.3",
             "form_name_json": {
                 "en": "your-funding-request-25",
-                "cy": "eich-cais-am-gyllid",
+                "cy": "eich-cais-am-gyllid-25",
             },
         },
         {
@@ -47,7 +47,8 @@ LOADER_CONFIG={
                 "cy": "1.4 Darparwr cymorth datblygu (heb ei sgorio)",
             },
             "tree_path": "1037.1.1.4",
-            "form_name_json": {"en": "development-support-provider-25", "cy": ""},
+            "form_name_json": {"en": "development-support-provider-25",
+            "cy": "darparwr-cymorth-datblygu-25",},
         },
         {
             "section_name": {
@@ -57,7 +58,7 @@ LOADER_CONFIG={
             "tree_path": "1037.1.1.5",
             "form_name_json": {
                 "en": "declaration-25",
-                "cy": "datganiad",
+                "cy": "datganiad-25",
             },
         },
     ],
@@ -65,8 +66,8 @@ LOADER_CONFIG={
         "id": "4db6072c-4657-458d-9f57-9ca59638317b",
         "short_name": "COF25-EOI",
         "welsh_available": True,
-        "owner_organisation_name": "Department for Levelling Up, Housing and Communities",
-        "owner_organisation_shortname": "DLUHC",
+        "owner_organisation_name": "Ministry of Housing, Communities and Local Government",
+        "owner_organisation_shortname": "MHCLG",
         "owner_organisation_logo_uri": None,
         "funding_type": "EOI",
         "name_json": {"en": "Community Ownership Fund 2025", "cy": "Y Cronfa Perchnogaeth Gymunedol 2025"},
