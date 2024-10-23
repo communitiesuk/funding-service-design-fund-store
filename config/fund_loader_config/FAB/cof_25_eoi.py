@@ -1,4 +1,4 @@
-LOADER_CONFIG={
+LOADER_CONFIG = {
     "sections_config": [
         {
             "section_name": {
