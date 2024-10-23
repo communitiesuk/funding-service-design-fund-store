@@ -215,8 +215,8 @@ LOADER_CONFIG = {
         "id": "604450fe-65c0-4a2e-a4ba-30ccf256056b",
         "short_name": "COF25",
         "welsh_available": True,
-        "owner_organisation_name": "Department for Levelling Up, Housing and Communities",
-        "owner_organisation_shortname": "DLUHC",
+        "owner_organisation_name": "Ministry of Housing, Communities and Local Government",
+        "owner_organisation_shortname": "MHCLG",
         "owner_organisation_logo_uri": "None",
         "funding_type": "COMPETITIVE",
         "name_json": {
