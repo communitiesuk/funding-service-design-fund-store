@@ -44,7 +44,7 @@ LOADER_CONFIG = {
                 "cy": "2.1 Gwybodaeth am y prosiect",
             },
             "form_name_json": {
-                "en": "project-information-cof",
+                "en": "project-information-cof-25",
                 "cy": "gwybodaeth-am-y-prosiect-cof-25",
             },
             "tree_path": "1036.1.2.1",
@@ -193,7 +193,7 @@ LOADER_CONFIG = {
             },
             "form_name_json": {
                 "en": "upload-business-plan-cof-25",
-                "cy": "lanlwythwch-y-cynllun-busnes-cof",
+                "cy": "lanlwythwch-y-cynllun-busnes-cof-25",
             },
             "tree_path": "1036.1.4.8",
         },
