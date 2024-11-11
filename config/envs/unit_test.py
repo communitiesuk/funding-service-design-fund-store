@@ -11,8 +11,6 @@ from config.envs.default import DefaultConfig as Config
 @configclass
 class UnitTestConfig(Config):
     #  Application Config
-    SECRET_KEY = "test"  # pragma: allowlist secret
-    SESSION_COOKIE_NAME = "session_cookie"
 
     # Logging
     FSD_LOG_LEVEL = logging.DEBUG
